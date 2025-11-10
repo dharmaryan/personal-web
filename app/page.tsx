@@ -1,21 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
 
-const personalHighlights = [
-  {
-    heading: "How I work",
-    body: "Systems-first, detail-oriented, and anchored by a clear operating cadence.",
-  },
-  {
-    heading: "Outside of work",
-    body: "Lifting, running, and exploring cities and coffee spots wherever I land.",
-  },
-  {
-    heading: "What I'm exploring",
-    body: "AI GTM tooling and the rise of operator-led startups.",
-  },
-];
-
 export default function HomePage() {
   return (
     <main className="flex-1">
@@ -64,19 +49,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="border-b border-slate-200 bg-slate-50" id="about">
-        <div className="mx-auto max-w-3xl px-6 py-20">
-          <h2 className="text-sm font-semibold uppercase tracking-[0.3em] text-slate-500">
-            About
-          </h2>
-          <div className="mt-6 space-y-5 text-slate-700">
-            <p>
-              Ex-finance guy who went from PE into start-up land. Love messing around with big datasets, making numbers look really clean and building defendable, robust models.
-            </p>
-          </div>
-        </div>
-      </section>
-
       <section className="border-b border-slate-200 bg-white" id="experience">
         <div className="mx-auto max-w-3xl px-6 py-20">
           <h2 className="text-sm font-semibold uppercase tracking-[0.3em] text-slate-500">
@@ -104,24 +76,54 @@ export default function HomePage() {
                 Made fancy slide decks and pretty Excels for publicly listed TMT clients :)
               </p>
             </div>
+            <div>
+              <p className="text-xs uppercase tracking-[0.25em] text-slate-400">2019 – 2022</p>
+              <h3 className="mt-2 text-xl font-semibold text-slate-900">Finance & Statistics @ University of Sydney</h3>
+              <p className="mt-2 text-base">
+                Did an exchange at Wharton, met some cool people.
+              </p>
+            </div>
           </div>
         </div>
       </section>
 
-      <section className="border-b border-slate-200 bg-slate-50" id="personal">
+      <section className="border-b border-slate-200 bg-slate-50" id="projects">
         <div className="mx-auto max-w-4xl px-6 py-20">
           <h2 className="text-sm font-semibold uppercase tracking-[0.3em] text-slate-500">
-            Personal
+            Projects
           </h2>
-          <div className="mt-10 grid gap-10 md:grid-cols-3">
-            {personalHighlights.map((item) => (
-              <div key={item.heading} className="space-y-3">
-                <h3 className="text-lg font-semibold text-slate-900">
-                  {item.heading}
-                </h3>
-                <p className="text-base text-slate-600">{item.body}</p>
-              </div>
-            ))}
+          <div className="mt-10 space-y-10">
+            <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
+              <Link href="#" className="text-lg font-semibold text-slate-900 transition hover:text-brand-blue">
+                A brute-force methodology for procuring employment
+              </Link>
+              <p className="mt-4 text-base text-slate-600">
+                A structured outbound system for breaking into competitive roles: targeting, list-building, multi-touch
+                outreach, funnel tracking and iteration. Detailed write-up coming soon.
+              </p>
+            </div>
+            <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
+              <Link href="#" className="text-lg font-semibold text-slate-900 transition hover:text-brand-blue">
+                Designing a ‘sexy’ financial model
+              </Link>
+              <p className="mt-4 text-base text-slate-600">
+                An experiment in building clear, auditable, presentation-ready models for operators and investors — balancing
+                rigour, readability, and aesthetics. Case study coming soon.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="border-b border-slate-200 bg-slate-50" id="about">
+        <div className="mx-auto max-w-3xl px-6 py-20">
+          <h2 className="text-sm font-semibold uppercase tracking-[0.3em] text-slate-500">
+            About
+          </h2>
+          <div className="mt-6 space-y-5 text-slate-700">
+            <p>
+              Ex-finance guy who went from PE into start-up land. Love messing around with big datasets, making numbers look really clean and building defendable, robust models.
+            </p>
           </div>
         </div>
       </section>
@@ -131,12 +133,10 @@ export default function HomePage() {
           <h2 className="text-sm font-semibold uppercase tracking-[0.3em] text-slate-500">
             Contact
           </h2>
-          <p className="mt-6 text-lg text-slate-600">
-            Always open to a chat!
-          </p>
+          <p className="mt-6 text-lg text-slate-600">Always open to a chat!</p>
           <div className="mt-8 flex flex-wrap gap-4">
             <Link
-              href="mailto:ryandharma04@gmail.com"
+              href="mailto:ryan@placeholder.com"
               className="inline-flex items-center rounded-full bg-brand-blue px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-blue/90"
             >
               Email me
