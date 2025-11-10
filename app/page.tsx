@@ -110,20 +110,18 @@ export default function HomePage() {
           <div className="mt-10 space-y-10">
             <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
               <Link href="#" className="text-lg font-semibold text-slate-900 transition hover:text-brand-blue">
-                A brute-force methodology for procuring employment
+                A brute-force sales funnel methodology for getting employed
               </Link>
               <p className="mt-4 text-base text-slate-600">
-                A structured outbound system for breaking into competitive roles: targeting, list-building, multi-touch
-                outreach, funnel tracking and iteration. Detailed write-up coming soon.
+                The arcane art of getting a job and also succeeding in various high-volume, low-probability processes.
               </p>
             </div>
             <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
               <Link href="#" className="text-lg font-semibold text-slate-900 transition hover:text-brand-blue">
-                Designing a ‘sexy’ financial model
+                What makes a ‘sexy’ financial model?
               </Link>
               <p className="mt-4 text-base text-slate-600">
-                An experiment in building clear, auditable, presentation-ready models for operators and investors — balancing
-                rigour, readability, and aesthetics. Case study coming soon.
+                Identifying the formatting, set-up and style that won't get your workings made fun of.  
               </p>
             </div>
           </div>
