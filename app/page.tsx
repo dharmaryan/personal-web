@@ -15,10 +15,10 @@ export default function HomePage() {
                 Hi, I'm Ryan.
               </p>
               <h1 className="mt-6 text-4xl font-semibold text-slate-900 sm:text-5xl">
-                RevOps @ Omni
+                Currently: RevOps @ Omni
               </h1>
               <p className="mt-6 text-lg text-slate-600">
-                Designing GTM, analytics and financial systems for high-growth software. Previously energy, transport &
+                Now learning about GTM, analytics and setting up financial systems in high-growth tech. Previously energy, transport &
                 digital infrastructure investing and investment banking.
               </p>
               <p className="mt-4 text-base text-slate-600">
@@ -56,7 +56,9 @@ export default function HomePage() {
           </h2>
           <div className="mt-6 space-y-5 text-slate-700">
             <p>
-              Ex-finance guy who went from PE into start-up land. Love messing around with big datasets, making numbers look really clean and building defendable, robust models.
+              Ex-finance guy who went from PE into the world of start-ups. 
+              
+              Love analysing, cleaning up and drawing insights from large datasets and building robust financial models. 
             </p>
           </div>
         </div>
@@ -103,25 +105,23 @@ export default function HomePage() {
       <section className="border-b border-slate-200 bg-slate-50" id="projects">
         <div className="mx-auto max-w-4xl px-6 py-20">
           <h2 className="text-sm font-semibold uppercase tracking-[0.3em] text-slate-500">
-            Projects
+            Recent stuff I've been working on
           </h2>
           <div className="mt-10 space-y-10">
             <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
               <Link href="#" className="text-lg font-semibold text-slate-900 transition hover:text-brand-blue">
-                A brute-force methodology for procuring employment
+                A brute-force methodology for getting employed
               </Link>
               <p className="mt-4 text-base text-slate-600">
-                A structured outbound system for breaking into competitive roles: targeting, list-building, multi-touch
-                outreach, funnel tracking and iteration. Detailed write-up coming soon.
+                Comparing sales funnels to getting employed: designing a structured outbound system for breaking into competitive roles.
               </p>
             </div>
             <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
               <Link href="#" className="text-lg font-semibold text-slate-900 transition hover:text-brand-blue">
-                Designing a ‘sexy’ financial model
+                Defining and building a ‘sexy’ financial model
               </Link>
               <p className="mt-4 text-base text-slate-600">
-                An experiment in building clear, auditable, presentation-ready models for operators and investors — balancing
-                rigour, readability, and aesthetics. Case study coming soon.
+                Why do bankers always hate financial models that weren't built by them? Examining the qualities of models that make them clear, auditable and accurate.
               </p>
             </div>
           </div>
