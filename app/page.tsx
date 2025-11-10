@@ -15,7 +15,7 @@ export default function HomePage() {
                 Hi, I'm Ryan.
               </p>
               <h1 className="mt-6 text-4xl font-semibold text-slate-900 sm:text-5xl">
-                Currently: RevOps @ Omni
+                RevOps @ Omni
               </h1>
               <p className="mt-6 text-lg text-slate-600">
                 Now learning about GTM, analytics and setting up financial systems in high-growth tech. Previously energy, transport &
@@ -118,7 +118,7 @@ export default function HomePage() {
             </div>
             <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
               <Link href="#" className="text-lg font-semibold text-slate-900 transition hover:text-brand-blue">
-                Defining and building a ‘sexy’ financial model
+                What makes a ‘sexy’ financial model?
               </Link>
               <p className="mt-4 text-base text-slate-600">
                 Why do bankers always hate financial models that weren't built by them? Examining the qualities of models that make them clear, auditable and accurate.
