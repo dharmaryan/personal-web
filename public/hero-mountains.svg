@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#E7F0FF" />
+      <stop offset="100%" stop-color="#F6F9FF" />
+    </linearGradient>
+    <linearGradient id="sun" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FFD27F" stop-opacity="0.6" />
+      <stop offset="100%" stop-color="#FFAE63" stop-opacity="0.2" />
+    </linearGradient>
+    <linearGradient id="mountainBack" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#B6C6E3" />
+      <stop offset="100%" stop-color="#8298C3" />
+    </linearGradient>
+    <linearGradient id="mountainMid" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#7E92B9" />
+      <stop offset="100%" stop-color="#4D6191" />
+    </linearGradient>
+    <linearGradient id="mountainFront" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#5670A5" />
+      <stop offset="100%" stop-color="#2F466D" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="800" fill="url(#sky)" />
+  <circle cx="880" cy="160" r="140" fill="url(#sun)" />
+  <path d="M0 520 L220 340 L420 500 L640 300 L860 460 L1040 320 L1200 500 V800 H0 Z" fill="url(#mountainBack)" />
+  <path d="M0 620 L180 420 L360 580 L520 380 L700 580 L900 420 L1100 600 L1200 540 V800 H0 Z" fill="url(#mountainMid)" opacity="0.95" />
+  <path d="M0 700 L200 520 L360 660 L520 500 L700 660 L880 520 L1080 680 L1200 640 V800 H0 Z" fill="url(#mountainFront)" />
+  <path d="M0 800 L1200 800 L1200 720 Q900 660 620 720 Q340 780 0 720 Z" fill="#F3F5FB" />
+</svg>
