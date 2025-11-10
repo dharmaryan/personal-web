@@ -10,6 +10,9 @@ export const metadata: Metadata = {
   description:
     "Revenue Operations professional with experience across Bank of America, I Squared Capital, and Omni.",
   metadataBase: new URL("https://ryandharma.com"),
+  icons: {
+    icon: "/favicon.svg",
+  },
   openGraph: {
     title: "Ryan Dharma – RevOps and Finance",
     description:
@@ -19,6 +22,7 @@ export const metadata: Metadata = {
     locale: "en_US",
     type: "website",
   },
+  
   twitter: {
     card: "summary_large_image",
     title: "Ryan Dharma – RevOps and Finance",
