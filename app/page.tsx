@@ -49,23 +49,8 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="border-b border-slate-200 bg-slate-50" id="about">
-        <div className="mx-auto max-w-3xl px-6 py-20">
-          <h2 className="text-sm font-semibold uppercase tracking-[0.3em] text-slate-500">
-            About
-          </h2>
-          <div className="mt-6 space-y-5 text-slate-700">
-            <p>
-              Ex-finance guy who went from PE into the world of start-ups. 
-              
-              Love analysing, cleaning up and drawing insights from large datasets and building robust financial models. 
-            </p>
-          </div>
-        </div>
-      </section>
-      
       <section className="border-b border-slate-200 bg-white" id="experience">
-        <div className="mx-auto max-w-3xl px-6 py-20">
+        <div className="mx-auto max-w-5xl px-6 py-20">
           <h2 className="text-sm font-semibold uppercase tracking-[0.3em] text-slate-500">
             Experience
           </h2>
@@ -103,33 +88,48 @@ export default function HomePage() {
       </section>
 
       <section className="border-b border-slate-200 bg-slate-50" id="projects">
-        <div className="mx-auto max-w-4xl px-6 py-20">
+        <div className="mx-auto max-w-5xl px-6 py-20">
           <h2 className="text-sm font-semibold uppercase tracking-[0.3em] text-slate-500">
-            Recent stuff I've been working on
+            Projects
           </h2>
           <div className="mt-10 space-y-10">
             <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
               <Link href="#" className="text-lg font-semibold text-slate-900 transition hover:text-brand-blue">
-                A brute-force methodology for getting employed
+                A brute-force methodology for procuring employment
               </Link>
               <p className="mt-4 text-base text-slate-600">
-                Comparing sales funnels to getting employed: designing a structured outbound system for breaking into competitive roles.
+                A structured outbound system for breaking into competitive roles: targeting, list-building, multi-touch
+                outreach, funnel tracking and iteration. Detailed write-up coming soon.
               </p>
             </div>
             <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
               <Link href="#" className="text-lg font-semibold text-slate-900 transition hover:text-brand-blue">
-                What makes a ‘sexy’ financial model?
+                Designing a ‘sexy’ financial model
               </Link>
               <p className="mt-4 text-base text-slate-600">
-                Why do bankers always hate financial models that weren't built by them? Examining the qualities of models that make them clear, auditable and accurate.
+                An experiment in building clear, auditable, presentation-ready models for operators and investors — balancing
+                rigour, readability, and aesthetics. Case study coming soon.
               </p>
             </div>
           </div>
         </div>
       </section>
-      
+
+      <section className="border-b border-slate-200 bg-slate-50" id="about">
+        <div className="mx-auto max-w-5xl px-6 py-20">
+          <h2 className="text-sm font-semibold uppercase tracking-[0.3em] text-slate-500">
+            About
+          </h2>
+          <div className="mt-6 space-y-5 text-slate-700">
+            <p>
+              Ex-finance guy who went from PE into start-up land. Love messing around with big datasets, making numbers look really clean and building defendable, robust models.
+            </p>
+          </div>
+        </div>
+      </section>
+
       <section className="bg-white" id="contact">
-        <div className="mx-auto max-w-3xl px-6 py-20">
+        <div className="mx-auto max-w-5xl px-6 py-20">
           <h2 className="text-sm font-semibold uppercase tracking-[0.3em] text-slate-500">
             Contact
           </h2>
