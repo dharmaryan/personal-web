@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 const experiences = [
@@ -37,41 +38,62 @@ export default function HomePage() {
   return (
     <main className="flex-1">
       <section className="border-b border-slate-200 bg-white" id="home">
-        <div className="mx-auto max-w-4xl px-6 py-24 sm:py-32">
-          <p className="text-sm font-semibold uppercase tracking-[0.3em] text-slate-500">
-            Hi, I'm Ryan.
-          </p>
-          <h1 className="mt-6 text-4xl font-semibold text-slate-900 sm:text-5xl">
-            Revenue Operations & Growth Strategy for AI-Native Startups.
-          </h1>
-          <p className="mt-6 text-lg text-slate-600">
-            I design scalable GTM, analytics, and financial systems for high-growth software companies.
-          </p>
-          <p className="mt-4 text-base text-slate-600">
-            Based in Sydney → moving to San Francisco. Connect with me on{" "}
-            <Link
-              href="https://www.linkedin.com/in/ryandharma"
-              className="font-medium text-brand-blue underline-offset-4 transition hover:text-brand-blue/80"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              LinkedIn
-            </Link>
-            .
-          </p>
-          <div className="mt-10 flex flex-wrap gap-4">
-            <Link
-              href="#"
-              className="inline-flex items-center rounded-full bg-brand-blue px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-blue/90"
-            >
-              View Resume
-            </Link>
-            <Link
-              href="#contact"
-              className="inline-flex items-center rounded-full border border-brand-blue px-6 py-3 text-sm font-semibold text-brand-blue transition hover:bg-brand-blue/10"
-            >
-              Contact Me
-            </Link>
+        <div className="mx-auto max-w-5xl px-6 py-24 sm:py-32">
+          <div className="grid items-center gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,320px)]">
+            <div>
+              <p className="text-sm font-semibold uppercase tracking-[0.3em] text-slate-500">
+                Hi, I'm Ryan.
+              </p>
+              <h1 className="mt-6 text-4xl font-semibold text-slate-900 sm:text-5xl">
+                RevOps @ Omni
+              </h1>
+              <p className="mt-6 text-lg text-slate-600">
+                Designing GTM, analytics and financial systems for high-growth software. Previously energy, transport &
+                digital infrastructure investing and investment banking.
+              </p>
+              <p className="mt-4 text-base text-slate-600">
+                Based in San Francisco, originally from Sydney.
+              </p>
+              <div className="mt-10 flex flex-wrap gap-4">
+                <Link
+                  href="https://www.linkedin.com/in/ryandharma/"
+                  className="inline-flex items-center rounded-full bg-brand-blue px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-blue/90"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Connect on LinkedIn
+                </Link>
+              </div>
+            </div>
+            <div className="relative mx-auto flex max-w-xs justify-center lg:mx-0">
+              <figure className="relative h-48 w-48 sm:h-56 sm:w-56" aria-labelledby="ryan-hero-portrait">
+                <div className="absolute inset-0 -z-20 overflow-hidden rounded-[32px] shadow-lg ring-1 ring-slate-200">
+                  <Image
+                    src="/hero-mountains.svg"
+                    alt="Illustrated mountainscape backdrop"
+                    fill
+                    priority
+                    sizes="(min-width: 1024px) 320px, 224px"
+                    className="object-cover"
+                  />
+                </div>
+                <div className="absolute inset-0 -z-10 rounded-[32px] bg-white/70 backdrop-blur-sm" aria-hidden />
+                <div className="relative flex h-full w-full items-center justify-center rounded-full border-4 border-white bg-white shadow-xl">
+                  <Image
+                    src="/ryan-dharma-headshot.jpg"
+                    alt="Ryan Dharma smiling outdoors"
+                    fill
+                    priority
+                    sizes="(min-width: 1024px) 320px, 224px"
+                    className="rounded-full object-cover"
+                  />
+                </div>
+                <div className="absolute inset-0 -z-30 rounded-[32px] bg-brand-blue/10 blur-2xl" aria-hidden />
+                <figcaption id="ryan-hero-portrait" className="sr-only">
+                  Portrait of Ryan Dharma framed by a minimalist mountainscape illustration.
+                </figcaption>
+              </figure>
+            </div>
           </div>
         </div>
       </section>
