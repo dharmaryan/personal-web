@@ -155,7 +155,7 @@ export default function HomePage() {
 
       <footer className="border-t border-slate-200 bg-slate-50">
         <div className="mx-auto max-w-4xl px-6 py-8 text-sm text-slate-500">
-          © 2025 Ryan Dharma · Built with Next.js & Inter
+          November 2025
         </div>
       </footer>
     </main>
