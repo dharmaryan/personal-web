@@ -49,6 +49,21 @@ export default function HomePage() {
         </div>
       </section>
 
+      <section className="border-b border-slate-200 bg-slate-50" id="about">
+        <div className="mx-auto max-w-5xl px-6 py-20">
+          <h2 className="text-sm font-semibold uppercase tracking-[0.3em] text-slate-500">
+            About
+          </h2>
+          <div className="mt-6 space-y-5 text-slate-700">
+            <p>
+              Ex-finance guy who went from PE into the world of start-ups. 
+              
+              Love analysing, cleaning up and drawing insights from large datasets and building robust financial models.             
+            </p>
+          </div>
+        </div>
+      </section>
+      
       <section className="border-b border-slate-200 bg-white" id="experience">
         <div className="mx-auto max-w-5xl px-6 py-20">
           <h2 className="text-sm font-semibold uppercase tracking-[0.3em] text-slate-500">
@@ -114,20 +129,6 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-
-      <section className="border-b border-slate-200 bg-slate-50" id="about">
-        <div className="mx-auto max-w-5xl px-6 py-20">
-          <h2 className="text-sm font-semibold uppercase tracking-[0.3em] text-slate-500">
-            About
-          </h2>
-          <div className="mt-6 space-y-5 text-slate-700">
-            <p>
-              Ex-finance guy who went from PE into start-up land. Love messing around with big datasets, making numbers look really clean and building defendable, robust models.
-            </p>
-          </div>
-        </div>
-      </section>
-
       <section className="bg-white" id="contact">
         <div className="mx-auto max-w-5xl px-6 py-20">
           <h2 className="text-sm font-semibold uppercase tracking-[0.3em] text-slate-500">
