@@ -18,7 +18,7 @@ export default function HomePage() {
                 RevOps @ Omni
               </h1>
               <p className="mt-6 text-lg text-slate-600">
-                Designing GTM, analytics and financial systems for high-growth software. Previously energy, transport &
+                Now learning about GTM, analytics and setting up financial systems in high-growth tech. Previously energy, transport &
                 digital infrastructure investing and investment banking.
               </p>
               <p className="mt-4 text-base text-slate-600">
@@ -154,8 +154,8 @@ export default function HomePage() {
       </section>
 
       <footer className="border-t border-slate-200 bg-slate-50">
-        <div className="mx-auto max-w-5xl px-6 py-8 text-sm text-slate-500">
-          © 2025 Ryan Dharma · Built with Next.js & Inter
+        <div className="mx-auto max-w-4xl px-6 py-8 text-sm text-slate-500">
+          November 2025
         </div>
       </footer>
     </main>
