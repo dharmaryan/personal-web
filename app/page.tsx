@@ -94,7 +94,7 @@ export default function HomePage() {
               <p className="text-xs uppercase tracking-[0.25em] text-slate-400">2024 – 2025</p>
               <h3 className="mt-2 text-xl font-semibold text-slate-900">Private Equity @ I Squared Capital</h3>
               <p className="mt-2 text-base">
-                First junior hire in the Sydney office of a $50B infrastructure private equity fund, making and managing investments in core-plus & value-add infrastructure.
+                First junior hire in the Sydney office of a $50B private equity fund, making and managing investments in core-plus & value-add infrastructure.
               </p>
             </div>
             <div>
@@ -132,11 +132,11 @@ export default function HomePage() {
             Contact
           </h2>
           <p className="mt-6 text-lg text-slate-600">
-            I'm always excited to meet founders, GTM leaders, and AI teams building the next wave of software companies.
+            Always open to a chat!
           </p>
           <div className="mt-8 flex flex-wrap gap-4">
             <Link
-              href="mailto:ryan@placeholder.com"
+              href="mailto:ryandharma04@gmail.com"
               className="inline-flex items-center rounded-full bg-brand-blue px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-blue/90"
             >
               Email me
@@ -155,7 +155,7 @@ export default function HomePage() {
 
       <footer className="border-t border-slate-200 bg-slate-50">
         <div className="mx-auto max-w-4xl px-6 py-8 text-sm text-slate-500">
-          © 2025 Ryan Dharma · Built with Next.js & Inter
+          November 2025
         </div>
       </footer>
     </main>
