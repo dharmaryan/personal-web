@@ -38,6 +38,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={inter.variable}>
+      <head>
+        <meta name="robots" content="noindex, nofollow" />
+      </head>
       <body className="bg-white text-slate-900 antialiased">
         <div className="min-h-screen flex flex-col">
           {children}
