@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Inter } from "next/font/google";
 import type { ReactNode } from "react";
 import "./globals.css";
 
@@ -38,8 +39,8 @@ export default function RootLayout({
       <head>
         <meta name="robots" content="noindex, nofollow" />
       </head>
-      <body className="bg-white text-slate-900 antialiased">
-        <div className="min-h-screen flex flex-col">
+      <body className={`${inter.variable} bg-white text-slate-900 antialiased`}>
+        <div className="page-transition min-h-screen flex flex-col">
           {children}
         </div>
       </body>

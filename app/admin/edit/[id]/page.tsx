@@ -62,7 +62,7 @@ export default async function EditPostPage({ params }: EditPageProps) {
             type='submit'
             name='intent'
             value='save'
-            className='rounded-full border border-slate-200 px-5 py-2 text-sm font-semibold text-slate-700 hover:border-slate-400'
+            className='rounded-full border border-slate-200 px-5 py-2 text-sm font-semibold text-slate-700 transition duration-200 hover:border-slate-300 hover:bg-slate-50'
           >
             Save Changes
           </button>
@@ -70,7 +70,7 @@ export default async function EditPostPage({ params }: EditPageProps) {
             type='submit'
             name='intent'
             value={post.published ? 'unpublish' : 'publish'}
-            className='rounded-full bg-brand-blue px-6 py-2 text-sm font-semibold text-white hover:bg-brand-blue/90'
+            className='rounded-full bg-brand-blue px-6 py-2 text-sm font-semibold text-white transition duration-200 hover:bg-brand-blue/90'
           >
             {post.published ? 'Unpublish' : 'Publish'}
           </button>

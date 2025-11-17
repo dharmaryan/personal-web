@@ -4,7 +4,6 @@ type BlobPutFunction = (path: string, file: File, options: { access: 'public'; t
 
 async function loadBlobClient(): Promise<{ put: BlobPutFunction } | null> {
   try {
-    // eslint-disable-next-line @typescript-eslint/no-implied-eval
     const required = eval('require')('@vercel/blob') as Partial<{ put: BlobPutFunction }>
     if (typeof required?.put === 'function') {
       return { put: required.put }

@@ -51,7 +51,7 @@ export default function LoginPage({ searchParams }: LoginPageProps) {
         {hasError && <p className='mt-2 text-sm text-red-600'>Incorrect password. Please try again.</p>}
         <button
           type='submit'
-          className='mt-6 w-full rounded-full bg-brand-blue px-4 py-3 text-sm font-semibold text-white hover:bg-brand-blue/90'
+          className='mt-6 w-full rounded-full bg-brand-blue px-4 py-3 text-sm font-semibold text-white transition duration-200 hover:bg-brand-blue/90'
         >
           Sign in
         </button>
