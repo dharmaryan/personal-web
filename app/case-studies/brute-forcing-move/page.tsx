@@ -40,10 +40,11 @@ export default function ApolloFunnelCaseStudy() {
           >
             ← Back to main site
           </Link>
+          <hr className='my-12 border-slate-200' />
         </div>
       </section>
 
-      <section className='bg-gradient-to-b from-slate-50 to-slate-100'>
+      <section className='bg-white'>
         <div className='mx-auto max-w-3xl px-4 pt-10 pb-24'>
           <article>
             <div className='case-body'>
@@ -233,12 +234,12 @@ export default function ApolloFunnelCaseStudy() {
 
               <hr className='my-12 border-slate-200' />
               <div className='sm:flex sm:items-center sm:justify-between'>
-                <p className='text-base font-semibold text-slate-900'>Enjoyed this case study?</p>
+                <p className='text-base font-semibold text-slate-900'>Enjoyed this piece?</p>
                 <Link
                   href='/'
                   className='mt-4 inline-flex items-center rounded-full bg-brand-blue px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-blue/90 sm:mt-0'
                 >
-                  View my main site.
+                  View my main site
                 </Link>
               </div>
               <hr className='my-12 border-slate-200' />
