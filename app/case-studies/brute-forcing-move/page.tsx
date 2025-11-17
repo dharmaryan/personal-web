@@ -11,35 +11,46 @@ export const metadata: Metadata = {
 export default function ApolloFunnelCaseStudy() {
   return (
     <main className='flex-1 bg-white text-slate-700'>
-      <section className='bg-gradient-to-b from-slate-50 to-slate-100'>
-        <div className='mx-auto max-w-3xl px-6 py-20'>
-          <p className='text-sm font-semibold uppercase tracking-[0.3em] text-slate-500'>Case Study</p>
-          <h1 className='mt-6 text-4xl font-semibold text-slate-900'>
+      <section className='bg-white'>
+        <div className='mx-auto max-w-3xl px-4 pt-20 pb-10'>
+          <p className='mb-6 text-sm font-semibold uppercase tracking-wider text-slate-400'>CASE STUDY</p>
+          <h1 className='mb-4 text-4xl font-bold leading-tight text-slate-900 md:text-5xl'>
             A brute force sales funnel methodology for getting employed
           </h1>
-          <p className='mt-6 text-lg text-slate-600'>
+          <p className='text-lg text-slate-600'>
             How I built an outbound job-search engine with Apollo, Gmail, and ChatGPT to create a repeatable pipeline of
             conversations, and eventually land a RevOps role in the US.
           </p>
+          <div className='mt-8 mb-8 flex items-center gap-4'>
+            <Image
+              src='/ryan-dharma-headshot.jpg'
+              alt='Ryan Dharma'
+              width={48}
+              height={48}
+              className='rounded-full'
+            />
+            <div className='space-y-1 text-sm'>
+              <p className='font-semibold text-slate-900'>Ryan Dharma</p>
+              <p className='text-slate-500'>Nov 17, 2025</p>
+            </div>
+          </div>
           <Link
             href='/'
-            className='mt-8 inline-flex items-center gap-2 text-sm font-semibold text-slate-600 underline-offset-4 transition hover:text-slate-900'
+            className='inline-flex items-center gap-2 text-sm text-slate-600 transition hover:text-slate-900'
           >
-            <span aria-hidden='true'>←</span>
-            Back to main site
+            ← Back to main site
           </Link>
         </div>
       </section>
 
-      <div className='border-t border-slate-200/60 my-12'></div>
-
-      <section className='bg-white py-16 sm:py-24'>
-        <div className='mx-auto max-w-3xl px-6'>
+      <section className='bg-gradient-to-b from-slate-50 to-slate-100'>
+        <div className='mx-auto max-w-3xl px-4 pt-10 pb-24'>
           <article>
-            <section>
-              <h2 className='mt-12 mb-4 text-3xl font-semibold text-slate-900 first:mt-0'>
-                June: A Stalled Career Path Meets an Eight-Year Goal
-              </h2>
+            <div className='case-body'>
+              <section>
+                <h2 className='mt-12 mb-4 text-3xl font-semibold text-slate-900 first:mt-0'>
+                  June: A Stalled Career Path Meets an Eight-Year Goal
+                </h2>
               <p className='mt-4 text-base leading-7 text-slate-600'>I had wanted to move to the US for almost a decade, and I couldn’t stop thinking about it.</p>
               <p className='mt-4 text-base leading-7 text-slate-600'>
                 A few failed private equity interview processes later, I was in limbo – didn’t know how to move to the US and my
@@ -220,14 +231,15 @@ export default function ApolloFunnelCaseStudy() {
               </p>
             </section>
 
-            <div className='mt-10 border-t border-slate-200 pt-6 sm:flex sm:items-center sm:justify-between'>
-              <p className='text-base font-semibold text-slate-900'>Enjoyed this case study?</p>
-              <Link
-                href='/'
-                className='mt-4 inline-flex items-center rounded-full bg-brand-blue px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-blue/90 sm:mt-0'
-              >
-                View Ryan’s main site.
-              </Link>
+              <div className='mt-10 border-t border-slate-200 pt-6 sm:flex sm:items-center sm:justify-between'>
+                <p className='text-base font-semibold text-slate-900'>Enjoyed this case study?</p>
+                <Link
+                  href='/'
+                  className='mt-4 inline-flex items-center rounded-full bg-brand-blue px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-blue/90 sm:mt-0'
+                >
+                  View Ryan’s main site.
+                </Link>
+              </div>
             </div>
           </article>
         </div>
