@@ -28,13 +28,13 @@ export default function ApolloFunnelCaseStudy() {
               June: A Stalled Career Path Meets an Eight-Year Goal
             </h2>
             <p>
-              I had wanted to move to the US for almost a decade, and I couldn’t stop thinking about it. <br /> A few failed private
+              I had wanted to move to the US for almost a decade, and I couldn’t stop thinking about it. <br /><br /> A few failed private
               equity interview processes later, I was in limbo – didn’t know how to move to the US and my current employer wasn’t
-              budging. At some point, it became clear that the only real option was to take control of the situation myself. 
+              budging. <br /><br />At some point, it became clear that the only real option was to take control of the situation myself. 
               Similarly, I wanted to try out an operating role in tech (investing had made me feel like I wasn’t really learning
               how to run companies).
             </p>
-            <p>So I put in my 3 months’ notice and left. <br />Three months to get employed.</p>
+            <p>So I put in my 3 months’ notice and left. <br /><br />Three months to get employed.</p>
           </section>
 
           <section className='space-y-4'>
@@ -42,9 +42,9 @@ export default function ApolloFunnelCaseStudy() {
               The Breakthrough: Discovering Apollo + Gmail + ChatGPT
             </h3>
             <p>
-              What began as an attempt to manually craft cold emails quickly became a system. <br />Apollo handled volume and
+              What began as an attempt to manually craft cold emails quickly became a system. <br /><br />Apollo handled volume and
               deliverability. <br />ChatGPT generated the templates I needed. <br />Five newly created emails (warmed across the way) became
-              the backbone for my cold emails. <br />Together, they became a scalable outbound engine, something close to having a small
+              the backbone for my cold emails. <br /><br />Together, they became a scalable outbound engine, something close to having a small
               SDR team attached to my job search.
             </p>
             <figure className='space-y-4'>
@@ -65,7 +65,7 @@ export default function ApolloFunnelCaseStudy() {
             <h3 className='text-xl font-semibold text-slate-900'>System Design</h3>
             <p>
               The intention here was to build a scalable system in the same way that an operator would: build fast, trust the
-              numbers, and iterate when things don’t work. <br />My IB / PE background made the process feel familiar – high volume,
+              numbers, and iterate when things don’t work. My IB / PE background made the process feel familiar – high volume,
               structured communication, clean data, and moving fast under pressure.
             </p>
             <div className='space-y-4'>
