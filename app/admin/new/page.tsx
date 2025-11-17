@@ -21,7 +21,7 @@ export default function NewPostPage() {
             type='submit'
             name='intent'
             value='draft'
-            className='rounded-full border border-slate-200 px-5 py-2 text-sm font-semibold text-slate-700 hover:border-slate-400'
+            className='rounded-full border border-slate-200 px-5 py-2 text-sm font-semibold text-slate-700 transition duration-200 hover:border-slate-300 hover:bg-slate-50'
           >
             Save Draft
           </button>
@@ -29,7 +29,7 @@ export default function NewPostPage() {
             type='submit'
             name='intent'
             value='publish'
-            className='rounded-full bg-brand-blue px-6 py-2 text-sm font-semibold text-white hover:bg-brand-blue/90'
+            className='rounded-full bg-brand-blue px-6 py-2 text-sm font-semibold text-white transition duration-200 hover:bg-brand-blue/90'
           >
             Publish
           </button>

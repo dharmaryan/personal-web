@@ -27,7 +27,7 @@ export default function HomePage() {
               <div className="mt-10 flex flex-wrap justify-center gap-4 lg:justify-start">
                 <Link
                   href="https://www.linkedin.com/in/ryandharma/"
-                  className="inline-flex items-center rounded-full bg-brand-blue px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-blue/90"
+                  className="inline-flex items-center rounded-full bg-brand-blue px-6 py-3 text-sm font-semibold text-white shadow-sm transition duration-200 hover:bg-brand-blue/90"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -136,13 +136,13 @@ export default function HomePage() {
           <div className="mt-8 flex flex-wrap gap-4">
             <Link
               href="mailto:ryandharma04@gmail.com"
-              className="inline-flex items-center rounded-full bg-brand-blue px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-blue/90"
+              className="inline-flex items-center rounded-full bg-brand-blue px-6 py-3 text-sm font-semibold text-white shadow-sm transition duration-200 hover:bg-brand-blue/90"
             >
               Email me
             </Link>
             <Link
               href="https://www.linkedin.com/in/ryandharma"
-              className="inline-flex items-center rounded-full border border-brand-blue px-6 py-3 text-sm font-semibold text-brand-blue transition hover:bg-brand-blue/10"
+              className="inline-flex items-center rounded-full border border-brand-blue px-6 py-3 text-sm font-semibold text-brand-blue transition duration-200 hover:bg-brand-blue/10"
               target="_blank"
               rel="noopener noreferrer"
             >

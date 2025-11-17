@@ -2,7 +2,6 @@ type PrismaClientConstructor = new (...args: any[]) => any
 
 function loadPrismaClient(): PrismaClientConstructor {
   try {
-    // eslint-disable-next-line @typescript-eslint/no-implied-eval
     const required = eval('require')('@prisma/client') as { PrismaClient: PrismaClientConstructor }
     if (required?.PrismaClient) {
       return required.PrismaClient

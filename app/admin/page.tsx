@@ -15,6 +15,20 @@ type AdminPost = {
 
 async function loadPosts(): Promise<AdminPost[]> {
   try {
+    await prisma.post.upsert({
+      where: { slug: 'brute-forcing-move' },
+      update: {},
+      create: {
+        title: 'A brute force sales funnel methodology for getting employed',
+        slug: 'brute-forcing-move',
+        subtitle:
+          'How I built an outbound job-search engine with Apollo, Gmail, and ChatGPT to create a repeatable pipeline of conversations, and eventually land a RevOps role in the US.',
+        author: 'Ryan Dharma',
+        content: JSON.stringify({ type: 'doc', content: [{ type: 'paragraph' }] }),
+        coverImage: null,
+        published: true,
+      },
+    })
     return await prisma.post.findMany({
       orderBy: { createdAt: 'desc' },
     })
@@ -36,7 +50,7 @@ export default async function AdminDashboard() {
           </div>
           <Link
             href='/admin/new'
-            className='inline-flex items-center rounded-full bg-brand-blue px-5 py-3 text-sm font-semibold text-white hover:bg-brand-blue/90'
+            className='inline-flex items-center rounded-full bg-brand-blue px-5 py-3 text-sm font-semibold text-white transition duration-200 hover:bg-brand-blue/90'
           >
             New Post
           </Link>
