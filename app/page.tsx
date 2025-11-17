@@ -101,14 +101,13 @@ export default function HomePage() {
                 A structured outbound system for breaking into competitive roles: targeting, list-building, multi-touch
                 outreach, funnel tracking and iteration. Detailed write-up coming soon.
               </p>
-              <Link
-                href="/case-studies/apollo-funnel"
-                className="mt-6 inline-flex w-full flex-col rounded-2xl border border-brand-blue px-6 py-4 text-left text-sm font-semibold text-brand-blue transition hover:bg-brand-blue/5"
-              >
-                <span>A brute-force sales funnel methodology for getting employed</span>
-                <span className="mt-1 text-xs font-normal text-slate-600">
-                  The arcane art of getting a job and also succeeding in various high-volume, low-probability processes.
-                </span>
+              <Link href="/case-studies/apollo-funnel">
+                <button className="mt-6 inline-flex w-full flex-col rounded-2xl border border-brand-blue px-6 py-4 text-left text-sm font-semibold text-brand-blue transition hover:bg-brand-blue/5">
+                  <span>A brute-force sales funnel methodology for getting employed</span>
+                  <span className="mt-1 text-xs font-normal text-slate-600">
+                    The arcane art of getting a job and also succeeding in various high-volume, low-probability processes.
+                  </span>
+                </button>
               </Link>
             </div>
             <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
