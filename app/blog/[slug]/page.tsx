@@ -4,18 +4,24 @@ import PostLayout from '@/components/PostLayout'
 import TipTapContent from '@/components/tiptap/TipTapContent'
 import { prisma } from '@/lib/prisma'
 
+export const dynamic = 'force-dynamic'
+
 interface PageProps {
   params: { slug: string }
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const post = await prisma.post.findUnique({ where: { slug: params.slug } })
-  if (!post || !post.published) {
-    return { title: 'Post not found' }
-  }
-  return {
-    title: `${post.title} – Ryan Dharma`,
-    description: post.subtitle ?? undefined,
+  try {
+    const post = await prisma.post.findUnique({ where: { slug: params.slug } })
+    if (!post || !post.published) {
+      return { title: 'Post not found' }
+    }
+    return {
+      title: `${post.title} – Ryan Dharma`,
+      description: post.subtitle ?? undefined,
+    }
+  } catch (_error) {
+    return { title: 'Blog post – Ryan Dharma' }
   }
 }
 

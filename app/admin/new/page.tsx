@@ -2,6 +2,8 @@ import Link from 'next/link'
 import PostEditorForm from '@/components/admin/PostEditorForm'
 import { createPostAction } from '../actions'
 
+export const dynamic = 'force-dynamic'
+
 export default function NewPostPage() {
   return (
     <main className='flex-1 bg-white px-6 py-16 text-slate-900'>

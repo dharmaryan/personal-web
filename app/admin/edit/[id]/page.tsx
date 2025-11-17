@@ -4,6 +4,8 @@ import PostEditorForm from '@/components/admin/PostEditorForm'
 import { prisma } from '@/lib/prisma'
 import { deletePostAction, updatePostAction } from '../../actions'
 
+export const dynamic = 'force-dynamic'
+
 interface EditPageProps {
   params: { id: string }
 }
