@@ -18,7 +18,7 @@ export default function ApolloFunnelCaseStudy() {
           </h1>
           <p className='text-lg text-slate-600'>
             How I built an outbound job-search engine with Apollo, Gmail, and ChatGPT to create a repeatable pipeline of
-            conversations — and eventually land a RevOps role in the US.
+            conversations, and eventually land a RevOps role in the US.
           </p>
         </header>
 
@@ -28,13 +28,13 @@ export default function ApolloFunnelCaseStudy() {
               June: A Stalled Career Path Meets an Eight-Year Goal
             </h2>
             <p>
-              I had wanted to move to the US for almost a decade, and I couldn’t stop thinking about it. A few failed private
+              I had wanted to move to the US for almost a decade, and I couldn’t stop thinking about it. <br /> A few failed private
               equity interview processes later, I was in limbo – didn’t know how to move to the US and my current employer wasn’t
-              budging. At some point, it became clear that the only real option was to take control of the situation myself.
+              budging. At some point, it became clear that the only real option was to take control of the situation myself. 
               Similarly, I wanted to try out an operating role in tech (investing had made me feel like I wasn’t really learning
               how to run companies).
             </p>
-            <p>So I put in my 3 months’ notice and left. Three months to get employed.</p>
+            <p>So I put in my 3 months’ notice and left. <br />Three months to get employed.</p>
           </section>
 
           <section className='space-y-4'>
@@ -42,9 +42,9 @@ export default function ApolloFunnelCaseStudy() {
               The Breakthrough: Discovering Apollo + Gmail + ChatGPT
             </h3>
             <p>
-              What began as an attempt to manually craft cold emails quickly became a system. Apollo handled volume and
-              deliverability. ChatGPT generated the templates I needed. Five newly created emails (warmed across the way) became
-              the backbone for my cold emails. Together, they became a scalable outbound engine, something close to having a small
+              What began as an attempt to manually craft cold emails quickly became a system. <br />Apollo handled volume and
+              deliverability. <br />ChatGPT generated the templates I needed. <br />Five newly created emails (warmed across the way) became
+              the backbone for my cold emails. <br />Together, they became a scalable outbound engine, something close to having a small
               SDR team attached to my job search.
             </p>
             <figure className='space-y-4'>
@@ -65,7 +65,7 @@ export default function ApolloFunnelCaseStudy() {
             <h3 className='text-xl font-semibold text-slate-900'>System Design</h3>
             <p>
               The intention here was to build a scalable system in the same way that an operator would: build fast, trust the
-              numbers, and iterate when things don’t work. My IB / PE background made the process feel familiar – high volume,
+              numbers, and iterate when things don’t work. <br />My IB / PE background made the process feel familiar – high volume,
               structured communication, clean data, and moving fast under pressure.
             </p>
             <div className='space-y-4'>
@@ -117,7 +117,7 @@ export default function ApolloFunnelCaseStudy() {
               After a few days of near-zero movement, I woke up one morning to three call acceptances. I began scheduling 6–8 a.m.
               calls before my 70-hour work week and slowly accumulated early interview processes. At the same time, my previous
               employer was working to move me to the US. This process stalled by a full month in between interview rounds. That was
-              clarifying. I dropped out and doubled down on outbound. I generated five live interview processes by August.
+              clarifying. I dropped out and doubled down on outbound. <br />I generated five live interview processes by August.
             </p>
           </section>
 
@@ -126,10 +126,10 @@ export default function ApolloFunnelCaseStudy() {
             <p>
               I had a holiday booked in Japan and while I was in my hotel, a high growth AI hardware company asked me to fly to
               California on 24 hours notice for final round interviews. I completed a superday, received an offer, negotiated it,
-              and accepted. I flew home with a job offer in hand – it felt surreal that I could finally move.
+              and accepted. <br />I flew home with a job offer in hand – it felt surreal that I could finally move.
             </p>
             <p>
-              Until it was rescinded for company specific reasons. It was jarring, but I rebuilt the funnel immediately and
+              Until it was rescinded for company specific reasons. <br />It was jarring, but I rebuilt the funnel immediately and
               launched a second, much larger wave of outreach, this time generating 12 new active processes in a month.
             </p>
           </section>
@@ -141,7 +141,7 @@ export default function ApolloFunnelCaseStudy() {
             <p>
               My notice period ended. I was now unemployed. I immediately booked a ticket to the US and left. At this time, I had
               progressed a number of these interviews to late stages and just needed to wrap up an offer so I could move overseas.
-              I spent time flying between SF and NY and ended up maturing this funnel. Because I’m now in RevOps, here’s the funnel
+              I spent time flying between SF and NY and ended up maturing this funnel. <br />Because I’m now in RevOps, here’s the funnel
               diagram for each stage and my conversions to next stage.
             </p>
             <figure className='space-y-4'>
@@ -163,7 +163,7 @@ export default function ApolloFunnelCaseStudy() {
             <ul className='list-disc space-y-1 pl-5'>
               <li>The interview process completed in three days (positive signal for execution rigor)</li>
               <li>Founders had a strong track record in scaling and exiting businesses</li>
-              <li>Strong role fit – I was deep into selling myself and was looking for a high leverage operating role</li>
+              <li>Strong role fit – I was deep into learning about GTM and was looking for a high leverage operating role</li>
             </ul>
           </section>
 
@@ -210,8 +210,8 @@ export default function ApolloFunnelCaseStudy() {
               high volume, low initial probability of success, and a requirement for the seller to put in a ton of grunt work.
             </p>
             <p>
-              For the people that took the time out of their day to call me, thank you. For the people I unknowingly spammed, I
-              apologise! And for people in my personal life trying to replicate this move, good luck!
+              For the people that took the time out of their day to call me, thank you. <br />For the people I unknowingly spammed, I
+              apologise! <br />And for people in my personal life trying to replicate this move, good luck!
             </p>
           </section>
         </div>
