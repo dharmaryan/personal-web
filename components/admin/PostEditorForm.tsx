@@ -4,6 +4,7 @@ import { useState } from 'react'
 import ImageUploader from './ImageUploader'
 import TipTapEditor from '../tiptap/TipTapEditor'
 import type { ReactNode } from 'react'
+import { EMPTY_DOC_STRING } from '@/lib/richText'
 
 interface PostEditorFormProps {
   action: (formData: FormData) => Promise<void> | void
@@ -18,10 +19,8 @@ interface PostEditorFormProps {
   children: ReactNode
 }
 
-const emptyDoc = JSON.stringify({ type: 'doc', content: [{ type: 'paragraph' }] })
-
 export default function PostEditorForm({ action, initialData, children }: PostEditorFormProps) {
-  const [content, setContent] = useState(initialData?.content ?? emptyDoc)
+  const [content, setContent] = useState(initialData?.content ?? EMPTY_DOC_STRING)
   const [coverImage, setCoverImage] = useState(initialData?.coverImage ?? '')
 
   return (

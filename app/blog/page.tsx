@@ -3,10 +3,20 @@ import Link from 'next/link'
 import type { Metadata } from 'next'
 import { prisma } from '@/lib/prisma'
 
+type BlogPostSummary = {
+  id: string
+  title: string
+  slug: string
+  subtitle: string | null
+  author: string
+  coverImage: string | null
+  createdAt: Date
+}
+
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
 
-async function loadPublishedPosts() {
+async function loadPublishedPosts(): Promise<BlogPostSummary[]> {
   try {
     return await prisma.post.findMany({
       where: { published: true },

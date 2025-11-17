@@ -5,7 +5,15 @@ import { deletePostAction, togglePublishAction } from './actions'
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
 
-async function loadPosts() {
+type AdminPost = {
+  id: string
+  title: string
+  slug: string
+  published: boolean
+  createdAt: Date
+}
+
+async function loadPosts(): Promise<AdminPost[]> {
   try {
     return await prisma.post.findMany({
       orderBy: { createdAt: 'desc' },
