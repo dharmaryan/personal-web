@@ -130,7 +130,7 @@ export default function ApolloFunnelCaseStudy() {
             </section>
 
             <section>
-              <h2 className='mt-12 mb-4 text-3xl font-semibold text-slate-900 first:mt-0'>July: Gaining Traction</h2>
+              <h2 className='mt-10 mb-4 text-3xl font-semibold text-slate-900'>July: Gaining Traction</h2>
               <p className='mt-4 text-base leading-7 text-slate-600'>
                 After a few days of near-zero movement, I woke up one morning to three call acceptances. I began scheduling 6–8 a.m.
                 calls before my 70-hour work week and slowly accumulated early interview processes. At the same time, my previous
@@ -141,7 +141,7 @@ export default function ApolloFunnelCaseStudy() {
             </section>
 
             <section>
-              <h2 className='mt-12 mb-4 text-3xl font-semibold text-slate-900 first:mt-0'>August – September: The Chaos Spike</h2>
+              <h2 className='mt-10 mb-4 text-3xl font-semibold text-slate-900'>August – September: The Chaos Spike</h2>
               <p className='mt-4 text-base leading-7 text-slate-600'>
                 I had a holiday booked in Japan and while I was in my hotel, a high growth AI hardware company asked me to fly to
                 California on 24 hours notice for final round interviews. I completed a superday, received an offer, negotiated it,
@@ -156,7 +156,7 @@ export default function ApolloFunnelCaseStudy() {
             </section>
 
             <section>
-              <h2 className='mt-12 mb-4 text-3xl font-semibold text-slate-900 first:mt-0'>October: Bouncing Back and the Funnel at Full Scale</h2>
+              <h2 className='mt-10 mb-4 text-3xl font-semibold text-slate-900'>October: Bouncing Back and the Funnel at Full Scale</h2>
               <p className='mt-4 text-base leading-7 text-slate-600'>
                 My notice period ended. I was now unemployed. I immediately booked a ticket to the US and left. At this time, I had
                 progressed a number of these interviews to late stages and just needed to wrap up an offer so I could move overseas.
@@ -187,7 +187,7 @@ export default function ApolloFunnelCaseStudy() {
             </section>
 
             <section>
-              <h2 className='mt-12 mb-4 text-3xl font-semibold text-slate-900 first:mt-0'>Key Learnings &amp; What Didn’t Work</h2>
+              <h2 className='mt-10 mb-4 text-3xl font-semibold text-slate-900'>Key Learnings &amp; What Didn’t Work</h2>
               <p className='mt-4 text-base leading-7 text-slate-600'>Some lessons and mistakes to keep note of for next time:</p>
               <ul className='mt-4 list-disc space-y-2 pl-5 text-base leading-7 text-slate-600'>
                 <li>Attaching my resume upfront lowered response rates: relational &gt; transactional always</li>
@@ -219,7 +219,7 @@ export default function ApolloFunnelCaseStudy() {
             </section>
 
             <section>
-              <h2 className='mt-12 mb-4 text-3xl font-semibold text-slate-900 first:mt-0'>Conclusion: A Job Search Is a Sales Funnel</h2>
+              <h2 className='mt-10 mb-4 text-3xl font-semibold text-slate-900'>Conclusion: A Job Search Is a Sales Funnel</h2>
               <p className='mt-4 text-base leading-7 text-slate-600'>
                 The fact that this succeeded remains, to date, one of the achievements in my life that I’m most proud of. Trying to
                 move countries with no job can feel like an arcane process, but it is effectively a sales funnel, characterised by
@@ -231,15 +231,17 @@ export default function ApolloFunnelCaseStudy() {
               </p>
             </section>
 
-              <div className='mt-10 border-t border-slate-200 pt-6 sm:flex sm:items-center sm:justify-between'>
+              <hr className='my-12 border-slate-200' />
+              <div className='sm:flex sm:items-center sm:justify-between'>
                 <p className='text-base font-semibold text-slate-900'>Enjoyed this case study?</p>
                 <Link
                   href='/'
                   className='mt-4 inline-flex items-center rounded-full bg-brand-blue px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-blue/90 sm:mt-0'
                 >
-                  View Ryan’s main site.
+                  View my main site.
                 </Link>
               </div>
+              <hr className='my-12 border-slate-200' />
             </div>
           </article>
         </div>
