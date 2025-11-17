@@ -6,12 +6,15 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
 export const metadata: Metadata = {
-  title: "Ryan Dharma — RevOps & Growth Strategy",
+  title: "Ryan Dharma – RevOps and Finance",
   description:
     "Revenue Operations professional with experience across Bank of America, I Squared Capital, and Omni.",
   metadataBase: new URL("https://ryandharma.com"),
+  icons: {
+    icon: "/favicon.svg",
+  },
   openGraph: {
-    title: "Ryan Dharma — RevOps & Growth Strategy",
+    title: "Ryan Dharma – RevOps and Finance",
     description:
       "Revenue Operations professional with experience across Bank of America, I Squared Capital, and Omni.",
     url: "https://ryandharma.com",
@@ -19,9 +22,10 @@ export const metadata: Metadata = {
     locale: "en_US",
     type: "website",
   },
+  
   twitter: {
     card: "summary_large_image",
-    title: "Ryan Dharma — RevOps & Growth Strategy",
+    title: "Ryan Dharma – RevOps and Finance",
     description:
       "Revenue Operations professional with experience across Bank of America, I Squared Capital, and Omni.",
   },
