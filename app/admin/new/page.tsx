@@ -3,6 +3,7 @@ import PostEditorForm from '@/components/admin/PostEditorForm'
 import { createPostAction } from '../actions'
 
 export const dynamic = 'force-dynamic'
+export const runtime = 'nodejs'
 
 export default function NewPostPage() {
   return (

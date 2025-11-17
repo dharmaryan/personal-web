@@ -3,11 +3,20 @@ import { prisma } from '@/lib/prisma'
 import { deletePostAction, togglePublishAction } from './actions'
 
 export const dynamic = 'force-dynamic'
+export const runtime = 'nodejs'
+
+async function loadPosts() {
+  try {
+    return await prisma.post.findMany({
+      orderBy: { createdAt: 'desc' },
+    })
+  } catch (_error) {
+    return []
+  }
+}
 
 export default async function AdminDashboard() {
-  const posts = await prisma.post.findMany({
-    orderBy: { createdAt: 'desc' },
-  })
+  const posts = await loadPosts()
 
   return (
     <main className='flex-1 bg-white px-6 py-16 text-slate-900'>

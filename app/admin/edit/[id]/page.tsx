@@ -5,13 +5,27 @@ import { prisma } from '@/lib/prisma'
 import { deletePostAction, updatePostAction } from '../../actions'
 
 export const dynamic = 'force-dynamic'
+export const runtime = 'nodejs'
+
+async function loadPost(id: string) {
+  try {
+    return await prisma.post.findUnique({ where: { id } })
+  } catch (_error) {
+    return null
+  }
+}
 
 interface EditPageProps {
   params: { id: string }
 }
 
 export default async function EditPostPage({ params }: EditPageProps) {
-  const post = await prisma.post.findUnique({ where: { id: params.id } })
+  const postId = params?.id
+  if (!postId) {
+    notFound()
+  }
+
+  const post = await loadPost(postId)
   if (!post) {
     notFound()
   }

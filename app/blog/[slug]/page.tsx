@@ -5,6 +5,15 @@ import TipTapContent from '@/components/tiptap/TipTapContent'
 import { prisma } from '@/lib/prisma'
 
 export const dynamic = 'force-dynamic'
+export const runtime = 'nodejs'
+
+async function loadPostBySlug(slug: string) {
+  try {
+    return await prisma.post.findUnique({ where: { slug } })
+  } catch (_error) {
+    return null
+  }
+}
 
 interface PageProps {
   params: { slug: string }
@@ -12,7 +21,7 @@ interface PageProps {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   try {
-    const post = await prisma.post.findUnique({ where: { slug: params.slug } })
+    const post = await loadPostBySlug(params.slug)
     if (!post || !post.published) {
       return { title: 'Post not found' }
     }
@@ -26,7 +35,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 export default async function BlogPostPage({ params }: PageProps) {
-  const post = await prisma.post.findUnique({ where: { slug: params.slug } })
+  const post = await loadPostBySlug(params.slug)
   if (!post || !post.published) {
     notFound()
   }

@@ -4,16 +4,25 @@ import type { Metadata } from 'next'
 import { prisma } from '@/lib/prisma'
 
 export const dynamic = 'force-dynamic'
+export const runtime = 'nodejs'
+
+async function loadPublishedPosts() {
+  try {
+    return await prisma.post.findMany({
+      where: { published: true },
+      orderBy: { createdAt: 'desc' },
+    })
+  } catch (_error) {
+    return []
+  }
+}
 
 export const metadata: Metadata = {
   title: 'Blog – Ryan Dharma',
 }
 
 export default async function BlogIndexPage() {
-  const posts = await prisma.post.findMany({
-    where: { published: true },
-    orderBy: { createdAt: 'desc' },
-  })
+  const posts = await loadPublishedPosts()
 
   return (
     <main className='flex-1 bg-white px-6 py-16 text-slate-900'>
