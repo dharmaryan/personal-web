@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
-import { Inter } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
+const inter = { variable: "font-sans" } as const;
 
 export const metadata: Metadata = {
   title: "Ryan Dharma – RevOps and Finance",
@@ -37,12 +36,12 @@ export default function RootLayout({
   children: ReactNode;
 }) {
   return (
-    <html lang="en" className={inter.variable}>
+    <html lang="en">
       <head>
         <meta name="robots" content="noindex, nofollow" />
       </head>
-      <body className="bg-white text-slate-900 antialiased">
-        <div className="min-h-screen flex flex-col">
+      <body className={`${inter.variable} bg-white text-slate-900 antialiased`}>
+        <div className="page-transition min-h-screen flex flex-col">
           {children}
         </div>
       </body>
