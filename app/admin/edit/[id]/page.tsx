@@ -20,13 +20,20 @@ interface EditPageProps {
 }
 
 export default async function EditPostPage({ params }: EditPageProps) {
+  const isBuildTime = process.env.NEXT_PHASE === 'phase-production-build'
   const postId = params?.id
   if (!postId) {
+    if (isBuildTime) {
+      return null
+    }
     notFound()
   }
 
   const post = await loadPost(postId)
   if (!post) {
+    if (isBuildTime) {
+      return null
+    }
     notFound()
   }
 
