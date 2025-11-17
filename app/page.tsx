@@ -18,7 +18,7 @@ export default function HomePage() {
                 RevOps @ Omni
               </h1>
               <p className="mt-6 text-lg text-slate-600">
-                Designing GTM, analytics and financial systems for high-growth software. Previously energy, transport &
+                Now learning about GTM, analytics and setting up financial systems in high-growth tech. Previously energy, transport &
                 digital infrastructure investing and investment banking.
               </p>
               <p className="mt-4 text-base text-slate-600">
@@ -49,6 +49,21 @@ export default function HomePage() {
         </div>
       </section>
 
+      <section className="border-b border-slate-200 bg-slate-50" id="about">
+        <div className="mx-auto max-w-5xl px-6 py-20">
+          <h2 className="text-sm font-semibold uppercase tracking-[0.3em] text-slate-500">
+            About
+          </h2>
+          <div className="mt-6 space-y-5 text-slate-700">
+            <p>
+              Ex-finance guy who went from PE into the world of start-ups. 
+              
+              Love analysing, cleaning up and drawing insights from large datasets and building robust financial models.             
+            </p>
+          </div>
+        </div>
+      </section>
+      
       <section className="border-b border-slate-200 bg-white" id="experience">
         <div className="mx-auto max-w-5xl px-6 py-20">
           <h2 className="text-sm font-semibold uppercase tracking-[0.3em] text-slate-500">
@@ -94,48 +109,24 @@ export default function HomePage() {
           </h2>
           <div className="mt-10 space-y-10">
             <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
-              <Link href="#" className="text-lg font-semibold text-slate-900 transition hover:text-brand-blue">
-                A brute-force methodology for procuring employment
+              <Link href="/case-studies/apollo-funnel" className="text-lg font-semibold text-slate-900 transition hover:text-brand-blue">
+                A brute-force sales funnel methodology for getting employed
               </Link>
               <p className="mt-4 text-base text-slate-600">
-                A structured outbound system for breaking into competitive roles: targeting, list-building, multi-touch
-                outreach, funnel tracking and iteration. Detailed write-up coming soon.
+                The arcane art of getting a job and also succeeding in various high-volume, low-probability processes.
               </p>
-              <Link href="/case-studies/apollo-funnel">
-                <button className="mt-6 inline-flex w-full flex-col rounded-2xl border border-brand-blue px-6 py-4 text-left text-sm font-semibold text-brand-blue transition hover:bg-brand-blue/5">
-                  <span>A brute-force sales funnel methodology for getting employed</span>
-                  <span className="mt-1 text-xs font-normal text-slate-600">
-                    The arcane art of getting a job and also succeeding in various high-volume, low-probability processes.
-                  </span>
-                </button>
-              </Link>
             </div>
             <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
               <Link href="#" className="text-lg font-semibold text-slate-900 transition hover:text-brand-blue">
-                Designing a ‘sexy’ financial model
+                What makes a ‘sexy’ financial model?
               </Link>
               <p className="mt-4 text-base text-slate-600">
-                An experiment in building clear, auditable, presentation-ready models for operators and investors — balancing
-                rigour, readability, and aesthetics. Case study coming soon.
+                Identifying the formatting, set-up and style that won't get your workings made fun of.  
               </p>
             </div>
           </div>
         </div>
       </section>
-
-      <section className="border-b border-slate-200 bg-slate-50" id="about">
-        <div className="mx-auto max-w-5xl px-6 py-20">
-          <h2 className="text-sm font-semibold uppercase tracking-[0.3em] text-slate-500">
-            About
-          </h2>
-          <div className="mt-6 space-y-5 text-slate-700">
-            <p>
-              Ex-finance guy who went from PE into start-up land. Love messing around with big datasets, making numbers look really clean and building defendable, robust models.
-            </p>
-          </div>
-        </div>
-      </section>
-
       <section className="bg-white" id="contact">
         <div className="mx-auto max-w-5xl px-6 py-20">
           <h2 className="text-sm font-semibold uppercase tracking-[0.3em] text-slate-500">
@@ -144,7 +135,7 @@ export default function HomePage() {
           <p className="mt-6 text-lg text-slate-600">Always open to a chat!</p>
           <div className="mt-8 flex flex-wrap gap-4">
             <Link
-              href="mailto:ryan@placeholder.com"
+              href="mailto:ryandharma04@gmail.com"
               className="inline-flex items-center rounded-full bg-brand-blue px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-blue/90"
             >
               Email me
@@ -162,8 +153,8 @@ export default function HomePage() {
       </section>
 
       <footer className="border-t border-slate-200 bg-slate-50">
-        <div className="mx-auto max-w-5xl px-6 py-8 text-sm text-slate-500">
-          © 2025 Ryan Dharma · Built with Next.js & Inter
+        <div className="mx-auto max-w-4xl px-6 py-8 text-sm text-slate-500">
+          November 2025
         </div>
       </footer>
     </main>
