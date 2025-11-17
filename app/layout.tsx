@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import type { ReactNode } from "react";
 import "./globals.css";
+
+const inter = { variable: "font-sans" } as const;
 
 export const metadata: Metadata = {
   title: "Ryan Dharma – RevOps and Finance",
