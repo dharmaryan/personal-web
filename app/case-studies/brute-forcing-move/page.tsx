@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 export default function ApolloFunnelCaseStudy() {
   return (
-    <main className='flex-1 bg-white'>
+    <main className='flex-1 border-b border-slate-200 bg-gradient-to-br from-[#E3F2FD] via-[#F7FAFF] to-white'>
       <article className='mx-auto max-w-3xl px-6 py-24 text-slate-700'>
         <header className='space-y-4'>
           <p className='text-sm font-semibold uppercase tracking-[0.3em] text-slate-500'>Case Study</p>
@@ -53,7 +53,7 @@ export default function ApolloFunnelCaseStudy() {
                 alt='Cold email template screenshot'
                 width={1200}
                 height={742}
-                className='rounded-2xl border border-slate-200'
+                className='rounded-2xl border border-slate-200 shadow-lg'
               />
               <figcaption className='text-sm text-slate-500'>
                 Figure 1: A template I used – on placeholder names, of course.
@@ -105,7 +105,7 @@ export default function ApolloFunnelCaseStudy() {
                 alt='Screenshot of outbound sequences'
                 width={1200}
                 height={742}
-                className='rounded-2xl border border-slate-200'
+                className='rounded-2xl border border-slate-200 shadow-lg'
               />
               <figcaption className='text-sm text-slate-500'>Figure 2: Some sequences I prepared.</figcaption>
             </figure>
@@ -150,7 +150,7 @@ export default function ApolloFunnelCaseStudy() {
                 alt='Funnel metrics and time to offer'
                 width={1200}
                 height={742}
-                className='rounded-2xl border border-slate-200'
+                className='rounded-2xl border border-slate-200 shadow-lg'
               />
               <figcaption className='text-sm text-slate-500'>
                 Figure 3: Funnel metrics and time to offer.

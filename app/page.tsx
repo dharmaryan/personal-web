@@ -109,7 +109,7 @@ export default function HomePage() {
           </h2>
           <div className="mt-10 space-y-10">
             <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
-              <Link href="/case-studies/apollo-funnel" className="text-lg font-semibold text-slate-900 transition hover:text-brand-blue">
+              <Link href="/case-studies/brute-forcing-move" className="text-lg font-semibold text-slate-900 transition hover:text-brand-blue">
                 A brute-force sales funnel methodology for getting employed
               </Link>
               <p className="mt-4 text-base text-slate-600">
