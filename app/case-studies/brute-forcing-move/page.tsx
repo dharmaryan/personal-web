@@ -31,9 +31,8 @@ export default function ApolloFunnelCaseStudy() {
         </div>
       </section>
 
-      <section className='border-t border-slate-200 bg-white'>
-        <div className='mx-auto max-w-3xl px-6 py-16 sm:py-24'>
-          <article className='rounded-3xl border border-slate-200 bg-white p-6 shadow-xl sm:p-12'>
+      <section className='border-t border-slate-200 bg-white py-16 sm:py-24'>
+        <article className='mx-auto max-w-3xl rounded-3xl border border-slate-200 bg-white px-6 py-6 sm:py-12'>
             <div>
               <section className='pt-10 first:pt-0'>
                 <h2 className='text-3xl font-semibold text-slate-900'>June: A Stalled Career Path Meets an Eight-Year Goal</h2>
@@ -228,8 +227,7 @@ export default function ApolloFunnelCaseStudy() {
               </Link>
             </div>
           </article>
-        </div>
-      </section>
-    </main>
+        </section>
+      </main>
   )
 }
