@@ -3,8 +3,6 @@ import { Inter } from "next/font/google";
 import type { ReactNode } from "react";
 import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
-
 export const metadata: Metadata = {
   title: "Ryan Dharma – RevOps and Finance",
   description:
