@@ -1,33 +1,34 @@
-# Personal Web + Blog CMS
+# Personal Web
 
-This repo contains the Next.js App Router site for Ryan Dharma. The landing page and existing case studies stay untouched while a lightweight blogging CMS now powers `/blog` and the `/admin` tools.
+This repo contains the Next.js App Router site for Ryan Dharma. The landing page and case studies are fully static and powered by MDX content—no database or admin CMS is required.
 
-## Prerequisites
+## Content
 
-- Node.js 18+
-- SQLite 3 (used locally by Prisma)
+- Case studies live in `content/case-studies/*.mdx`.
+- Each file uses frontmatter for metadata (e.g. `slug`, `title`, `summary`, `description`, `author`, `date`, `backHref`, `backLabel`, `label`).
+- The body of the MDX file renders inside the shared `PostLayout` component.
 
-## Environment variables
+### Adding a new case study
 
-Create an `.env` file based on `.env.example` and set:
-
-```
-DATABASE_URL="file:./prisma/dev.db"
-ADMIN_PASSWORD="super-secure-password"
-BLOB_READ_WRITE_TOKEN="<vercel blob read/write token>"
-```
-
-The `ADMIN_PASSWORD` gates the `/admin` routes via middleware. The blob token is required for image uploads from the TipTap editor.
-
-## Database & Prisma
-
-1. Install dependencies: `npm install`
-2. Apply the existing migration (or generate a new SQLite database) with:
+1. Create a new file in `content/case-studies/` (for example, `content/case-studies/new-piece.mdx`).
+2. Add frontmatter with the slug and display fields:
+   ```mdx
+   ---
+   slug: "new-piece"
+   title: "Great New Piece"
+   summary: "Short teaser for the article."
+   description: "SEO-friendly description."
+   author: "Ryan Dharma"
+   date: "2025-01-01"
+   backHref: "/"
+   backLabel: "← Back to main site"
+   label: "CASE STUDY"
+   ---
+   
+   ## Heading
+   Body content in MDX goes here.
    ```
-   npx prisma migrate dev --name init
-   ```
-   This seeds `prisma/dev.db` with the `Post` table defined in `prisma/schema.prisma`.
-3. Generate the Prisma client if needed: `npx prisma generate`
+3. The page becomes available at `/case-studies/<slug>` and is also listed under `/blog`.
 
 ## Local development
 
@@ -37,9 +38,5 @@ npm run dev
 
 The app runs on `http://localhost:3000`.
 
-- `/blog` lists all published posts.
-- `/blog/[slug]` renders a single post using the shared `PostLayout`.
-- `/admin/login` prompts for the password from `ADMIN_PASSWORD`.
-- `/admin` exposes CRUD controls plus links to `/admin/new` and `/admin/edit/[id]` which include the TipTap editor, Vercel Blob uploads, and publish workflows.
-
-Image uploads go through `POST /api/upload`, which stores files in Vercel Blob and returns the public URL that TipTap uses.
+- `/case-studies/[slug]` renders a case study from the MDX content.
+- `/blog` lists the available case studies using the same MDX source.

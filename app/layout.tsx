@@ -1,8 +1,12 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
+import { Inter } from "next/font/google";
 import "./globals.css";
 
-const inter = { variable: "font-sans" } as const;
+const inter = Inter({
+  subsets: ["latin"],
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "Ryan Dharma – RevOps and Finance",
@@ -21,7 +25,7 @@ export const metadata: Metadata = {
     locale: "en_US",
     type: "website",
   },
-  
+
   twitter: {
     card: "summary_large_image",
     title: "Ryan Dharma – RevOps and Finance",
@@ -40,7 +44,7 @@ export default function RootLayout({
       <head>
         <meta name="robots" content="noindex, nofollow" />
       </head>
-      <body className={`${inter.variable} bg-white text-slate-900 antialiased`}>
+      <body className={`${inter.className} bg-white text-slate-900 antialiased`}>
         <div className="page-transition min-h-screen flex flex-col">
           {children}
         </div>
