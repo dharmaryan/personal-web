@@ -44,8 +44,8 @@ export default function RootLayout({
       <head>
         <meta name="robots" content="noindex, nofollow" />
       </head>
-      <body className={`${inter.className} bg-white text-slate-900 antialiased`}>
-        <div className="page-transition min-h-screen flex flex-col">
+      <body className={`body-with-wallpaper ${inter.className} bg-warm-beige text-ink antialiased`}>
+        <div className="page-transition relative z-10 min-h-screen flex flex-col">
           {children}
         </div>
       </body>
