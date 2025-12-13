@@ -19,7 +19,7 @@ export default async function BlogIndexPage() {
         <div className='mt-12 space-y-10'>
           {posts.length === 0 && <p className='text-slate-500'>No published posts yet.</p>}
           {posts.map((post) => (
-            <article key={post.slug} className='rounded-3xl border border-slate-100 bg-white p-6 shadow-sm transition hover:shadow-md'>
+            <article key={post.slug} className='rounded-3xl border border-slate-100 bg-white p-6 shadow-sm'>
               <Link href={`/case-studies/${post.slug}`} className='block'>
                 {'coverImage' in post.meta && post.meta.coverImage ? (
                   <div className='mb-4 overflow-hidden rounded-2xl border border-slate-100'>

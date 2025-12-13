@@ -26,7 +26,7 @@ export default function PostLayout({
   children,
 }: PostLayoutProps) {
   return (
-    <main className='page-transition flex-1 bg-white text-slate-700'>
+    <main className='flex-1 bg-white text-slate-700'>
       <section className='bg-white'>
         <div className='mx-auto max-w-3xl px-4 pt-20 pb-10'>
           <p className='mb-6 text-sm font-semibold uppercase tracking-wider text-slate-400'>{label}</p>
@@ -41,7 +41,7 @@ export default function PostLayout({
           </div>
           <Link
             href={backHref}
-            className='inline-flex items-center gap-2 text-sm text-slate-600 transition duration-200 hover:text-slate-900'
+            className='inline-flex items-center gap-2 text-sm text-slate-600 hover:text-slate-900'
           >
             {backLabel}
           </Link>
@@ -59,7 +59,7 @@ export default function PostLayout({
                 <p className='text-base font-semibold text-slate-900'>Enjoyed this piece?</p>
                 <Link
                   href='/'
-                  className='relative mt-4 inline-flex items-center rounded-full bg-brand-blue px-6 py-3 text-sm font-semibold text-white transition duration-200 hover:bg-brand-blue/90 sm:mt-0'
+                  className='relative mt-4 inline-flex items-center rounded-full bg-brand-blue px-6 py-3 text-sm font-semibold text-white sm:mt-0'
                 >
                   <span className='relative z-10 text-white'>View my main site</span>
                 </Link>

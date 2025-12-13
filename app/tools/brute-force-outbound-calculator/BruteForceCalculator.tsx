@@ -1,17 +1,15 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 
 const inputClassName =
-  "w-full rounded-2xl border border-white/20 bg-white/60 px-4 py-3 text-slate-900 shadow-sm backdrop-blur transition focus:border-indigo-400 focus:bg-white focus:shadow-md focus:outline-none";
+  "w-full rounded-2xl border border-white/20 bg-white/60 px-4 py-3 text-slate-900 shadow-sm backdrop-blur focus:border-indigo-400 focus:bg-white focus:shadow-md focus:outline-none";
 
 export default function BruteForceCalculator() {
   const [targetReplyRate, setTargetReplyRate] = useState<number>(10);
   const [targetCalls, setTargetCalls] = useState<number>(10);
   const [timelineWeeks, setTimelineWeeks] = useState<number>(12);
   const [repliesToCallsConversion, setRepliesToCallsConversion] = useState<number>(60);
-  const [highlightTotal, setHighlightTotal] = useState(false);
-
   const { totalMessages, messagesPerWeek, messagesPerDay } = useMemo(() => {
     const replyRate = Math.max(targetReplyRate, 0) / 100;
     const conversionRate = Math.max(repliesToCallsConversion, 0) / 100;
@@ -26,12 +24,6 @@ export default function BruteForceCalculator() {
 
     return { totalMessages: total, messagesPerWeek: perWeek, messagesPerDay: perDay };
   }, [repliesToCallsConversion, targetCalls, targetReplyRate, timelineWeeks]);
-
-  useEffect(() => {
-    setHighlightTotal(true);
-    const timeout = setTimeout(() => setHighlightTotal(false), 250);
-    return () => clearTimeout(timeout);
-  }, [totalMessages]);
 
   const badgeLabel = useMemo(() => {
     if (totalMessages < 500) return "Chill";
@@ -105,11 +97,7 @@ export default function BruteForceCalculator() {
 
       <div className="mt-8 rounded-2xl border border-slate-200 bg-white/90 p-6 shadow-inner">
         <p className="text-sm font-medium text-slate-600">Total messages required</p>
-        <div
-          className={`mt-2 text-4xl font-bold text-slate-900 transition duration-300 ease-out sm:text-5xl ${
-            highlightTotal ? "scale-[1.02] opacity-100" : "opacity-95"
-          }`}
-        >
+        <div className="mt-2 text-4xl font-bold text-slate-900 sm:text-5xl">
           {totalMessages.toLocaleString()}
         </div>
         <div className="mt-2 inline-flex items-center gap-2 rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-slate-600">
@@ -145,7 +133,7 @@ export default function BruteForceCalculator() {
             {bars.map((bar) => (
               <div key={bar.label} className="flex flex-1 flex-col items-center gap-2">
                 <div
-                  className="w-full rounded-full bg-gradient-to-t from-indigo-500 via-fuchsia-500 to-amber-400 shadow-sm transition"
+                  className="w-full rounded-full bg-gradient-to-t from-indigo-500 via-fuchsia-500 to-amber-400 shadow-sm"
                   style={{
                     height: `${Math.max(10, (bar.value / maxBarValue) * 100)}%`,
                   }}
