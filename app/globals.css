@@ -2,14 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
-::selection {
-  background: #c96727;
-  color: #ffffff;
-}
-
 body {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  background: #f6f2eb;
+  background: #ffffff;
+  color: #0f0f0f;
 }
 
 .case-body h2 {
@@ -46,7 +42,7 @@ body {
 }
 
 .case-body a {
-  @apply text-brand-blue underline underline-offset-4;
+  @apply text-zinc-900 underline underline-offset-4;
 }
 
 .case-body figure {
