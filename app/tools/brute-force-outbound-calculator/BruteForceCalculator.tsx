@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 
 const inputClassName =
-  "w-full rounded-2xl border border-white/20 bg-white/60 px-4 py-3 text-slate-900 shadow-sm backdrop-blur focus:border-indigo-400 focus:bg-white focus:shadow-md focus:outline-none";
+  "w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-slate-900 focus:border-indigo-500 focus:outline-none";
 
 export default function BruteForceCalculator() {
   const [targetReplyRate, setTargetReplyRate] = useState<number>(10);
@@ -42,8 +42,7 @@ export default function BruteForceCalculator() {
   const maxBarValue = Math.max(...bars.map((bar) => bar.value), 1);
 
   return (
-    <div className="relative overflow-hidden rounded-3xl border border-white/20 bg-white/70 p-6 shadow-xl backdrop-blur-lg sm:p-8">
-      <div className="absolute inset-0 -z-10 bg-gradient-to-br from-white via-white/70 to-transparent" aria-hidden />
+    <div className="relative overflow-hidden rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
       <div className="flex items-center justify-between gap-3">
         <div>
           <p className="text-xs uppercase tracking-[0.2em] text-slate-500">Outbound Planner</p>
@@ -95,7 +94,7 @@ export default function BruteForceCalculator() {
         </label>
       </div>
 
-      <div className="mt-8 rounded-2xl border border-slate-200 bg-white/90 p-6 shadow-inner">
+      <div className="mt-8 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
         <p className="text-sm font-medium text-slate-600">Total messages required</p>
         <div className="mt-2 text-4xl font-bold text-slate-900 sm:text-5xl">
           {totalMessages.toLocaleString()}
