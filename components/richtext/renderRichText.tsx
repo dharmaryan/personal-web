@@ -38,13 +38,13 @@ function renderNode(node: RichTextNode, key: string): ReactNode {
       )
     case 'blockquote':
       return (
-        <blockquote key={key} className='border-l-4 border-slate-200 pl-4 italic text-slate-600'>
+        <blockquote key={key} className='border-l-4 border-zinc-200 pl-4 italic text-zinc-700'>
           {(node.content || []).map((child, idx) => renderNode(child, `${key}-quote-${idx}`))}
         </blockquote>
       )
     case 'codeBlock':
       return (
-        <pre key={key} className='mt-4 overflow-x-auto rounded-2xl bg-slate-900 p-4 text-sm text-white'>
+        <pre key={key} className='mt-4 overflow-x-auto rounded-2xl bg-zinc-900 p-4 text-sm text-white'>
           <code>{(node.content && node.content[0]?.text) || ''}</code>
         </pre>
       )
@@ -55,8 +55,8 @@ function renderNode(node: RichTextNode, key: string): ReactNode {
       const caption = (node.attrs?.title as string) || ''
       return (
         <figure key={key} className='my-8 space-y-4'>
-          <img src={src} alt={alt} className='w-full rounded-2xl border border-slate-200 object-cover shadow-lg' />
-          {caption && <figcaption className='text-sm text-slate-500'>{caption}</figcaption>}
+          <img src={src} alt={alt} className='w-full rounded-2xl border border-zinc-200 object-cover' />
+          {caption && <figcaption className='text-sm text-zinc-500'>{caption}</figcaption>}
         </figure>
       )
     }
@@ -104,14 +104,14 @@ function applyMarks(value: string, marks: RichTextMark[] | undefined, key: strin
         return <span key={markKey} className='underline'>{content}</span>
       case 'code':
         return (
-          <code key={markKey} className='rounded bg-slate-100 px-1 py-0.5 text-sm text-slate-700'>
+          <code key={markKey} className='rounded bg-zinc-100 px-1 py-0.5 text-sm text-zinc-700'>
             {content}
           </code>
         )
       case 'link': {
         const href = typeof mark.attrs?.href === 'string' ? mark.attrs.href : '#'
         return (
-          <a key={markKey} href={href} className='text-brand-blue underline underline-offset-4'>
+          <a key={markKey} href={href} className='text-zinc-900 underline underline-offset-4'>
             {content}
           </a>
         )
