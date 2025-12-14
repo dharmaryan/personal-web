@@ -2,9 +2,9 @@ import Link from "next/link";
 
 const headerCopy = {
   name: "RYAN DHARMA",
-  title: "Systems thinking for high-velocity GTM teams.",
+  title: "Revenue Operations at Omni",
   subtitle:
-    "RevOps @ Omni. Previously investing and investment banking across infrastructure and TMT. Building clean reporting, durable processes, and honest operating rhythms.",
+    "Making people confident in their decision making by interpreting and wrangling big datasets. Previous investing and investment banking experience across infrastructure and TMT.",
   linkedIn: "https://www.linkedin.com/in/ryandharma/",
   email: "mailto:ryandharma04@gmail.com",
 };
@@ -50,7 +50,7 @@ export default function HomeShell() {
               <ExperienceCard
                 time="2025 – Present"
                 role="Revenue Operations @ Omni"
-                description="Learning about building GTM systems and revenue strategy for a Series B analytics start-up."
+                description="Building and managing GTM systems and revenue strategy for a Series B analytics start-up."
               />
               <ExperienceCard
                 time="2024 – 2025"
@@ -64,7 +64,7 @@ export default function HomeShell() {
               />
               <ExperienceCard
                 time="2019 – 2022"
-                role="Finance & Statistics @ University of Sydney"
+                role="Statistics & Finance @ University of Sydney"
                 description="Did an exchange at Wharton, met some cool people."
               />
             </div>
@@ -81,7 +81,7 @@ export default function HomeShell() {
           <div className="mt-6 grid gap-4 md:grid-cols-2">
             <ProjectCard
               title="Brute-force sales funnel methodology for getting employed"
-              description="The arcane art of getting a job and also succeeding in various high-volume, low-probability processes."
+              description="Sending out ~6,400 emails over the course of 4 months to brute force my way into the US."
               href="/case-studies/brute-forcing-move"
             />
             <ProjectCard
