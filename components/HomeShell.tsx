@@ -74,13 +74,13 @@ export default function HomeShell() {
           <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
             <div>
               <h2 className="text-2xl font-semibold text-zinc-950">Projects</h2>
-              <p className="text-base text-zinc-600">Case studies and tools I use to model messy go-to-market problems.</p>
+              <p className="text-base text-zinc-600">Documenting passion projects and what I've been up to lately.</p>
             </div>
           </div>
           <div className="mt-6 grid gap-4 md:grid-cols-2">
             <ProjectCard
               title="Brute-force sales funnel methodology for getting employed"
-              description="Sending out ~6,400 emails over the course of 4 months to brute force my way into the US."
+              description="How I sent out ~6,400 emails over the course of 3 months to brute force my way into the US."
               href="/case-studies/brute-forcing-move"
             />
             <ProjectCard
