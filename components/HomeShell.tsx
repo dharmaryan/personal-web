@@ -11,8 +11,8 @@ const headerCopy = {
 
 export default function HomeShell() {
   return (
-    <main className="flex min-h-screen items-stretch bg-white text-zinc-900">
-      <div className="mx-auto flex w-full max-w-5xl flex-col gap-12 px-6 py-12 lg:px-10 lg:py-16">
+  <main className="flex min-h-screen items-stretch bg-zinc-50 text-zinc-900">
+    <div className="mx-auto flex w-full max-w-5xl flex-col gap-12 px-6 py-12 lg:px-10 lg:py-16">
         <section
           id="home"
           className="flex flex-col gap-8 rounded-3xl border border-zinc-200 bg-white p-10"
