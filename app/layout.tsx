@@ -42,8 +42,8 @@ export default function RootLayout({
         <div className="min-h-screen flex flex-col">{children}</div>
         <div className="fixed bottom-4 right-4 z-50">
           <div className="flex gap-2 rounded-md border border-zinc-200 bg-white px-3 py-2 text-sm font-semibold text-zinc-900 shadow-sm">
-            <a href="mailto:ryandharma04@gmail.com" className="px-2 py-1">Email</a>
-            <a href="https://www.linkedin.com/in/ryandharma/" target="_blank" rel="noopener noreferrer" className="px-2 py-1">LinkedIn</a>
+            <a href="mailto:ryandharma04@gmail.com" className="px-2 py-1 hover:text-blue-600">Email</a>
+            <a href="https://www.linkedin.com/in/ryandharma/" target="_blank" rel="noopener noreferrer" className="px-2 py-1 hover:text-blue-600">LinkedIn</a>
           </div>
         </div>
       </body>

@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 
 const headerCopy = {
@@ -38,16 +37,6 @@ export default function HomeShell() {
             >
               LinkedIn
             </Link>
-          </div>
-          <div>
-            <Image
-              src="/ryan-dharma-headshot.jpg"
-              alt="Ryan Dharma headshot"
-              width={144}
-              height={144}
-              className="h-36 w-36 rounded-full object-cover"
-              priority
-            />
           </div>
         </section>
 
