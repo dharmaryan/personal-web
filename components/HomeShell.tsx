@@ -84,9 +84,9 @@ export default function HomeShell() {
               href="/case-studies/brute-forcing-move"
             />
             <ProjectCard
-              title="Brute-Force Outbound Calculator"
-              description="Turns the 14-week job hunt funnel into an interactive calculator for planning outbound volume."
-              href="/tools/brute-force-outbound-calculator"
+              title="Fundraising & Runway Model"  
+              description="Simplified illustrative model for projecting burn, runway, and dilution across fundraising scenarios."
+              href="/Fundraising%20%26%20Runway%20Model.xlsx"
             />
           </div>
         </section>
