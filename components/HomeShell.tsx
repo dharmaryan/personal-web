@@ -43,8 +43,7 @@ export default function HomeShell() {
         <section id="about" className="rounded-3xl border border-zinc-200 bg-white p-8">
           <div className="mx-auto max-w-3xl space-y-6">
             <div className="flex items-center justify-between">
-              <h2 className="text-2xl font-semibold text-zinc-950">About</h2>
-              <span className="text-sm text-zinc-500">Experience</span>
+              <h2 className="text-2xl font-semibold text-zinc-950">Experience</h2>
             </div>
             <div className="space-y-4">
               <ExperienceCard
