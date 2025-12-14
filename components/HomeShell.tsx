@@ -83,7 +83,7 @@ export default function HomeShell() {
               description="How I sent out ~6,400 emails over the course of 3 months to brute force my way into the US."
               href="/case-studies/brute-forcing-move"
             />
-            <ProjectCard
+            <DownloadCard
               title="Fundraising & Runway Model"  
               description="Simplified illustrative model for projecting burn, runway, and dilution across fundraising scenarios."
               href="/Fundraising%20%26%20Runway%20Model.xlsx"
@@ -139,6 +139,35 @@ function ProjectCard({
       <div className="mt-4 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-zinc-600">
         <span className="h-2 w-2 rounded-full bg-zinc-900" aria-hidden />
         <span>View</span>
+      </div>
+    </Link>
+  );
+}
+
+function DownloadCard({
+  title,
+  description,
+  href,
+}: {
+  title: string;
+  description: string;
+  href: string;
+}) {
+  return (
+    <Link
+      href={href}
+      className="block h-full rounded-3xl border border-zinc-200 bg-white p-6"
+    >
+      <div className="flex items-start justify-between gap-3">
+        <h3 className="text-lg font-semibold text-zinc-950">{title}</h3>
+        <span className="text-sm text-zinc-500" aria-hidden>
+          →
+        </span>
+      </div>
+      <p className="mt-3 text-sm text-zinc-700">{description}</p>
+      <div className="mt-4 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-zinc-600">
+        <span className="h-2 w-2 rounded-full bg-zinc-900" aria-hidden />
+        <span>Download</span>
       </div>
     </Link>
   );
