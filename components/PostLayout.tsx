@@ -59,7 +59,7 @@ export default function PostLayout({
                 <p className='text-base font-semibold text-zinc-950'>Enjoyed this piece?</p>
                 <Link
                   href='/'
-                  className='mt-4 inline-flex items-center rounded-md border border-zinc-900 bg-zinc-900 px-6 py-3 text-sm font-semibold text-white sm:mt-0'
+                  className='mt-4 inline-flex items-center rounded-md border border-zinc-900 bg-zinc-900 px-6 py-3 text-sm font-semibold text-white hover:border-blue-600 hover:bg-blue-600 sm:mt-0'
                 >
                   <span className='text-white'>View my main site</span>
                 </Link>

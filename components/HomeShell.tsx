@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 const headerCopy = {
@@ -25,7 +26,7 @@ export default function HomeShell() {
           <div className="flex flex-wrap items-center gap-3 text-sm font-semibold text-zinc-900">
             <Link
               href={headerCopy.email}
-              className="inline-flex items-center rounded-md border border-zinc-300 bg-white px-5 py-3"
+              className="inline-flex items-center rounded-md border border-zinc-300 bg-white px-5 py-3 hover:border-blue-500 hover:text-blue-600"
             >
               Email me
             </Link>
@@ -33,10 +34,20 @@ export default function HomeShell() {
               href={headerCopy.linkedIn}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center rounded-md border border-zinc-900 bg-zinc-900 px-5 py-3 text-white"
+              className="inline-flex items-center rounded-md border border-zinc-900 bg-zinc-900 px-5 py-3 text-white hover:border-blue-600 hover:bg-blue-600"
             >
               LinkedIn
             </Link>
+          </div>
+          <div>
+            <Image
+              src="/ryan-dharma-headshot.jpg"
+              alt="Ryan Dharma headshot"
+              width={144}
+              height={144}
+              className="h-36 w-36 rounded-full object-cover"
+              priority
+            />
           </div>
         </section>
 
@@ -127,7 +138,7 @@ function ProjectCard({
   return (
     <Link
       href={href}
-      className="block h-full rounded-3xl border border-zinc-200 bg-white p-6"
+      className="block h-full rounded-3xl border border-zinc-200 bg-white p-6 hover:border-blue-500"
     >
       <div className="flex items-start justify-between gap-3">
         <h3 className="text-lg font-semibold text-zinc-950">{title}</h3>
@@ -156,7 +167,7 @@ function DownloadCard({
   return (
     <Link
       href={href}
-      className="block h-full rounded-3xl border border-zinc-200 bg-white p-6"
+      className="block h-full rounded-3xl border border-zinc-200 bg-white p-6 hover:border-blue-500"
     >
       <div className="flex items-start justify-between gap-3">
         <h3 className="text-lg font-semibold text-zinc-950">{title}</h3>
