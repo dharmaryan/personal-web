@@ -52,6 +52,11 @@ export default function HomeShell() {
                 description="Building and managing GTM systems and revenue strategy for a Series B analytics start-up."
               />
               <ExperienceCard
+                time="2025 – 2026"
+                role="Finance Domain Expert @ Mercor"
+                description="Part of the global effort to provide robust financial models to leading AI labs to automate out junior investment banking work."
+              />
+              <ExperienceCard
                 time="2024 – 2025"
                 role="Private Equity @ I Squared Capital"
                 description="First junior hire in the Sydney office of a $50B private equity fund, making and managing investments in core-plus & value-add infrastructure."
