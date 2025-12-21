@@ -91,7 +91,7 @@ export default function HomeShell() {
             <DownloadCard
               title="Detailed Annual Planning & Fundraising Model"  
               description="A detailed strategic finance case study I developed including NTM monthly projections, multi-stage fundraising & valuation and build-out of SaaS metrics."
-              href="href="/Project%20Oracle%20-%20Illustrative%20Annual%20Planning%20and%20Fundraising%20Model.xlsx"
+              href="/Project%20Oracle%20-%20Illustrative%20Annual%20Planning%20and%20Fundraising%20Model.xlsx"
             />
           </div>
         </section>
