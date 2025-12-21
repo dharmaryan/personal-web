@@ -84,8 +84,13 @@ export default function HomeShell() {
               href="/case-studies/brute-forcing-move"
             />
             <DownloadCard
-              title="Fundraising & Runway Model"  
+              title="Simplified Fundraising & Runway Model"  
               description="Simplified illustrative model for projecting burn, runway, and dilution across fundraising scenarios."
+              href="/Fundraising%20%26%20Runway%20Model.xlsx"
+            />
+            <DownloadCard
+              title="Detailed Annual Planning & Fundraising Model"  
+              description="A case study I developed including NTM monthly projections, multi-stage fundraising & valuation and build-out of SaaS metrics."
               href="/Fundraising%20%26%20Runway%20Model.xlsx"
             />
           </div>
