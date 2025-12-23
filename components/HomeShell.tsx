@@ -88,6 +88,11 @@ export default function HomeShell() {
               description="How I sent out ~6,400 emails over the course of 3 months to brute force my way into the US."
               href="/case-studies/brute-forcing-move"
             />
+            <ProjectCard
+              title="An ex-financier’s view on why tech ships faster than finance"
+              description="Intuitively and quantitatively explaining why things work so much more quickly in tech."
+              href="/case-studies/output-comparison"
+            />
             <DownloadCard
               title="Simplified Fundraising & Runway Model"  
               description="Simplified illustrative model for projecting burn, runway, and dilution across fundraising scenarios."

@@ -1,6 +1,9 @@
 import fs from 'fs/promises'
 import path from 'path'
-import { markdownToDoc, type RichTextDoc } from './richText'
+import type { ReactElement } from 'react'
+import { compileMDX } from 'next-mdx-remote/rsc'
+import rehypeKatex from 'rehype-katex'
+import remarkMath from 'remark-math'
 
 const CASE_STUDIES_DIR = path.join(process.cwd(), 'content', 'case-studies')
 
@@ -27,7 +30,7 @@ export interface CaseStudy {
       backLabel: string
       label: string
     }
-  doc: RichTextDoc
+  content: ReactElement
 }
 
 function parseFrontmatter(source: string): { meta: Frontmatter; body: string } {
@@ -85,6 +88,17 @@ export async function loadCaseStudy(slug: string): Promise<CaseStudy | null> {
   const backHref = parsedMeta.backHref ?? '/'
   const backLabel = parsedMeta.backLabel ?? '← Back to main site'
   const label = parsedMeta.label ?? 'CASE STUDY'
+  // Compile the MDX body so markdown renders as React components instead of raw text, and enable math output.
+  const compiled = await compileMDX({
+    source: body,
+    options: {
+      parseFrontmatter: false,
+      mdxOptions: {
+        remarkPlugins: [remarkMath], // Support $$...$$ syntax in the markdown source.
+        rehypePlugins: [rehypeKatex], // Transform parsed math to KaTeX HTML.
+      },
+    },
+  })
 
   return {
     slug,
@@ -97,7 +111,7 @@ export async function loadCaseStudy(slug: string): Promise<CaseStudy | null> {
       backLabel,
       label,
     },
-    doc: markdownToDoc(body),
+    content: compiled.content,
   }
 }
 
