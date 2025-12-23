@@ -88,6 +88,11 @@ export default function HomeShell() {
               description="How I sent out ~6,400 emails over the course of 3 months to brute force my way into the US."
               href="/case-studies/brute-forcing-move"
             />
+            <ProjectCard
+              title="Contract Returns Calculator"
+              description="Stripe-inspired, deterministic calculator for CAC payback, IRR, and cash-on-cash at the contract level."
+              href="/case-studies/contract-returns-calculator"
+            />
             <DownloadCard
               title="Simplified Fundraising & Runway Model"  
               description="Simplified illustrative model for projecting burn, runway, and dilution across fundraising scenarios."
