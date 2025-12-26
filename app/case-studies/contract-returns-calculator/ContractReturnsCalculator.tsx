@@ -1,6 +1,7 @@
 'use client'
 
-import { useMemo, useRef, useState } from 'react'
+import Link from 'next/link'
+import { useMemo, useRef, useState, type MouseEvent } from 'react'
 
 type BillingFrequency = 'monthly' | 'quarterly' | 'annual'
 type EscalationPeriod = 'monthly' | 'quarterly' | 'annual'
@@ -31,6 +32,13 @@ interface CalculatedResults {
   cocMultiple: number | null
   cumulativeCashCreated: number
   irrAnnualized: number | null
+}
+
+interface ChartPoint {
+  month: number
+  monthlyCash: number
+  cumulativeCash: number
+  paybackAchieved: boolean
 }
 
 const currencyFormatter = new Intl.NumberFormat('en-US', {
@@ -245,6 +253,167 @@ const EXAMPLE_STATE = {
   costLines: [] as { name: string; monthlyCost: number }[],
 }
 
+const buildLinePath = (points: { x: number; y: number }[]) => {
+  if (points.length === 0) return ''
+  return points.map((point, index) => `${index === 0 ? 'M' : 'L'}${point.x} ${point.y}`).join(' ')
+}
+
+function CashflowChart({
+  data,
+  paybackMonth,
+}: {
+  data: ChartPoint[]
+  paybackMonth: number | null
+}) {
+  const [hoverIndex, setHoverIndex] = useState<number | null>(null)
+
+  const width = 640
+  const height = 260
+  const padding = { top: 18, right: 24, bottom: 32, left: 52 }
+  const innerWidth = width - padding.left - padding.right
+  const innerHeight = height - padding.top - padding.bottom
+
+  const values = data.flatMap((point) => [point.monthlyCash, point.cumulativeCash, 0])
+  const minValue = Math.min(...values)
+  const maxValue = Math.max(...values)
+  const range = maxValue - minValue === 0 ? 1 : maxValue - minValue
+
+  const xForIndex = (index: number) =>
+    padding.left + (data.length === 1 ? 0 : (index / (data.length - 1)) * innerWidth)
+  const yForValue = (value: number) => padding.top + ((maxValue - value) / range) * innerHeight
+
+  const monthlyPoints = data.map((point, index) => ({
+    x: xForIndex(index),
+    y: yForValue(point.monthlyCash),
+  }))
+
+  const cumulativePoints = data.map((point, index) => ({
+    x: xForIndex(index),
+    y: yForValue(point.cumulativeCash),
+  }))
+
+  const baselineY = yForValue(0)
+  const paybackIndex = paybackMonth ? data.findIndex((point) => point.month === paybackMonth) : -1
+
+  const handleMove = (event: MouseEvent<HTMLDivElement>) => {
+    const rect = event.currentTarget.getBoundingClientRect()
+    const x = event.clientX - rect.left
+    const ratio = (x - padding.left) / innerWidth
+    const index = Math.round(ratio * (data.length - 1))
+    const clampedIndex = Math.min(Math.max(index, 0), data.length - 1)
+    setHoverIndex(clampedIndex)
+  }
+
+  const hoverPoint = hoverIndex === null ? null : data[hoverIndex]
+  const hoverX = hoverIndex === null ? 0 : xForIndex(hoverIndex)
+
+  return (
+    <div className="relative">
+      <div
+        className="relative overflow-hidden rounded-2xl border border-zinc-200 bg-white"
+        onMouseMove={handleMove}
+        onMouseLeave={() => setHoverIndex(null)}
+      >
+        <svg viewBox={`0 0 ${width} ${height}`} className="h-64 w-full">
+          <line
+            x1={padding.left}
+            x2={width - padding.right}
+            y1={baselineY}
+            y2={baselineY}
+            className="stroke-zinc-200"
+            strokeWidth={1}
+          />
+          <line
+            x1={xForIndex(0)}
+            x2={xForIndex(0)}
+            y1={padding.top}
+            y2={height - padding.bottom}
+            className="stroke-zinc-300"
+            strokeWidth={1}
+          />
+          {paybackIndex >= 0 && (
+            <line
+              x1={xForIndex(paybackIndex)}
+              x2={xForIndex(paybackIndex)}
+              y1={padding.top}
+              y2={height - padding.bottom}
+              className="stroke-blue-400"
+              strokeDasharray="6 6"
+              strokeWidth={1.5}
+            />
+          )}
+          <path
+            d={buildLinePath(monthlyPoints)}
+            className="fill-none stroke-zinc-400"
+            strokeWidth={1.5}
+          />
+          <path
+            d={buildLinePath(cumulativePoints)}
+            className="fill-none stroke-blue-600"
+            strokeWidth={2.5}
+          />
+          {hoverIndex !== null && (
+            <>
+              <line
+                x1={hoverX}
+                x2={hoverX}
+                y1={padding.top}
+                y2={height - padding.bottom}
+                className="stroke-zinc-300"
+                strokeDasharray="4 4"
+                strokeWidth={1}
+              />
+              <circle
+                cx={hoverX}
+                cy={yForValue(hoverPoint?.cumulativeCash ?? 0)}
+                r={4}
+                className="fill-blue-600"
+              />
+              <circle
+                cx={hoverX}
+                cy={yForValue(hoverPoint?.monthlyCash ?? 0)}
+                r={3}
+                className="fill-zinc-400"
+              />
+            </>
+          )}
+          <text x={padding.left + 4} y={padding.top + 12} className="fill-zinc-400 text-[10px]">
+            CAC
+          </text>
+          <text
+            x={width - padding.right - 40}
+            y={baselineY - 6}
+            className="fill-zinc-400 text-[10px]"
+          >
+            $0
+          </text>
+          <text
+            x={width - padding.right - 70}
+            y={height - 10}
+            className="fill-zinc-400 text-[10px]"
+          >
+            Months →
+          </text>
+        </svg>
+      </div>
+
+      {hoverPoint && (
+        <div
+          className="pointer-events-none absolute top-4 rounded-xl border border-zinc-200 bg-white/95 px-3 py-2 text-xs text-zinc-700 shadow-sm"
+          style={{ left: `${hoverX}px`, transform: 'translateX(-50%)' }}
+        >
+          <div className="font-semibold text-zinc-900">Month {hoverPoint.month}</div>
+          <div className="mt-1 space-y-0.5">
+            <div>Monthly cash flow: {formatCurrency(hoverPoint.monthlyCash)}</div>
+            <div>Cumulative cash flow: {formatCurrency(hoverPoint.cumulativeCash)}</div>
+            <div>Payback achieved: {hoverPoint.paybackAchieved ? 'True' : 'False'}</div>
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
 export default function ContractReturnsCalculator() {
   const idRef = useRef(0)
   const costIdRef = useRef(0)
@@ -267,7 +436,9 @@ export default function ContractReturnsCalculator() {
   )
   const [costMode, setCostMode] = useState<CostMode>(DEFAULT_STATE.costMode)
   const [costLines, setCostLines] = useState<CostLine[]>([])
-  const [showAllMonths, setShowAllMonths] = useState(false)
+  const [showAdvanced, setShowAdvanced] = useState(false)
+  const [showDetails, setShowDetails] = useState(false)
+  const [expandedLines, setExpandedLines] = useState<string[]>([])
 
   const createRevenueLine = () => ({
     id: `line-${idRef.current++}`,
@@ -306,7 +477,9 @@ export default function ContractReturnsCalculator() {
         ...line,
       })),
     )
-    setShowAllMonths(false)
+    setShowAdvanced(false)
+    setShowDetails(false)
+    setExpandedLines([])
   }
 
   const resetAll = () => applyPreset(DEFAULT_STATE)
@@ -385,404 +558,527 @@ export default function ContractReturnsCalculator() {
     cac,
   ])
 
-  const tableMonths = showAllMonths ? results.cashCollected.length : Math.min(24, results.cashCollected.length)
+  const chartData = useMemo<ChartPoint[]>(() => {
+    const data: ChartPoint[] = []
+    let cumulative = -cac
+    data.push({
+      month: 0,
+      monthlyCash: -cac,
+      cumulativeCash: cumulative,
+      paybackAchieved: cumulative >= 0,
+    })
+
+    results.cashCollected.forEach((cash, index) => {
+      cumulative += cash
+      data.push({
+        month: index + 1,
+        monthlyCash: cash,
+        cumulativeCash: cumulative,
+        paybackAchieved: cumulative >= 0,
+      })
+    })
+
+    return data
+  }, [cac, results.cashCollected])
+
+  const paybackLabel =
+    results.paybackMonth === null
+      ? 'No payback'
+      : results.paybackMonth === 0
+        ? 'Month 0'
+        : `Month ${results.paybackMonth}`
+
+  const verdictLine =
+    results.paybackMonth === null
+      ? 'No payback within the modeled term.'
+      : `Payback in month ${results.paybackMonth}.`
+
+  const cocLine =
+    results.cocMultiple === null
+      ? 'Returns pending.'
+      : `$${formatCompact(results.cocMultiple)} returned for every $1 invested.`
+
+  const handleAddLine = () => {
+    const newLine = createRevenueLine()
+    setRevenueLines((lines) => [...lines, newLine])
+    setExpandedLines((lines) => [...lines, newLine.id])
+  }
+
+  const toggleExpandedLine = (id: string) => {
+    setExpandedLines((lines) =>
+      lines.includes(id) ? lines.filter((lineId) => lineId !== id) : [...lines, id],
+    )
+  }
 
   return (
-    <div className="space-y-10">
-      <div className="rounded-3xl border border-zinc-200 bg-white p-6">
-        <div className="flex flex-wrap items-center justify-between gap-4">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-zinc-500">Calculator</p>
-            <p className="mt-2 text-2xl font-semibold text-zinc-950">Contract Returns Calculator</p>
-            <p className="mt-2 text-sm text-zinc-600">
-              Build contract-level unit economics and simulate cash collection timing.
-            </p>
-          </div>
-          <div className="flex flex-wrap gap-3">
+    <div className="flex min-h-screen flex-col bg-white text-zinc-700">
+      <header className="border-b border-zinc-200">
+        <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4 sm:px-6">
+          <Link href="/" className="text-sm font-semibold text-zinc-700 hover:text-blue-600">
+            ← Back to main site
+          </Link>
+          <div className="flex flex-wrap items-center gap-3 text-sm font-semibold text-zinc-700">
             <button
               type="button"
               onClick={loadExample}
-              className="rounded-full border border-zinc-200 px-4 py-2 text-sm font-semibold text-zinc-700 hover:border-blue-500"
+              className="rounded-full border border-zinc-200 px-3 py-1.5 hover:border-blue-500"
             >
               Load example
             </button>
             <button
               type="button"
               onClick={resetAll}
-              className="rounded-full border border-zinc-200 px-4 py-2 text-sm font-semibold text-zinc-700 hover:border-blue-500"
+              className="rounded-full border border-zinc-200 px-3 py-1.5 hover:border-blue-500"
             >
               Reset
             </button>
+            <a href="mailto:ryandharma04@gmail.com" className="px-2 py-1 hover:text-blue-600">
+              Email
+            </a>
+            <a
+              href="https://www.linkedin.com/in/ryandharma/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-2 py-1 hover:text-blue-600"
+            >
+              LinkedIn
+            </a>
           </div>
         </div>
-      </div>
+      </header>
 
-      <div className="grid gap-8 md:grid-cols-[minmax(0,1fr)_minmax(0,0.85fr)]">
-        <div className="space-y-6">
-          <div className="rounded-3xl border border-zinc-200 bg-white p-6">
-            <p className="text-lg font-semibold text-zinc-950">Deal &amp; timing</p>
-            <div className="mt-4 grid gap-4 sm:grid-cols-2">
-              <label className="text-sm font-medium text-zinc-700">
-                CAC ($)
-                <input
-                  type="number"
-                  value={cac}
-                  onChange={(event) => setCac(toNumber(event.target.value))}
-                  className="mt-2 w-full rounded-xl border border-zinc-200 px-3 py-2 text-sm text-zinc-900"
-                />
-              </label>
-              <label className="text-sm font-medium text-zinc-700">
-                Term (months)
-                <input
-                  type="number"
-                  value={termMonths}
-                  onChange={(event) => setTermMonths(toNumber(event.target.value))}
-                  className="mt-2 w-full rounded-xl border border-zinc-200 px-3 py-2 text-sm text-zinc-900"
-                />
-              </label>
-              <label className="text-sm font-medium text-zinc-700">
-                Renewals (#)
-                <input
-                  type="number"
-                  value={renewals}
-                  onChange={(event) => setRenewals(toNumber(event.target.value))}
-                  className="mt-2 w-full rounded-xl border border-zinc-200 px-3 py-2 text-sm text-zinc-900"
-                />
-              </label>
-              <label className="text-sm font-medium text-zinc-700">
-                Billing frequency
-                <select
-                  value={billingFrequency}
-                  onChange={(event) => setBillingFrequency(event.target.value as BillingFrequency)}
-                  className="mt-2 w-full rounded-xl border border-zinc-200 px-3 py-2 text-sm text-zinc-900"
-                >
-                  <option value="monthly">Monthly</option>
-                  <option value="quarterly">Quarterly</option>
-                  <option value="annual">Annual upfront</option>
-                </select>
-              </label>
-              <label className="text-sm font-medium text-zinc-700">
-                Payment terms
-                <select
-                  value={lagMonths}
-                  onChange={(event) => setLagMonths(toNumber(event.target.value))}
-                  className="mt-2 w-full rounded-xl border border-zinc-200 px-3 py-2 text-sm text-zinc-900"
-                >
-                  <option value={0}>Due on receipt (0)</option>
-                  <option value={1}>Net 30 (1)</option>
-                  <option value={2}>Net 60 (2)</option>
-                  <option value={3}>Net 90 (3)</option>
-                </select>
-              </label>
-              <label className="text-sm font-medium text-zinc-700">
-                Escalation (%)
-                <input
-                  type="number"
-                  value={escalationPercent}
-                  onChange={(event) => setEscalationPercent(toNumber(event.target.value))}
-                  className="mt-2 w-full rounded-xl border border-zinc-200 px-3 py-2 text-sm text-zinc-900"
-                />
-              </label>
-              <label className="text-sm font-medium text-zinc-700">
-                Escalation cadence
-                <select
-                  value={escalationPeriod}
-                  onChange={(event) => setEscalationPeriod(event.target.value as EscalationPeriod)}
-                  className="mt-2 w-full rounded-xl border border-zinc-200 px-3 py-2 text-sm text-zinc-900"
-                >
-                  <option value="monthly">Monthly</option>
-                  <option value="quarterly">Quarterly</option>
-                  <option value="annual">Annual</option>
-                </select>
-              </label>
+      <div className="mx-auto flex w-full max-w-6xl flex-1 flex-col px-4 py-6 sm:px-6 lg:py-8">
+        <div className="grid flex-1 gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">
+          <section className="flex flex-col gap-6 rounded-3xl border border-zinc-200 bg-white p-6 shadow-sm">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-zinc-500">Calculator</p>
+              <p className="mt-2 text-sm text-zinc-600">
+                Model contract returns and cash collection without scrolling.
+              </p>
             </div>
-          </div>
 
-          <div className="rounded-3xl border border-zinc-200 bg-white p-6">
-            <p className="text-lg font-semibold text-zinc-950">Renewal adjustments</p>
-            <div className="mt-4 grid gap-4 sm:grid-cols-2">
-              <label className="text-sm font-medium text-zinc-700">
-                Renewal uplift (%)
-                <input
-                  type="number"
-                  value={renewalUpliftPercent}
-                  onChange={(event) => setRenewalUpliftPercent(toNumber(event.target.value))}
-                  className="mt-2 w-full rounded-xl border border-zinc-200 px-3 py-2 text-sm text-zinc-900"
-                />
-              </label>
-              <label className="text-sm font-medium text-zinc-700">
-                Renewal volume change (%)
-                <input
-                  type="number"
-                  value={renewalVolumeChangePercent}
-                  onChange={(event) => setRenewalVolumeChangePercent(toNumber(event.target.value))}
-                  className="mt-2 w-full rounded-xl border border-zinc-200 px-3 py-2 text-sm text-zinc-900"
-                />
-              </label>
-            </div>
-          </div>
-
-          <div className="rounded-3xl border border-zinc-200 bg-white p-6">
-            <div className="flex items-center justify-between">
-              <p className="text-lg font-semibold text-zinc-950">Revenue lines</p>
-              <button
-                type="button"
-                onClick={() => setRevenueLines((lines) => [...lines, createRevenueLine()])}
-                className="text-sm font-semibold text-blue-600"
-              >
-                + Add line
-              </button>
-            </div>
-            <div className="mt-4 space-y-4">
-              {revenueLines.map((line) => (
-                <div key={line.id} className="rounded-2xl border border-zinc-200 bg-white p-4">
-                  <div className="flex items-center justify-between gap-3">
-                    <input
-                      type="text"
-                      value={line.name}
-                      onChange={(event) =>
-                        setRevenueLines((lines) =>
-                          lines.map((item) => (item.id === line.id ? { ...item, name: event.target.value } : item)),
-                        )
-                      }
-                      className="w-full rounded-lg border border-zinc-200 px-3 py-2 text-sm text-zinc-900"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setRevenueLines((lines) => lines.filter((item) => item.id !== line.id))}
-                      className="text-xs font-semibold uppercase tracking-wide text-zinc-400 hover:text-zinc-600"
-                    >
-                      Remove
-                    </button>
-                  </div>
-                  <div className="mt-3 grid gap-3 sm:grid-cols-2">
-                    <label className="text-xs font-medium uppercase tracking-wide text-zinc-500">
-                      Monthly price ($)
-                      <input
-                        type="number"
-                        value={line.monthlyPrice}
-                        onChange={(event) =>
-                          setRevenueLines((lines) =>
-                            lines.map((item) =>
-                              item.id === line.id ? { ...item, monthlyPrice: toNumber(event.target.value) } : item,
-                            ),
-                          )
-                        }
-                        className="mt-2 w-full rounded-lg border border-zinc-200 px-3 py-2 text-sm text-zinc-900"
-                      />
-                    </label>
-                    <label className="text-xs font-medium uppercase tracking-wide text-zinc-500">
-                      Volume
-                      <input
-                        type="number"
-                        value={line.volume}
-                        onChange={(event) =>
-                          setRevenueLines((lines) =>
-                            lines.map((item) =>
-                              item.id === line.id ? { ...item, volume: toNumber(event.target.value) } : item,
-                            ),
-                          )
-                        }
-                        className="mt-2 w-full rounded-lg border border-zinc-200 px-3 py-2 text-sm text-zinc-900"
-                      />
-                    </label>
-                    {costMode === 'margin' && (
-                      <label className="text-xs font-medium uppercase tracking-wide text-zinc-500">
-                        Margin (%)
-                        <input
-                          type="number"
-                          value={line.margin}
-                          onChange={(event) =>
-                            setRevenueLines((lines) =>
-                              lines.map((item) =>
-                                item.id === line.id ? { ...item, margin: toNumber(event.target.value) } : item,
-                              ),
-                            )
-                          }
-                          className="mt-2 w-full rounded-lg border border-zinc-200 px-3 py-2 text-sm text-zinc-900"
-                        />
-                      </label>
-                    )}
-                  </div>
-                </div>
-              ))}
-              {revenueLines.length === 0 && (
-                <p className="text-sm text-zinc-500">Add at least one revenue line to compute returns.</p>
-              )}
-            </div>
-          </div>
-
-          <div className="rounded-3xl border border-zinc-200 bg-white p-6">
-            <p className="text-lg font-semibold text-zinc-950">Cost mode</p>
-            <div className="mt-4 flex flex-wrap gap-3">
-              <button
-                type="button"
-                onClick={() => setCostMode('margin')}
-                className={`rounded-full border px-4 py-2 text-sm font-semibold ${
-                  costMode === 'margin'
-                    ? 'border-blue-500 bg-blue-50 text-blue-700'
-                    : 'border-zinc-200 text-zinc-700'
-                }`}
-              >
-                Margin-driven
-              </button>
-              <button
-                type="button"
-                onClick={() => setCostMode('line-item')}
-                className={`rounded-full border px-4 py-2 text-sm font-semibold ${
-                  costMode === 'line-item'
-                    ? 'border-blue-500 bg-blue-50 text-blue-700'
-                    : 'border-zinc-200 text-zinc-700'
-                }`}
-              >
-                Line-item-driven
-              </button>
-            </div>
-            {costMode === 'line-item' && (
-              <div className="mt-6 space-y-4">
-                <div className="flex items-center justify-between">
-                  <p className="text-sm font-semibold uppercase tracking-[0.2em] text-zinc-500">Costs</p>
-                  <button
-                    type="button"
-                    onClick={() => setCostLines((lines) => [...lines, createCostLine()])}
-                    className="text-sm font-semibold text-blue-600"
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <p className="text-sm font-semibold text-zinc-900">Core deal inputs</p>
+              </div>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <label className="text-xs font-semibold uppercase tracking-wide text-zinc-500">
+                  CAC ($)
+                  <input
+                    type="number"
+                    value={cac}
+                    onChange={(event) => setCac(toNumber(event.target.value))}
+                    className="mt-2 w-full rounded-xl border border-zinc-200 px-3 py-2 text-sm text-zinc-900"
+                  />
+                </label>
+                <label className="text-xs font-semibold uppercase tracking-wide text-zinc-500">
+                  Term (months)
+                  <input
+                    type="number"
+                    value={termMonths}
+                    onChange={(event) => setTermMonths(toNumber(event.target.value))}
+                    className="mt-2 w-full rounded-xl border border-zinc-200 px-3 py-2 text-sm text-zinc-900"
+                  />
+                </label>
+                <label className="text-xs font-semibold uppercase tracking-wide text-zinc-500">
+                  Billing frequency
+                  <select
+                    value={billingFrequency}
+                    onChange={(event) => setBillingFrequency(event.target.value as BillingFrequency)}
+                    className="mt-2 w-full rounded-xl border border-zinc-200 px-3 py-2 text-sm text-zinc-900"
                   >
-                    + Add cost
-                  </button>
-                </div>
-                {costLines.map((line) => (
-                  <div key={line.id} className="rounded-2xl border border-zinc-200 bg-white p-4">
-                    <div className="flex items-center justify-between gap-3">
-                      <input
-                        type="text"
-                        value={line.name}
-                        onChange={(event) =>
-                          setCostLines((lines) =>
-                            lines.map((item) => (item.id === line.id ? { ...item, name: event.target.value } : item)),
-                          )
-                        }
-                        className="w-full rounded-lg border border-zinc-200 px-3 py-2 text-sm text-zinc-900"
-                      />
-                      <button
-                        type="button"
-                        onClick={() => setCostLines((lines) => lines.filter((item) => item.id !== line.id))}
-                        className="text-xs font-semibold uppercase tracking-wide text-zinc-400 hover:text-zinc-600"
-                      >
-                        Remove
-                      </button>
+                    <option value="monthly">Monthly</option>
+                    <option value="quarterly">Quarterly</option>
+                    <option value="annual">Annual upfront</option>
+                  </select>
+                </label>
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <p className="text-sm font-semibold text-zinc-900">Revenue lines</p>
+                <button type="button" onClick={handleAddLine} className="text-sm font-semibold text-blue-600">
+                  + Add line
+                </button>
+              </div>
+              <div className="space-y-3">
+                {revenueLines.map((line) => {
+                  const isExpanded = expandedLines.includes(line.id)
+                  const summary = `${line.name} · ${formatCurrency(line.monthlyPrice)}/mo × ${line.volume} · ${line.margin}% margin`
+                  return (
+                    <div key={line.id} className="rounded-2xl border border-zinc-200 bg-white">
+                      <div className="flex items-center justify-between gap-3 px-4 py-3">
+                        <button
+                          type="button"
+                          onClick={() => toggleExpandedLine(line.id)}
+                          className="flex flex-1 flex-col text-left"
+                        >
+                          <span className="text-sm font-semibold text-zinc-900">{line.name}</span>
+                          <span className="text-xs text-zinc-500">{summary}</span>
+                        </button>
+                        <div className="flex items-center gap-3">
+                          <button
+                            type="button"
+                            onClick={() => toggleExpandedLine(line.id)}
+                            className="text-xs font-semibold uppercase tracking-wide text-blue-600"
+                          >
+                            {isExpanded ? 'Collapse' : 'Edit'}
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setRevenueLines((lines) => lines.filter((item) => item.id !== line.id))
+                              setExpandedLines((lines) => lines.filter((lineId) => lineId !== line.id))
+                            }}
+                            className="text-xs font-semibold uppercase tracking-wide text-zinc-400 hover:text-zinc-600"
+                          >
+                            Remove
+                          </button>
+                        </div>
+                      </div>
+                      {isExpanded && (
+                        <div className="grid gap-3 border-t border-zinc-200 px-4 py-3 sm:grid-cols-2">
+                          <label className="text-xs font-semibold uppercase tracking-wide text-zinc-500">
+                            Name
+                            <input
+                              type="text"
+                              value={line.name}
+                              onChange={(event) =>
+                                setRevenueLines((lines) =>
+                                  lines.map((item) =>
+                                    item.id === line.id ? { ...item, name: event.target.value } : item,
+                                  ),
+                                )
+                              }
+                              className="mt-2 w-full rounded-lg border border-zinc-200 px-3 py-2 text-sm text-zinc-900"
+                            />
+                          </label>
+                          <label className="text-xs font-semibold uppercase tracking-wide text-zinc-500">
+                            Monthly price ($)
+                            <input
+                              type="number"
+                              value={line.monthlyPrice}
+                              onChange={(event) =>
+                                setRevenueLines((lines) =>
+                                  lines.map((item) =>
+                                    item.id === line.id
+                                      ? { ...item, monthlyPrice: toNumber(event.target.value) }
+                                      : item,
+                                  ),
+                                )
+                              }
+                              className="mt-2 w-full rounded-lg border border-zinc-200 px-3 py-2 text-sm text-zinc-900"
+                            />
+                          </label>
+                          <label className="text-xs font-semibold uppercase tracking-wide text-zinc-500">
+                            Volume
+                            <input
+                              type="number"
+                              value={line.volume}
+                              onChange={(event) =>
+                                setRevenueLines((lines) =>
+                                  lines.map((item) =>
+                                    item.id === line.id ? { ...item, volume: toNumber(event.target.value) } : item,
+                                  ),
+                                )
+                              }
+                              className="mt-2 w-full rounded-lg border border-zinc-200 px-3 py-2 text-sm text-zinc-900"
+                            />
+                          </label>
+                          {costMode === 'margin' && (
+                            <label className="text-xs font-semibold uppercase tracking-wide text-zinc-500">
+                              Margin (%)
+                              <input
+                                type="number"
+                                value={line.margin}
+                                onChange={(event) =>
+                                  setRevenueLines((lines) =>
+                                    lines.map((item) =>
+                                      item.id === line.id
+                                        ? { ...item, margin: toNumber(event.target.value) }
+                                        : item,
+                                    ),
+                                  )
+                                }
+                                className="mt-2 w-full rounded-lg border border-zinc-200 px-3 py-2 text-sm text-zinc-900"
+                              />
+                            </label>
+                          )}
+                        </div>
+                      )}
                     </div>
-                    <label className="mt-3 block text-xs font-medium uppercase tracking-wide text-zinc-500">
-                      Monthly cost ($)
-                      <input
-                        type="number"
-                        value={line.monthlyCost}
-                        onChange={(event) =>
-                          setCostLines((lines) =>
-                            lines.map((item) =>
-                              item.id === line.id ? { ...item, monthlyCost: toNumber(event.target.value) } : item,
-                            ),
-                          )
-                        }
-                        className="mt-2 w-full rounded-lg border border-zinc-200 px-3 py-2 text-sm text-zinc-900"
-                      />
-                    </label>
-                  </div>
-                ))}
-                {costLines.length === 0 && (
-                  <p className="text-sm text-zinc-500">Add costs if you want earnings to be revenue minus costs.</p>
+                  )
+                })}
+                {revenueLines.length === 0 && (
+                  <p className="text-sm text-zinc-500">Add at least one revenue line to compute returns.</p>
                 )}
               </div>
-            )}
-          </div>
-        </div>
+            </div>
 
-        <div className="space-y-6 md:sticky md:top-24 md:self-start">
-          <div className="rounded-3xl border border-zinc-200 bg-white p-6">
-            <p className="text-lg font-semibold text-zinc-950">Outputs</p>
-            <dl className="mt-4 space-y-4">
-              <div className="flex items-center justify-between text-sm">
-                <dt className="text-zinc-500">Month 1 earnings</dt>
-                <dd className="font-semibold text-zinc-950">{formatCurrency(results.monthOneEarnings)}</dd>
+            <div className="space-y-3">
+              <button
+                type="button"
+                onClick={() => setShowAdvanced((value) => !value)}
+                className="flex w-full items-center justify-between text-sm font-semibold text-zinc-900"
+              >
+                Advanced assumptions
+                <span className="text-xs font-semibold uppercase tracking-wide text-blue-600">
+                  {showAdvanced ? 'Hide' : 'Show'}
+                </span>
+              </button>
+              {showAdvanced && (
+                <div className="space-y-4 rounded-2xl border border-zinc-200 bg-zinc-50/70 p-4">
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    <label className="text-xs font-semibold uppercase tracking-wide text-zinc-500">
+                      Payment terms
+                      <select
+                        value={lagMonths}
+                        onChange={(event) => setLagMonths(toNumber(event.target.value))}
+                        className="mt-2 w-full rounded-xl border border-zinc-200 px-3 py-2 text-sm text-zinc-900"
+                      >
+                        <option value={0}>Due on receipt (0)</option>
+                        <option value={1}>Net 30 (1)</option>
+                        <option value={2}>Net 60 (2)</option>
+                        <option value={3}>Net 90 (3)</option>
+                      </select>
+                    </label>
+                    <label className="text-xs font-semibold uppercase tracking-wide text-zinc-500">
+                      Escalation (%)
+                      <input
+                        type="number"
+                        value={escalationPercent}
+                        onChange={(event) => setEscalationPercent(toNumber(event.target.value))}
+                        className="mt-2 w-full rounded-xl border border-zinc-200 px-3 py-2 text-sm text-zinc-900"
+                      />
+                    </label>
+                    <label className="text-xs font-semibold uppercase tracking-wide text-zinc-500">
+                      Escalation cadence
+                      <select
+                        value={escalationPeriod}
+                        onChange={(event) => setEscalationPeriod(event.target.value as EscalationPeriod)}
+                        className="mt-2 w-full rounded-xl border border-zinc-200 px-3 py-2 text-sm text-zinc-900"
+                      >
+                        <option value="monthly">Monthly</option>
+                        <option value="quarterly">Quarterly</option>
+                        <option value="annual">Annual</option>
+                      </select>
+                    </label>
+                    <label className="text-xs font-semibold uppercase tracking-wide text-zinc-500">
+                      Renewals (#)
+                      <input
+                        type="number"
+                        value={renewals}
+                        onChange={(event) => setRenewals(toNumber(event.target.value))}
+                        className="mt-2 w-full rounded-xl border border-zinc-200 px-3 py-2 text-sm text-zinc-900"
+                      />
+                    </label>
+                    <label className="text-xs font-semibold uppercase tracking-wide text-zinc-500">
+                      Renewal uplift (%)
+                      <input
+                        type="number"
+                        value={renewalUpliftPercent}
+                        onChange={(event) => setRenewalUpliftPercent(toNumber(event.target.value))}
+                        className="mt-2 w-full rounded-xl border border-zinc-200 px-3 py-2 text-sm text-zinc-900"
+                      />
+                    </label>
+                    <label className="text-xs font-semibold uppercase tracking-wide text-zinc-500">
+                      Renewal volume change (%)
+                      <input
+                        type="number"
+                        value={renewalVolumeChangePercent}
+                        onChange={(event) => setRenewalVolumeChangePercent(toNumber(event.target.value))}
+                        className="mt-2 w-full rounded-xl border border-zinc-200 px-3 py-2 text-sm text-zinc-900"
+                      />
+                    </label>
+                  </div>
+
+                  <div className="space-y-3">
+                    <p className="text-xs font-semibold uppercase tracking-[0.2em] text-zinc-500">Cost mode</p>
+                    <div className="flex flex-wrap gap-3">
+                      <button
+                        type="button"
+                        onClick={() => setCostMode('margin')}
+                        className={`rounded-full border px-4 py-1.5 text-xs font-semibold uppercase tracking-wide ${
+                          costMode === 'margin'
+                            ? 'border-blue-500 bg-blue-50 text-blue-700'
+                            : 'border-zinc-200 text-zinc-700'
+                        }`}
+                      >
+                        Margin-driven
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setCostMode('line-item')}
+                        className={`rounded-full border px-4 py-1.5 text-xs font-semibold uppercase tracking-wide ${
+                          costMode === 'line-item'
+                            ? 'border-blue-500 bg-blue-50 text-blue-700'
+                            : 'border-zinc-200 text-zinc-700'
+                        }`}
+                      >
+                        Line-item-driven
+                      </button>
+                    </div>
+                  </div>
+
+                  {costMode === 'line-item' && (
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between">
+                        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-zinc-500">Costs</p>
+                        <button
+                          type="button"
+                          onClick={() => setCostLines((lines) => [...lines, createCostLine()])}
+                          className="text-xs font-semibold text-blue-600"
+                        >
+                          + Add cost
+                        </button>
+                      </div>
+                      <div className="space-y-3">
+                        {costLines.map((line) => (
+                          <div key={line.id} className="rounded-2xl border border-zinc-200 bg-white p-3">
+                            <div className="flex items-center justify-between gap-3">
+                              <input
+                                type="text"
+                                value={line.name}
+                                onChange={(event) =>
+                                  setCostLines((lines) =>
+                                    lines.map((item) =>
+                                      item.id === line.id ? { ...item, name: event.target.value } : item,
+                                    ),
+                                  )
+                                }
+                                className="w-full rounded-lg border border-zinc-200 px-3 py-2 text-sm text-zinc-900"
+                              />
+                              <button
+                                type="button"
+                                onClick={() => setCostLines((lines) => lines.filter((item) => item.id !== line.id))}
+                                className="text-xs font-semibold uppercase tracking-wide text-zinc-400 hover:text-zinc-600"
+                              >
+                                Remove
+                              </button>
+                            </div>
+                            <label className="mt-3 block text-xs font-semibold uppercase tracking-wide text-zinc-500">
+                              Monthly cost ($)
+                              <input
+                                type="number"
+                                value={line.monthlyCost}
+                                onChange={(event) =>
+                                  setCostLines((lines) =>
+                                    lines.map((item) =>
+                                      item.id === line.id ? { ...item, monthlyCost: toNumber(event.target.value) } : item,
+                                    ),
+                                  )
+                                }
+                                className="mt-2 w-full rounded-lg border border-zinc-200 px-3 py-2 text-sm text-zinc-900"
+                              />
+                            </label>
+                          </div>
+                        ))}
+                        {costLines.length === 0 && (
+                          <p className="text-xs text-zinc-500">
+                            Add costs if you want earnings to be revenue minus costs.
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          </section>
+
+          <section className="flex flex-col gap-6 rounded-3xl border border-zinc-200 bg-white p-6 shadow-sm">
+            <div className="space-y-2">
+              <p className="text-sm font-semibold text-zinc-900">Decision summary</p>
+              <p className="text-sm text-zinc-600">
+                {verdictLine} {cocLine}
+              </p>
+            </div>
+
+            <dl className="grid gap-4 sm:grid-cols-3">
+              <div className="rounded-2xl border border-zinc-200 p-4">
+                <dt className="text-xs font-semibold uppercase tracking-wide text-zinc-500">Payback period</dt>
+                <dd className="mt-2 text-lg font-semibold text-zinc-950">{paybackLabel}</dd>
               </div>
-              <div className="flex items-center justify-between text-sm">
-                <dt className="text-zinc-500">Avg monthly earnings</dt>
-                <dd className="font-semibold text-zinc-950">{formatCurrency(results.averageMonthlyEarnings)}</dd>
-              </div>
-              <div className="flex items-center justify-between text-sm">
-                <dt className="text-zinc-500">Total earnings</dt>
-                <dd className="font-semibold text-zinc-950">{formatCurrency(results.totalRecognized)}</dd>
-              </div>
-              <div className="flex items-center justify-between text-sm">
-                <dt className="text-zinc-500">Payback period</dt>
-                <dd className="font-semibold text-zinc-950">
-                  {results.paybackMonth === null ? 'Never' : `Month ${results.paybackMonth}`}
-                </dd>
-              </div>
-              <div className="flex items-center justify-between text-sm">
-                <dt className="text-zinc-500">CoC multiple</dt>
-                <dd className="font-semibold text-zinc-950">
+              <div className="rounded-2xl border border-zinc-200 p-4">
+                <dt className="text-xs font-semibold uppercase tracking-wide text-zinc-500">CoC multiple</dt>
+                <dd className="mt-2 text-lg font-semibold text-zinc-950">
                   {results.cocMultiple === null ? 'n/a' : `${formatCompact(results.cocMultiple)}x`}
                 </dd>
               </div>
-              <div className="flex items-center justify-between text-sm">
-                <dt className="text-zinc-500">Cumulative cash created</dt>
-                <dd className="font-semibold text-zinc-950">{formatCurrency(results.cumulativeCashCreated)}</dd>
-              </div>
-              <div className="flex items-center justify-between text-sm">
-                <dt className="text-zinc-500">IRR (annualized)</dt>
-                <dd className="font-semibold text-zinc-950">
-                  {results.irrAnnualized === null ? 'n/a' : formatPercent(results.irrAnnualized)}
+              <div className="rounded-2xl border border-zinc-200 p-4">
+                <dt className="text-xs font-semibold uppercase tracking-wide text-zinc-500">Total earnings</dt>
+                <dd className="mt-2 text-lg font-semibold text-zinc-950">
+                  {formatCurrency(results.totalRecognized)}
                 </dd>
               </div>
             </dl>
-          </div>
 
-          <div className="rounded-3xl border border-zinc-200 bg-white p-6">
-            <div className="flex items-center justify-between">
-              <p className="text-lg font-semibold text-zinc-950">Cashflow</p>
-              {results.cashCollected.length > 24 && (
-                <button
-                  type="button"
-                  onClick={() => setShowAllMonths((value) => !value)}
-                  className="text-sm font-semibold text-blue-600"
-                >
-                  {showAllMonths ? 'Show fewer' : 'Show all'}
-                </button>
+            <div className="space-y-3">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <p className="text-sm font-semibold text-zinc-900">Cash flow over time</p>
+                <div className="flex flex-wrap gap-4 text-xs font-semibold uppercase tracking-wide text-zinc-500">
+                  <span className="flex items-center gap-2">
+                    <span className="h-2 w-2 rounded-full bg-zinc-400" /> Monthly cash flow
+                  </span>
+                  <span className="flex items-center gap-2">
+                    <span className="h-2 w-2 rounded-full bg-blue-600" /> Cumulative cash flow
+                  </span>
+                </div>
+              </div>
+              <CashflowChart data={chartData} paybackMonth={results.paybackMonth} />
+              <div className="flex items-center justify-between text-xs text-zinc-500">
+                <span>CAC anchor at month 0 · Payback marker is dashed.</span>
+                <span>Hover to inspect monthly values.</span>
+              </div>
+            </div>
+
+            <div className="space-y-3">
+              <button
+                type="button"
+                onClick={() => setShowDetails((value) => !value)}
+                className="flex w-full items-center justify-between text-sm font-semibold text-zinc-900"
+              >
+                Details
+                <span className="text-xs font-semibold uppercase tracking-wide text-blue-600">
+                  {showDetails ? 'Hide' : 'Show'}
+                </span>
+              </button>
+              {showDetails && (
+                <dl className="space-y-3 rounded-2xl border border-zinc-200 bg-zinc-50/70 p-4 text-sm">
+                  <div className="flex items-center justify-between">
+                    <dt className="text-zinc-500">Month 1 earnings</dt>
+                    <dd className="font-semibold text-zinc-900">
+                      {formatCurrency(results.monthOneEarnings)}
+                    </dd>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <dt className="text-zinc-500">Avg monthly earnings</dt>
+                    <dd className="font-semibold text-zinc-900">
+                      {formatCurrency(results.averageMonthlyEarnings)}
+                    </dd>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <dt className="text-zinc-500">Cumulative cash created</dt>
+                    <dd className="font-semibold text-zinc-900">
+                      {formatCurrency(results.cumulativeCashCreated)}
+                    </dd>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <dt className="text-zinc-500">
+                      IRR (annualized)
+                      <span className="ml-2 text-[11px] text-zinc-400" title="IRR is an optional, secondary view of return over time.">
+                        (optional)
+                      </span>
+                    </dt>
+                    <dd className="font-semibold text-zinc-900">
+                      {results.irrAnnualized === null ? 'n/a' : formatPercent(results.irrAnnualized)}
+                    </dd>
+                  </div>
+                </dl>
               )}
             </div>
-            <div className="mt-4 overflow-hidden rounded-2xl border border-zinc-200">
-              <table className="w-full text-left text-sm">
-                <thead className="bg-zinc-50 text-xs uppercase tracking-wide text-zinc-500">
-                  <tr>
-                    <th className="px-4 py-3">Month</th>
-                    <th className="px-4 py-3">Recognized</th>
-                    <th className="px-4 py-3">Cash collected</th>
-                    <th className="px-4 py-3">Cumulative cash</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {Array.from({ length: tableMonths }).map((_, index) => {
-                    const recognized = results.recognizedEarnings[index] ?? 0
-                    const cash = results.cashCollected[index] ?? 0
-                    const cumulative = results.cashCollected
-                      .slice(0, index + 1)
-                      .reduce((sum, value) => sum + value, 0)
-                    return (
-                      <tr key={`month-${index}`} className="border-t border-zinc-200">
-                        <td className="px-4 py-3 font-semibold text-zinc-900">{index + 1}</td>
-                        <td className="px-4 py-3 text-zinc-600">{formatCurrency(recognized)}</td>
-                        <td className="px-4 py-3 text-zinc-600">{formatCurrency(cash)}</td>
-                        <td className="px-4 py-3 text-zinc-900">{formatCurrency(cumulative)}</td>
-                      </tr>
-                    )
-                  })}
-                </tbody>
-              </table>
-            </div>
-            {results.cashCollected.length > 24 && !showAllMonths && (
-              <p className="mt-3 text-xs text-zinc-500">Showing first 24 months.</p>
-            )}
-          </div>
+          </section>
         </div>
       </div>
     </div>
