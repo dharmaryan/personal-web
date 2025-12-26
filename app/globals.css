@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 body {
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-family: inherit; /* Allow next/font on <html> to control typography deterministically. */
   background: #ffffff;
   color: #0f0f0f;
 }

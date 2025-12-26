@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
+import { Inter } from "next/font/google"; // Use next/font for deterministic Inter rendering across environments.
 import type { ReactNode } from "react";
 import "./globals.css";
 import "katex/dist/katex.min.css"; // Load KaTeX styles so rendered math is displayed correctly.
+
+const inter = Inter({ subsets: ["latin"], display: "swap" }); // Apply Inter site-wide with consistent loading behavior.
 
 export const metadata: Metadata = {
   title: "Ryan Dharma – RevOps and Finance",
@@ -35,7 +38,7 @@ export default function RootLayout({
   children: ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" className={inter.className}> {/* Set font on <html> to avoid dev/preview/prod mismatch. */}
       <head>
         <meta name="robots" content="noindex, nofollow" />
       </head>
