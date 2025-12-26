@@ -58,18 +58,39 @@ export async function GET(request: NextRequest) {
         "Content-Disposition": `attachment; filename="${pdfFilename}"`,
       },
     });
+  // } catch (error) {
+  //   console.error("PDF generation failed", {
+  //     url: targetUrl.toString(),
+  //     message: error instanceof Error ? error.message : "Unknown error",
+  //     stack: error instanceof Error ? error.stack : undefined,
+  //     error,
+  //   });
+  //   return NextResponse.json(
+  //     { error: "Failed to generate PDF" },
+  //     { status: 500 },
+  //   );
+  //
   } catch (error) {
-    console.error("PDF generation failed", {
-      url: targetUrl.toString(),
-      message: error instanceof Error ? error.message : "Unknown error",
-      stack: error instanceof Error ? error.stack : undefined,
-      error,
-    });
-    return NextResponse.json(
-      { error: "Failed to generate PDF" },
-      { status: 500 },
-    );
-  } finally {
+  const message = error instanceof Error ? error.message : String(error);
+  const stack = error instanceof Error ? error.stack : undefined;
+
+  console.error("PDF generation failed", {
+    url: targetUrl.toString(),
+    message,
+    stack,
+  });
+
+  // TEMPORARY: return the real error so we can see it
+  return NextResponse.json(
+    {
+      error: "Failed to generate PDF",
+      message,
+      stack,
+    },
+    { status: 500 },
+  );
+}
+} finally {
     if (browser) {
       await browser.close();
     }
