@@ -29,7 +29,7 @@ Well set-up systems are the reason small teams can outship entire organizations 
 In finance, output (measured by number of deals successfully completed) works something like this:
 
 $$
-\text{Output} = \frac{\text{Hours} \times \text{Skill} \times (1 - \text{Fatigue})}{\text{Review}} \times (1 - \text{Probability of Deal Dying})
+\text{Output} = \frac{\text{Hours} \times \text{Skill} \times (1 - \text{Fatigue})}{\text{Review}} \times (1 - \text{Prob. of Deal Dying})
 $$
 
 Where:
@@ -38,7 +38,7 @@ Where:
 - **Skill:** baseline workforce quality – this is usually very high in finance and not the binding constraint  
 - **Fatigue:** cognitive load accumulation – increases superlinearly after ~8 hours  
 - **Review:** the average # of review cycles before a deliverable is approved  
-- **Probability of Deal Dying:** the likelihood that a deal dies for external reasons, even after substantial work has been completed (anyone who’s worked on live deals knows this)
+- **Prob. of Deal Dying:** the probability that a deal dies for external reasons, even after substantial work has been completed (anyone who’s worked on live deals knows this)
 
 Most of these factors are fixed in the short-run. Skill is fixed, review is structurally fixed due to the high opportunity cost of errors, and deal survival probability is exogenous. 
 
@@ -58,7 +58,7 @@ $$
 \text{Output}
 =
 \frac{\text{Hours} \times \text{Skill} \times (1 - \text{Fatigue})}{\text{Review}}
-\times (1 - \text{Probability of Deal Dying})
+\times (1 - \text{Prob. of Deal Dying})
 $$
 
 Where:
@@ -67,7 +67,7 @@ Where:
 -	**Fatigue**: as defined above
 -	**System Leverage**: the degree to which a system automates or eliminates manual steps
 -	**Review**: as defined above
--	**Probability of Breakage**: the probability of a system malfunctioning due to bugs, edge cases or unintended changes in logic
+-	**Prob. of Breakage**: the probability of a system malfunctioning due to bugs, edge cases or unintended changes in logic
 
 Under this construct, skill and hours are reinvested into systems leverage, reducing the hours required to produce future output. The primary failure mode is breakage, which is endogenous. It arises from design choices, complexity and change velocity, and can be permanently reduced by engineering, testing and operational discipline. 
 
