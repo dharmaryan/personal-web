@@ -4,14 +4,14 @@ const nextConfig = {
   experimental: {
     serverComponentsExternalPackages: [
       "playwright-core",
-      "@sparticuz/chromium-min",
+      "@sparticuz/chromium",
     ],
   },
   images: {
     remotePatterns: [
       {
-        protocol: 'https',
-        hostname: '*.public.blob.vercel-storage.com',
+        protocol: "https",
+        hostname: "*.public.blob.vercel-storage.com",
       },
     ],
   },
