@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 
 export default function ContractReturnsCalculatorPage() {
   return (
-    <main className="bg-white text-zinc-700">
+    <main className="bg-zinc-50 text-zinc-700">
       <ContractReturnsCalculator />
     </main>
   )
