@@ -12,6 +12,10 @@ body {
   @apply mt-12 mb-4 text-3xl font-semibold text-slate-900;
 }
 
+.case-body > h2:first-child {
+  @apply mt-0; /* Match spacing between divider and first heading to the divider/back-link spacing. */
+}
+
 .case-body h3 {
   @apply mt-10 mb-3 text-2xl font-semibold text-slate-900;
 }
