@@ -17,7 +17,7 @@ export async function GET(request: NextRequest) {
   let browser;
 
   try {
-    const chromiumMod = await import("@sparticuz/chromium-min");
+    const chromiumMod = await import("@sparticuz/chromium");
     const chromium = chromiumMod.default;
     const pw = await import("playwright-core");
     const pwChromium = pw.chromium;
