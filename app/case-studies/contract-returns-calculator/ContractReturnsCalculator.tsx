@@ -42,8 +42,6 @@ interface ChartPoint {
 }
 
 const currencyFormatter = new Intl.NumberFormat('en-US', {
-  style: 'currency',
-  currency: 'USD',
   maximumFractionDigits: 0,
 })
 
@@ -216,7 +214,13 @@ const irr = (cashflows: number[]) => {
   return (low + high) / 2
 }
 
-const formatCurrency = (value: number) => currencyFormatter.format(value)
+const formatCurrency = (value: number) => {
+  if (!Number.isFinite(value)) return '-'
+  const rounded = Math.round(value)
+  if (rounded === 0) return '-'
+  const formatted = currencyFormatter.format(Math.abs(rounded))
+  return rounded < 0 ? `($${formatted})` : `$${formatted}`
+}
 const formatCompact = (value: number) => compactFormatter.format(value)
 const formatPercent = (value: number) => percentFormatter.format(value)
 
@@ -238,16 +242,16 @@ const DEFAULT_STATE = {
 const EXAMPLE_STATE = {
   cac: 25000,
   termMonths: 12,
-  renewals: 2,
+  renewals: 1,
   billingFrequency: 'monthly' as BillingFrequency,
   lagMonths: 1,
   escalationPercent: 3,
   escalationPeriod: 'annual' as EscalationPeriod,
   renewalUpliftPercent: 5,
-  renewalVolumeChangePercent: 10,
+  renewalVolumeChangePercent: 6,
   revenueLines: [
-    { name: 'Platform', monthlyPrice: 2000, volume: 1, margin: 80 },
-    { name: 'Seats', monthlyPrice: 50, volume: 50, margin: 70 },
+    { name: 'Platform fee', monthlyPrice: 3200, volume: 1, margin: 82 },
+    { name: 'Seats (team)', monthlyPrice: 85, volume: 120, margin: 76 },
   ],
   costMode: 'margin' as CostMode,
   costLines: [] as { name: string; monthlyCost: number }[],
@@ -279,6 +283,14 @@ function CashflowChart({
   const minValue = Math.min(...values)
   const maxValue = Math.max(...values)
   const range = maxValue - minValue === 0 ? 1 : maxValue - minValue
+  const maxMonth = data[data.length - 1]?.month ?? 0
+  const xTickStep = 3
+  const xTicks = Array.from({ length: Math.floor(maxMonth / xTickStep) + 1 }, (_, index) => index * xTickStep)
+  if (xTicks[xTicks.length - 1] !== maxMonth) {
+    xTicks.push(maxMonth)
+  }
+  const yTickCount = 4
+  const yTicks = Array.from({ length: yTickCount + 1 }, (_, index) => minValue + (range / yTickCount) * index)
 
   const xForIndex = (index: number) =>
     padding.left + (data.length === 1 ? 0 : (index / (data.length - 1)) * innerWidth)
@@ -318,17 +330,25 @@ function CashflowChart({
         onMouseLeave={() => setHoverIndex(null)}
       >
         <svg viewBox={`0 0 ${width} ${height}`} className="h-64 w-full">
-          {[0.25, 0.5, 0.75].map((tick) => (
+          {yTicks.map((tick) => (
             <line
               key={tick}
               x1={padding.left}
               x2={width - padding.right}
-              y1={padding.top + innerHeight * tick}
-              y2={padding.top + innerHeight * tick}
-              className="stroke-zinc-200"
+              y1={yForValue(tick)}
+              y2={yForValue(tick)}
+              className="stroke-zinc-200/80"
               strokeWidth={1}
             />
           ))}
+          <line
+            x1={padding.left}
+            x2={width - padding.right}
+            y1={height - padding.bottom}
+            y2={height - padding.bottom}
+            className="stroke-zinc-300"
+            strokeWidth={1}
+          />
           <line
             x1={padding.left}
             x2={width - padding.right}
@@ -345,6 +365,46 @@ function CashflowChart({
             className="stroke-zinc-300"
             strokeWidth={1}
           />
+          {yTicks.map((tick) => (
+            <g key={`y-${tick}`}>
+              <line
+                x1={padding.left - 4}
+                x2={padding.left}
+                y1={yForValue(tick)}
+                y2={yForValue(tick)}
+                className="stroke-zinc-300"
+                strokeWidth={1}
+              />
+              <text
+                x={padding.left - 8}
+                y={yForValue(tick) + 3}
+                textAnchor="end"
+                className="fill-zinc-500 text-[10px]"
+              >
+                {formatCurrency(tick)}
+              </text>
+            </g>
+          ))}
+          {xTicks.map((month) => (
+            <g key={`x-${month}`}>
+              <line
+                x1={xForIndex(month)}
+                x2={xForIndex(month)}
+                y1={height - padding.bottom}
+                y2={height - padding.bottom + 4}
+                className="stroke-zinc-300"
+                strokeWidth={1}
+              />
+              <text
+                x={xForIndex(month)}
+                y={height - padding.bottom + 16}
+                textAnchor="middle"
+                className="fill-zinc-500 text-[10px]"
+              >
+                {month}
+              </text>
+            </g>
+          ))}
           {!isEmpty && paybackIndex >= 0 && (
             <>
               <line
@@ -416,18 +476,19 @@ function CashflowChart({
             CAC
           </text>
           <text
-            x={width - padding.right - 40}
-            y={baselineY - 6}
+            x={padding.left}
+            y={padding.top - 6}
             className="fill-zinc-500 text-[10px]"
           >
-            $0
+            Cash flow ($)
           </text>
           <text
-            x={width - padding.right - 70}
-            y={height - 10}
+            x={width / 2}
+            y={height - 6}
+            textAnchor="middle"
             className="fill-zinc-500 text-[10px]"
           >
-            Months →
+            Month
           </text>
         </svg>
         {isEmpty && (
@@ -480,6 +541,7 @@ export default function ContractReturnsCalculator() {
   const [showAdvanced, setShowAdvanced] = useState(false)
   const [showDetails, setShowDetails] = useState(false)
   const [expandedLines, setExpandedLines] = useState<string[]>([])
+  const [exampleLoaded, setExampleLoaded] = useState(false)
 
   const createRevenueLine = () => ({
     id: `line-${idRef.current++}`,
@@ -524,7 +586,10 @@ export default function ContractReturnsCalculator() {
   }
 
   const resetAll = () => applyPreset(DEFAULT_STATE)
-  const loadExample = () => applyPreset(EXAMPLE_STATE)
+  const loadExample = () => {
+    applyPreset(EXAMPLE_STATE)
+    setExampleLoaded(true)
+  }
 
   const results = useMemo<CalculatedResults>(() => {
     const recognizedEarnings = buildRecognizedEarnings(
@@ -643,7 +708,7 @@ export default function ContractReturnsCalculator() {
       ? ''
       : results.cocMultiple === null
         ? 'Returns pending.'
-        : `$${formatCompact(results.cocMultiple)} returned for every $1 invested.`
+        : `${formatCurrency(results.cocMultiple)} returned for every $1 invested.`
 
   const summaryLine = cocLine ? `${verdictLine} ${cocLine}` : verdictLine
 
@@ -662,25 +727,38 @@ export default function ContractReturnsCalculator() {
   return (
     <div className="flex min-h-screen flex-col bg-zinc-50 text-zinc-700">
       <header className="border-b border-zinc-200/80 bg-white/80">
-        <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4 sm:px-6">
-          <Link href="/" className="text-sm font-semibold text-zinc-700 hover:text-zinc-900">
+        <div className="mx-auto flex min-h-14 max-w-6xl items-center justify-between gap-3 px-4 py-3 sm:px-6">
+          <Link
+            href="/"
+            className="rounded-full bg-zinc-100/70 px-3 py-1.5 text-sm font-semibold text-zinc-700 transition hover:bg-zinc-200/70 hover:text-zinc-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-400"
+          >
             ← Back to main site
           </Link>
-          <div className="flex flex-wrap items-center gap-3 text-sm font-semibold text-zinc-700">
-            <button
-              type="button"
-              onClick={loadExample}
-              className="rounded-full border border-zinc-300 bg-white px-3 py-1.5 hover:border-zinc-400"
-            >
-              Load example
-            </button>
-            <button
-              type="button"
-              onClick={resetAll}
-              className="rounded-full border border-zinc-300 bg-white px-3 py-1.5 hover:border-zinc-400"
-            >
-              Reset
-            </button>
+          <div className="flex flex-col items-end gap-1 text-sm font-semibold text-zinc-700">
+            <div className="flex flex-wrap items-center justify-end gap-3">
+              <button
+                type="button"
+                onClick={loadExample}
+                className="rounded-full border border-zinc-300 bg-white px-3 py-1.5 hover:border-zinc-400"
+              >
+                Load example
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  resetAll()
+                  setExampleLoaded(false)
+                }}
+                className="rounded-full border border-zinc-300 bg-white px-3 py-1.5 hover:border-zinc-400"
+              >
+                Reset
+              </button>
+            </div>
+            {exampleLoaded && (
+              <span className="text-xs font-normal text-zinc-500">
+                Example: Mid-market SaaS deal (platform fee + seats), monthly billing.
+              </span>
+            )}
           </div>
         </div>
       </header>
@@ -690,9 +768,6 @@ export default function ContractReturnsCalculator() {
           <section className="flex flex-col gap-6 rounded-3xl border border-zinc-300 bg-white p-6 shadow-sm">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.2em] text-zinc-600">Calculator</p>
-              <p className="mt-2 text-sm text-zinc-600">
-                Model contract returns and cash collection without scrolling.
-              </p>
             </div>
 
             <div className="space-y-4">
@@ -1121,21 +1196,18 @@ export default function ContractReturnsCalculator() {
       </div>
 
       <footer className="border-t border-zinc-200/80 bg-white/80">
-        <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 text-sm text-zinc-600 sm:px-6">
-          <span className="text-xs uppercase tracking-[0.2em] text-zinc-500">Get in touch</span>
-          <div className="flex items-center gap-4 font-semibold text-zinc-700">
-            <a href="mailto:ryandharma04@gmail.com" className="hover:text-zinc-900">
-              Email
-            </a>
-            <a
-              href="https://www.linkedin.com/in/ryandharma/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-zinc-900"
-            >
-              LinkedIn
-            </a>
-          </div>
+        <div className="mx-auto flex h-16 max-w-6xl items-center justify-end gap-4 px-4 text-sm font-semibold text-zinc-700 sm:px-6">
+          <a href="mailto:ryandharma04@gmail.com" className="hover:text-zinc-900">
+            Email
+          </a>
+          <a
+            href="https://www.linkedin.com/in/ryandharma/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-zinc-900"
+          >
+            LinkedIn
+          </a>
         </div>
       </footer>
     </div>
