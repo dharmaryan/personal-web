@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { loadResume } from "@/lib/resume";
 import styles from "./resume-pdf.module.css";
+import "./print.css";
 
 export const metadata: Metadata = {
   title: "Resume PDF — Ryan Dharma",

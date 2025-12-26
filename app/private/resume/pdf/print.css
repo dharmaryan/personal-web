@@ -1,0 +1,14 @@
+@page {
+  size: A4;
+  margin: 12mm;
+}
+
+html,
+body {
+  background: #ffffff;
+}
+
+* {
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}

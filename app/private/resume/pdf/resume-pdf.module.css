@@ -62,16 +62,6 @@
   }
 }
 
-@page {
-  size: A4;
-  margin: 12mm;
-}
-
-* {
-  -webkit-print-color-adjust: exact;
-  print-color-adjust: exact;
-}
-
 .pdfSheet :global(.section),
 .pdfSheet :global(.role),
 .pdfSheet :global(h2),
