@@ -6,18 +6,13 @@ export const runtime = "nodejs";
 const pdfFilename = "Ryan_Dharma_Resume.pdf";
 
 export async function GET(request: NextRequest) {
-  const host = request.headers.get("host");
-  if (!host) {
-    return NextResponse.json({ error: "Missing host header" }, { status: 400 });
-  }
+  const targetUrl = new URL("/private/resume/pdf", request.nextUrl.origin);
+  let browser;
 
-  const protocol = request.headers.get("x-forwarded-proto") ?? "https";
-  const targetUrl = new URL("/private/resume/pdf", `${protocol}://${host}`);
-
-  const browser = await chromium.launch({
-    args: ["--no-sandbox", "--disable-setuid-sandbox"],
-  });
   try {
+    browser = await chromium.launch({
+      args: ["--no-sandbox", "--disable-setuid-sandbox"],
+    });
     const page = await browser.newPage();
     await page.goto(targetUrl.toString(), {
       waitUntil: "networkidle",
@@ -37,6 +32,11 @@ export async function GET(request: NextRequest) {
       },
     });
 
+    console.info("PDF generated", {
+      url: targetUrl.toString(),
+      bytes: pdfBuffer.byteLength,
+    });
+
     return new NextResponse(pdfBuffer, {
       status: 200,
       headers: {
@@ -51,6 +51,8 @@ export async function GET(request: NextRequest) {
       { status: 500 },
     );
   } finally {
-    await browser.close();
+    if (browser) {
+      await browser.close();
+    }
   }
 }

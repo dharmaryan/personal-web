@@ -15,8 +15,8 @@ export default async function ResumePage() {
   const content = await loadResume();
 
   return (
-    <main className={`resume-body ${styles.resumeBody} mx-auto w-full max-w-4xl px-6 py-6`}>
-      {content}
+    <main className={styles.resumePage}>
+      <section className={`${styles.resumeSheet} ${styles.resumeBody}`}>{content}</section>
       <ResumeActions />
     </main>
   );
