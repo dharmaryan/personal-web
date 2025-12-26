@@ -12,21 +12,21 @@ h1,
 h2,
 h3,
 h4 {
-  font-family: var(--font-serif), "Times New Roman", serif; /* Apply editorial serif to headings sitewide. */
+  font-family: var(--font-serif), var(--font-sans), system-ui, sans-serif; /* Prefer modern serif, avoid Times-like fallbacks. */
 }
 
 .case-body h2 {
-  font-family: var(--font-serif), "Times New Roman", serif; /* Ensure case headings use the editorial serif. */
+  font-family: var(--font-serif), var(--font-sans), system-ui, sans-serif; /* Ensure case headings use the editorial serif without Times-like fallbacks. */
   @apply mt-12 mb-4 text-3xl font-semibold text-slate-900;
 }
 
 .case-body h3 {
-  font-family: var(--font-serif), "Times New Roman", serif; /* Ensure case headings use the editorial serif. */
+  font-family: var(--font-serif), var(--font-sans), system-ui, sans-serif; /* Ensure case headings use the editorial serif without Times-like fallbacks. */
   @apply mt-10 mb-3 text-2xl font-semibold text-slate-900;
 }
 
 .case-body h4 {
-  font-family: var(--font-serif), "Times New Roman", serif; /* Ensure case headings use the editorial serif. */
+  font-family: var(--font-serif), var(--font-sans), system-ui, sans-serif; /* Ensure case headings use the editorial serif without Times-like fallbacks. */
   @apply mt-10 text-xl font-semibold text-slate-900;
 }
 

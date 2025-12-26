@@ -13,6 +13,8 @@ const sansFont = Inter({
 const serifFont = Fraunces({
   subsets: ["latin"],
   display: "swap",
+  weight: ["600", "700"], // Use restrained weights for a modern editorial serif.
+  style: ["normal"], // Limit to normal style to avoid heavier/older-looking variants.
   variable: "--font-serif", // Expose serif font as a CSS variable for editorial headings.
 });
 
