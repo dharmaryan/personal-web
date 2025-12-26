@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import "./globals.css";
+import "katex/dist/katex.min.css"; // Load KaTeX styles so rendered math is displayed correctly.
 
 export const metadata: Metadata = {
   title: "Ryan Dharma – RevOps and Finance",

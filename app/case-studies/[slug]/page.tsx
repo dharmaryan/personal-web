@@ -1,7 +1,6 @@
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import PostLayout from '@/components/PostLayout'
-import { renderRichText } from '@/components/richtext/renderRichText'
 import { listCaseStudySlugs, loadCaseStudy } from '@/lib/caseStudies'
 
 interface PageProps {
@@ -41,7 +40,7 @@ export default async function CaseStudyPage({ params }: PageProps) {
       backHref={study.meta.backHref}
       backLabel={study.meta.backLabel}
     >
-      {renderRichText(study.doc)}
+      {study.content}
     </PostLayout>
   )
 }
