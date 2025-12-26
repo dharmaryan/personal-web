@@ -1,7 +1,6 @@
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import PostLayout from '@/components/PostLayout'
-import { renderRichText } from '@/components/richtext/renderRichText'
 import { listCaseStudySlugs, loadCaseStudy } from '@/lib/caseStudies'
 
 interface PageProps {
@@ -40,7 +39,7 @@ export default async function BlogPostPage({ params }: PageProps) {
       backHref='/blog'
       backLabel='← Back to blog'
     >
-      {renderRichText(post.doc)}
+      {post.content}
     </PostLayout>
   )
 }
