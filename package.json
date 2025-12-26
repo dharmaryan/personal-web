@@ -11,8 +11,9 @@
   "dependencies": {
     "katex": "^0.16.11",
     "next": "14.2.3",
+    "@sparticuz/chromium-min": "^123.0.1",
     "next-mdx-remote": "^5.0.0",
-    "playwright": "^1.47.0",
+    "playwright-core": "^1.47.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "rehype-katex": "^7.0.0",

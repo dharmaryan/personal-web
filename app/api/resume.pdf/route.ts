@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { chromium } from "playwright";
 
 export const runtime = "nodejs";
 
@@ -18,14 +17,20 @@ export async function GET(request: NextRequest) {
   let browser;
 
   try {
-    browser = await chromium.launch({
-      args: ["--no-sandbox", "--disable-setuid-sandbox"],
+    const chromiumMod = await import("@sparticuz/chromium-min");
+    const chromium = chromiumMod.default;
+    const pw = await import("playwright-core");
+    const pwChromium = pw.chromium;
+
+    browser = await pwChromium.launch({
+      args: chromium.args,
+      executablePath: await chromium.executablePath(),
       headless: true,
     });
     const page = await browser.newPage();
     await page.goto(targetUrl.toString(), {
-      waitUntil: "networkidle",
-      timeout: 30_000,
+      waitUntil: "load",
+      timeout: 60_000,
     });
 
     const pdfBuffer = await page.pdf({
@@ -57,6 +62,8 @@ export async function GET(request: NextRequest) {
     console.error("PDF generation failed", {
       url: targetUrl.toString(),
       message: error instanceof Error ? error.message : "Unknown error",
+      stack: error instanceof Error ? error.stack : undefined,
+      error,
     });
     return NextResponse.json(
       { error: "Failed to generate PDF" },
