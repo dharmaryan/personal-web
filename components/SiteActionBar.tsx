@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 export default function SiteActionBar() {
   const pathname = usePathname();
 
-  if (pathname === "/private/resume") {
+  if (pathname === "/private/resume" || pathname === "/private/resume/pdf") {
     return null;
   }
 
