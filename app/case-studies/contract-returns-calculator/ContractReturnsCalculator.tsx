@@ -261,9 +261,11 @@ const buildLinePath = (points: { x: number; y: number }[]) => {
 function CashflowChart({
   data,
   paybackMonth,
+  isEmpty,
 }: {
   data: ChartPoint[]
   paybackMonth: number | null
+  isEmpty: boolean
 }) {
   const [hoverIndex, setHoverIndex] = useState<number | null>(null)
 
@@ -296,6 +298,7 @@ function CashflowChart({
   const paybackIndex = paybackMonth ? data.findIndex((point) => point.month === paybackMonth) : -1
 
   const handleMove = (event: MouseEvent<HTMLDivElement>) => {
+    if (isEmpty) return
     const rect = event.currentTarget.getBoundingClientRect()
     const x = event.clientX - rect.left
     const ratio = (x - padding.left) / innerWidth
@@ -310,18 +313,29 @@ function CashflowChart({
   return (
     <div className="relative">
       <div
-        className="relative overflow-hidden rounded-2xl border border-zinc-200 bg-white"
+        className="relative overflow-hidden rounded-2xl border border-zinc-300 bg-white shadow-sm"
         onMouseMove={handleMove}
         onMouseLeave={() => setHoverIndex(null)}
       >
         <svg viewBox={`0 0 ${width} ${height}`} className="h-64 w-full">
+          {[0.25, 0.5, 0.75].map((tick) => (
+            <line
+              key={tick}
+              x1={padding.left}
+              x2={width - padding.right}
+              y1={padding.top + innerHeight * tick}
+              y2={padding.top + innerHeight * tick}
+              className="stroke-zinc-200"
+              strokeWidth={1}
+            />
+          ))}
           <line
             x1={padding.left}
             x2={width - padding.right}
             y1={baselineY}
             y2={baselineY}
-            className="stroke-zinc-200"
-            strokeWidth={1}
+            className="stroke-zinc-300"
+            strokeWidth={1.5}
           />
           <line
             x1={xForIndex(0)}
@@ -331,28 +345,41 @@ function CashflowChart({
             className="stroke-zinc-300"
             strokeWidth={1}
           />
-          {paybackIndex >= 0 && (
-            <line
-              x1={xForIndex(paybackIndex)}
-              x2={xForIndex(paybackIndex)}
-              y1={padding.top}
-              y2={height - padding.bottom}
-              className="stroke-blue-400"
-              strokeDasharray="6 6"
-              strokeWidth={1.5}
-            />
+          {!isEmpty && paybackIndex >= 0 && (
+            <>
+              <line
+                x1={xForIndex(paybackIndex)}
+                x2={xForIndex(paybackIndex)}
+                y1={padding.top}
+                y2={height - padding.bottom}
+                className="stroke-zinc-400"
+                strokeDasharray="6 6"
+                strokeWidth={1.5}
+              />
+              <text
+                x={xForIndex(paybackIndex) + 6}
+                y={padding.top + 12}
+                className="fill-zinc-600 text-[10px]"
+              >
+                Payback
+              </text>
+            </>
           )}
-          <path
-            d={buildLinePath(monthlyPoints)}
-            className="fill-none stroke-zinc-400"
-            strokeWidth={1.5}
-          />
-          <path
-            d={buildLinePath(cumulativePoints)}
-            className="fill-none stroke-blue-600"
-            strokeWidth={2.5}
-          />
-          {hoverIndex !== null && (
+          {!isEmpty && (
+            <>
+              <path
+                d={buildLinePath(monthlyPoints)}
+                className="fill-none stroke-zinc-500"
+                strokeWidth={1.5}
+              />
+              <path
+                d={buildLinePath(cumulativePoints)}
+                className="fill-none stroke-blue-600"
+                strokeWidth={2.5}
+              />
+            </>
+          )}
+          {hoverIndex !== null && !isEmpty && (
             <>
               <line
                 x1={hoverX}
@@ -373,28 +400,42 @@ function CashflowChart({
                 cx={hoverX}
                 cy={yForValue(hoverPoint?.monthlyCash ?? 0)}
                 r={3}
-                className="fill-zinc-400"
+                className="fill-zinc-500"
               />
             </>
           )}
-          <text x={padding.left + 4} y={padding.top + 12} className="fill-zinc-400 text-[10px]">
+          <rect
+            x={padding.left + 6}
+            y={padding.top + 4}
+            width={30}
+            height={14}
+            rx={7}
+            className="fill-zinc-100"
+          />
+          <text x={padding.left + 14} y={padding.top + 14} className="fill-zinc-600 text-[10px]">
             CAC
           </text>
           <text
             x={width - padding.right - 40}
             y={baselineY - 6}
-            className="fill-zinc-400 text-[10px]"
+            className="fill-zinc-500 text-[10px]"
           >
             $0
           </text>
           <text
             x={width - padding.right - 70}
             y={height - 10}
-            className="fill-zinc-400 text-[10px]"
+            className="fill-zinc-500 text-[10px]"
           >
             Months →
           </text>
         </svg>
+        {isEmpty && (
+          <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-white/80 text-center">
+            <p className="text-sm font-semibold text-zinc-900">Add revenue to see cash flow and payback</p>
+            <p className="text-xs text-zinc-500">Hover points to inspect monthly values once computed.</p>
+          </div>
+        )}
       </div>
 
       {hoverPoint && (
@@ -512,9 +553,7 @@ export default function ContractReturnsCalculator() {
       : 0
 
     let paybackMonth: number | null = null
-    if (cac <= 0) {
-      paybackMonth = 0
-    } else {
+    if (cac > 0) {
       let cumulative = 0
       for (let index = 0; index < cashCollected.length; index += 1) {
         cumulative += cashCollected[index]
@@ -581,22 +620,32 @@ export default function ContractReturnsCalculator() {
     return data
   }, [cac, results.cashCollected])
 
+  const isEmptyState = results.totalRecognized === 0 && results.totalCashCollected === 0
+
   const paybackLabel =
-    results.paybackMonth === null
-      ? 'No payback'
-      : results.paybackMonth === 0
-        ? 'Month 0'
-        : `Month ${results.paybackMonth}`
+    isEmptyState
+      ? '—'
+      : results.paybackMonth === null
+        ? 'No payback'
+        : results.paybackMonth === 0
+          ? 'Immediate'
+          : `Month ${results.paybackMonth}`
 
   const verdictLine =
-    results.paybackMonth === null
-      ? 'No payback within the modeled term.'
-      : `Payback in month ${results.paybackMonth}.`
+    isEmptyState
+      ? 'Enter CAC and at least one revenue line to compute payback.'
+      : results.paybackMonth === null
+        ? 'No payback within the modeled term.'
+        : `Payback in month ${results.paybackMonth}.`
 
   const cocLine =
-    results.cocMultiple === null
-      ? 'Returns pending.'
-      : `$${formatCompact(results.cocMultiple)} returned for every $1 invested.`
+    isEmptyState
+      ? ''
+      : results.cocMultiple === null
+        ? 'Returns pending.'
+        : `$${formatCompact(results.cocMultiple)} returned for every $1 invested.`
+
+  const summaryLine = cocLine ? `${verdictLine} ${cocLine}` : verdictLine
 
   const handleAddLine = () => {
     const newLine = createRevenueLine()
@@ -611,81 +660,67 @@ export default function ContractReturnsCalculator() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col bg-white text-zinc-700">
-      <header className="border-b border-zinc-200">
+    <div className="flex min-h-screen flex-col bg-zinc-50 text-zinc-700">
+      <header className="border-b border-zinc-200/80 bg-white/80">
         <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4 sm:px-6">
-          <Link href="/" className="text-sm font-semibold text-zinc-700 hover:text-blue-600">
+          <Link href="/" className="text-sm font-semibold text-zinc-700 hover:text-zinc-900">
             ← Back to main site
           </Link>
           <div className="flex flex-wrap items-center gap-3 text-sm font-semibold text-zinc-700">
             <button
               type="button"
               onClick={loadExample}
-              className="rounded-full border border-zinc-200 px-3 py-1.5 hover:border-blue-500"
+              className="rounded-full border border-zinc-300 bg-white px-3 py-1.5 hover:border-zinc-400"
             >
               Load example
             </button>
             <button
               type="button"
               onClick={resetAll}
-              className="rounded-full border border-zinc-200 px-3 py-1.5 hover:border-blue-500"
+              className="rounded-full border border-zinc-300 bg-white px-3 py-1.5 hover:border-zinc-400"
             >
               Reset
             </button>
-            <a href="mailto:ryandharma04@gmail.com" className="px-2 py-1 hover:text-blue-600">
-              Email
-            </a>
-            <a
-              href="https://www.linkedin.com/in/ryandharma/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="px-2 py-1 hover:text-blue-600"
-            >
-              LinkedIn
-            </a>
           </div>
         </div>
       </header>
 
       <div className="mx-auto flex w-full max-w-6xl flex-1 flex-col px-4 py-6 sm:px-6 lg:py-8">
         <div className="grid flex-1 gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">
-          <section className="flex flex-col gap-6 rounded-3xl border border-zinc-200 bg-white p-6 shadow-sm">
+          <section className="flex flex-col gap-6 rounded-3xl border border-zinc-300 bg-white p-6 shadow-sm">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-zinc-500">Calculator</p>
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-zinc-600">Calculator</p>
               <p className="mt-2 text-sm text-zinc-600">
                 Model contract returns and cash collection without scrolling.
               </p>
             </div>
 
             <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <p className="text-sm font-semibold text-zinc-900">Core deal inputs</p>
-              </div>
               <div className="grid gap-4 sm:grid-cols-2">
-                <label className="text-xs font-semibold uppercase tracking-wide text-zinc-500">
+                <label className="text-xs font-semibold uppercase tracking-wide text-zinc-600">
                   CAC ($)
                   <input
                     type="number"
                     value={cac}
                     onChange={(event) => setCac(toNumber(event.target.value))}
-                    className="mt-2 w-full rounded-xl border border-zinc-200 px-3 py-2 text-sm text-zinc-900"
+                    className="mt-2 w-full rounded-xl border border-zinc-300 px-3 py-2 text-sm text-zinc-900"
                   />
                 </label>
-                <label className="text-xs font-semibold uppercase tracking-wide text-zinc-500">
+                <label className="text-xs font-semibold uppercase tracking-wide text-zinc-600">
                   Term (months)
                   <input
                     type="number"
                     value={termMonths}
                     onChange={(event) => setTermMonths(toNumber(event.target.value))}
-                    className="mt-2 w-full rounded-xl border border-zinc-200 px-3 py-2 text-sm text-zinc-900"
+                    className="mt-2 w-full rounded-xl border border-zinc-300 px-3 py-2 text-sm text-zinc-900"
                   />
                 </label>
-                <label className="text-xs font-semibold uppercase tracking-wide text-zinc-500">
+                <label className="text-xs font-semibold uppercase tracking-wide text-zinc-600">
                   Billing frequency
                   <select
                     value={billingFrequency}
                     onChange={(event) => setBillingFrequency(event.target.value as BillingFrequency)}
-                    className="mt-2 w-full rounded-xl border border-zinc-200 px-3 py-2 text-sm text-zinc-900"
+                    className="mt-2 w-full rounded-xl border border-zinc-300 px-3 py-2 text-sm text-zinc-900"
                   >
                     <option value="monthly">Monthly</option>
                     <option value="quarterly">Quarterly</option>
@@ -698,7 +733,7 @@ export default function ContractReturnsCalculator() {
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <p className="text-sm font-semibold text-zinc-900">Revenue lines</p>
-                <button type="button" onClick={handleAddLine} className="text-sm font-semibold text-blue-600">
+                <button type="button" onClick={handleAddLine} className="text-sm font-semibold text-zinc-700">
                   + Add line
                 </button>
               </div>
@@ -707,7 +742,7 @@ export default function ContractReturnsCalculator() {
                   const isExpanded = expandedLines.includes(line.id)
                   const summary = `${line.name} · ${formatCurrency(line.monthlyPrice)}/mo × ${line.volume} · ${line.margin}% margin`
                   return (
-                    <div key={line.id} className="rounded-2xl border border-zinc-200 bg-white">
+                    <div key={line.id} className="rounded-2xl border border-zinc-300 bg-white shadow-sm">
                       <div className="flex items-center justify-between gap-3 px-4 py-3">
                         <button
                           type="button"
@@ -721,7 +756,7 @@ export default function ContractReturnsCalculator() {
                           <button
                             type="button"
                             onClick={() => toggleExpandedLine(line.id)}
-                            className="text-xs font-semibold uppercase tracking-wide text-blue-600"
+                            className="text-xs font-semibold uppercase tracking-wide text-zinc-600"
                           >
                             {isExpanded ? 'Collapse' : 'Edit'}
                           </button>
@@ -739,7 +774,7 @@ export default function ContractReturnsCalculator() {
                       </div>
                       {isExpanded && (
                         <div className="grid gap-3 border-t border-zinc-200 px-4 py-3 sm:grid-cols-2">
-                          <label className="text-xs font-semibold uppercase tracking-wide text-zinc-500">
+                          <label className="text-xs font-semibold uppercase tracking-wide text-zinc-600">
                             Name
                             <input
                               type="text"
@@ -751,10 +786,10 @@ export default function ContractReturnsCalculator() {
                                   ),
                                 )
                               }
-                              className="mt-2 w-full rounded-lg border border-zinc-200 px-3 py-2 text-sm text-zinc-900"
+                              className="mt-2 w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm text-zinc-900"
                             />
                           </label>
-                          <label className="text-xs font-semibold uppercase tracking-wide text-zinc-500">
+                          <label className="text-xs font-semibold uppercase tracking-wide text-zinc-600">
                             Monthly price ($)
                             <input
                               type="number"
@@ -768,10 +803,10 @@ export default function ContractReturnsCalculator() {
                                   ),
                                 )
                               }
-                              className="mt-2 w-full rounded-lg border border-zinc-200 px-3 py-2 text-sm text-zinc-900"
+                              className="mt-2 w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm text-zinc-900"
                             />
                           </label>
-                          <label className="text-xs font-semibold uppercase tracking-wide text-zinc-500">
+                          <label className="text-xs font-semibold uppercase tracking-wide text-zinc-600">
                             Volume
                             <input
                               type="number"
@@ -783,11 +818,11 @@ export default function ContractReturnsCalculator() {
                                   ),
                                 )
                               }
-                              className="mt-2 w-full rounded-lg border border-zinc-200 px-3 py-2 text-sm text-zinc-900"
+                              className="mt-2 w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm text-zinc-900"
                             />
                           </label>
                           {costMode === 'margin' && (
-                            <label className="text-xs font-semibold uppercase tracking-wide text-zinc-500">
+                            <label className="text-xs font-semibold uppercase tracking-wide text-zinc-600">
                               Margin (%)
                               <input
                                 type="number"
@@ -801,7 +836,7 @@ export default function ContractReturnsCalculator() {
                                     ),
                                   )
                                 }
-                                className="mt-2 w-full rounded-lg border border-zinc-200 px-3 py-2 text-sm text-zinc-900"
+                                className="mt-2 w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm text-zinc-900"
                               />
                             </label>
                           )}
@@ -820,22 +855,20 @@ export default function ContractReturnsCalculator() {
               <button
                 type="button"
                 onClick={() => setShowAdvanced((value) => !value)}
-                className="flex w-full items-center justify-between text-sm font-semibold text-zinc-900"
+                className="flex w-full items-center justify-between text-sm font-semibold text-zinc-800 hover:text-zinc-900"
               >
-                Advanced assumptions
-                <span className="text-xs font-semibold uppercase tracking-wide text-blue-600">
-                  {showAdvanced ? 'Hide' : 'Show'}
-                </span>
+                <span>Advanced assumptions</span>
+                <span className="text-sm text-zinc-500">{showAdvanced ? '▾' : '▸'}</span>
               </button>
               {showAdvanced && (
-                <div className="space-y-4 rounded-2xl border border-zinc-200 bg-zinc-50/70 p-4">
+                <div className="space-y-4 rounded-2xl border border-zinc-200 bg-zinc-50 p-4">
                   <div className="grid gap-4 sm:grid-cols-2">
-                    <label className="text-xs font-semibold uppercase tracking-wide text-zinc-500">
+                    <label className="text-xs font-semibold uppercase tracking-wide text-zinc-600">
                       Payment terms
                       <select
                         value={lagMonths}
                         onChange={(event) => setLagMonths(toNumber(event.target.value))}
-                        className="mt-2 w-full rounded-xl border border-zinc-200 px-3 py-2 text-sm text-zinc-900"
+                        className="mt-2 w-full rounded-xl border border-zinc-300 px-3 py-2 text-sm text-zinc-900"
                       >
                         <option value={0}>Due on receipt (0)</option>
                         <option value={1}>Net 30 (1)</option>
@@ -843,58 +876,58 @@ export default function ContractReturnsCalculator() {
                         <option value={3}>Net 90 (3)</option>
                       </select>
                     </label>
-                    <label className="text-xs font-semibold uppercase tracking-wide text-zinc-500">
+                    <label className="text-xs font-semibold uppercase tracking-wide text-zinc-600">
                       Escalation (%)
                       <input
                         type="number"
                         value={escalationPercent}
                         onChange={(event) => setEscalationPercent(toNumber(event.target.value))}
-                        className="mt-2 w-full rounded-xl border border-zinc-200 px-3 py-2 text-sm text-zinc-900"
+                        className="mt-2 w-full rounded-xl border border-zinc-300 px-3 py-2 text-sm text-zinc-900"
                       />
                     </label>
-                    <label className="text-xs font-semibold uppercase tracking-wide text-zinc-500">
+                    <label className="text-xs font-semibold uppercase tracking-wide text-zinc-600">
                       Escalation cadence
                       <select
                         value={escalationPeriod}
                         onChange={(event) => setEscalationPeriod(event.target.value as EscalationPeriod)}
-                        className="mt-2 w-full rounded-xl border border-zinc-200 px-3 py-2 text-sm text-zinc-900"
+                        className="mt-2 w-full rounded-xl border border-zinc-300 px-3 py-2 text-sm text-zinc-900"
                       >
                         <option value="monthly">Monthly</option>
                         <option value="quarterly">Quarterly</option>
                         <option value="annual">Annual</option>
                       </select>
                     </label>
-                    <label className="text-xs font-semibold uppercase tracking-wide text-zinc-500">
+                    <label className="text-xs font-semibold uppercase tracking-wide text-zinc-600">
                       Renewals (#)
                       <input
                         type="number"
                         value={renewals}
                         onChange={(event) => setRenewals(toNumber(event.target.value))}
-                        className="mt-2 w-full rounded-xl border border-zinc-200 px-3 py-2 text-sm text-zinc-900"
+                        className="mt-2 w-full rounded-xl border border-zinc-300 px-3 py-2 text-sm text-zinc-900"
                       />
                     </label>
-                    <label className="text-xs font-semibold uppercase tracking-wide text-zinc-500">
+                    <label className="text-xs font-semibold uppercase tracking-wide text-zinc-600">
                       Renewal uplift (%)
                       <input
                         type="number"
                         value={renewalUpliftPercent}
                         onChange={(event) => setRenewalUpliftPercent(toNumber(event.target.value))}
-                        className="mt-2 w-full rounded-xl border border-zinc-200 px-3 py-2 text-sm text-zinc-900"
+                        className="mt-2 w-full rounded-xl border border-zinc-300 px-3 py-2 text-sm text-zinc-900"
                       />
                     </label>
-                    <label className="text-xs font-semibold uppercase tracking-wide text-zinc-500">
+                    <label className="text-xs font-semibold uppercase tracking-wide text-zinc-600">
                       Renewal volume change (%)
                       <input
                         type="number"
                         value={renewalVolumeChangePercent}
                         onChange={(event) => setRenewalVolumeChangePercent(toNumber(event.target.value))}
-                        className="mt-2 w-full rounded-xl border border-zinc-200 px-3 py-2 text-sm text-zinc-900"
+                        className="mt-2 w-full rounded-xl border border-zinc-300 px-3 py-2 text-sm text-zinc-900"
                       />
                     </label>
                   </div>
 
                   <div className="space-y-3">
-                    <p className="text-xs font-semibold uppercase tracking-[0.2em] text-zinc-500">Cost mode</p>
+                    <p className="text-xs font-semibold uppercase tracking-[0.2em] text-zinc-600">Cost mode</p>
                     <div className="flex flex-wrap gap-3">
                       <button
                         type="button"
@@ -902,7 +935,7 @@ export default function ContractReturnsCalculator() {
                         className={`rounded-full border px-4 py-1.5 text-xs font-semibold uppercase tracking-wide ${
                           costMode === 'margin'
                             ? 'border-blue-500 bg-blue-50 text-blue-700'
-                            : 'border-zinc-200 text-zinc-700'
+                            : 'border-zinc-300 text-zinc-700'
                         }`}
                       >
                         Margin-driven
@@ -913,7 +946,7 @@ export default function ContractReturnsCalculator() {
                         className={`rounded-full border px-4 py-1.5 text-xs font-semibold uppercase tracking-wide ${
                           costMode === 'line-item'
                             ? 'border-blue-500 bg-blue-50 text-blue-700'
-                            : 'border-zinc-200 text-zinc-700'
+                            : 'border-zinc-300 text-zinc-700'
                         }`}
                       >
                         Line-item-driven
@@ -924,18 +957,18 @@ export default function ContractReturnsCalculator() {
                   {costMode === 'line-item' && (
                     <div className="space-y-3">
                       <div className="flex items-center justify-between">
-                        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-zinc-500">Costs</p>
+                        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-zinc-600">Costs</p>
                         <button
                           type="button"
                           onClick={() => setCostLines((lines) => [...lines, createCostLine()])}
-                          className="text-xs font-semibold text-blue-600"
+                          className="text-xs font-semibold text-zinc-700"
                         >
                           + Add cost
                         </button>
                       </div>
                       <div className="space-y-3">
                         {costLines.map((line) => (
-                          <div key={line.id} className="rounded-2xl border border-zinc-200 bg-white p-3">
+                          <div key={line.id} className="rounded-2xl border border-zinc-300 bg-white p-3 shadow-sm">
                             <div className="flex items-center justify-between gap-3">
                               <input
                                 type="text"
@@ -947,7 +980,7 @@ export default function ContractReturnsCalculator() {
                                     ),
                                   )
                                 }
-                                className="w-full rounded-lg border border-zinc-200 px-3 py-2 text-sm text-zinc-900"
+                                className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm text-zinc-900"
                               />
                               <button
                                 type="button"
@@ -957,7 +990,7 @@ export default function ContractReturnsCalculator() {
                                 Remove
                               </button>
                             </div>
-                            <label className="mt-3 block text-xs font-semibold uppercase tracking-wide text-zinc-500">
+                            <label className="mt-3 block text-xs font-semibold uppercase tracking-wide text-zinc-600">
                               Monthly cost ($)
                               <input
                                 type="number"
@@ -969,7 +1002,7 @@ export default function ContractReturnsCalculator() {
                                     ),
                                   )
                                 }
-                                className="mt-2 w-full rounded-lg border border-zinc-200 px-3 py-2 text-sm text-zinc-900"
+                                className="mt-2 w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm text-zinc-900"
                               />
                             </label>
                           </div>
@@ -987,29 +1020,27 @@ export default function ContractReturnsCalculator() {
             </div>
           </section>
 
-          <section className="flex flex-col gap-6 rounded-3xl border border-zinc-200 bg-white p-6 shadow-sm">
+          <section className="flex flex-col gap-6 rounded-3xl border border-zinc-300 bg-white p-6 shadow-sm">
             <div className="space-y-2">
               <p className="text-sm font-semibold text-zinc-900">Decision summary</p>
-              <p className="text-sm text-zinc-600">
-                {verdictLine} {cocLine}
-              </p>
+              <p className="text-sm text-zinc-600">{summaryLine}</p>
             </div>
 
             <dl className="grid gap-4 sm:grid-cols-3">
-              <div className="rounded-2xl border border-zinc-200 p-4">
-                <dt className="text-xs font-semibold uppercase tracking-wide text-zinc-500">Payback period</dt>
+              <div className="rounded-2xl border border-zinc-300 p-4 shadow-sm">
+                <dt className="text-xs font-semibold uppercase tracking-wide text-zinc-600">Payback period</dt>
                 <dd className="mt-2 text-lg font-semibold text-zinc-950">{paybackLabel}</dd>
               </div>
-              <div className="rounded-2xl border border-zinc-200 p-4">
-                <dt className="text-xs font-semibold uppercase tracking-wide text-zinc-500">CoC multiple</dt>
+              <div className="rounded-2xl border border-zinc-300 p-4 shadow-sm">
+                <dt className="text-xs font-semibold uppercase tracking-wide text-zinc-600">CoC multiple</dt>
                 <dd className="mt-2 text-lg font-semibold text-zinc-950">
-                  {results.cocMultiple === null ? 'n/a' : `${formatCompact(results.cocMultiple)}x`}
+                  {isEmptyState ? '—' : results.cocMultiple === null ? '—' : `${formatCompact(results.cocMultiple)}x`}
                 </dd>
               </div>
-              <div className="rounded-2xl border border-zinc-200 p-4">
-                <dt className="text-xs font-semibold uppercase tracking-wide text-zinc-500">Total earnings</dt>
+              <div className="rounded-2xl border border-zinc-300 p-4 shadow-sm">
+                <dt className="text-xs font-semibold uppercase tracking-wide text-zinc-600">Total earnings</dt>
                 <dd className="mt-2 text-lg font-semibold text-zinc-950">
-                  {formatCurrency(results.totalRecognized)}
+                  {isEmptyState ? '—' : formatCurrency(results.totalRecognized)}
                 </dd>
               </div>
             </dl>
@@ -1017,62 +1048,69 @@ export default function ContractReturnsCalculator() {
             <div className="space-y-3">
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <p className="text-sm font-semibold text-zinc-900">Cash flow over time</p>
-                <div className="flex flex-wrap gap-4 text-xs font-semibold uppercase tracking-wide text-zinc-500">
+                <div
+                  className={`flex flex-wrap gap-4 text-xs font-semibold uppercase tracking-wide text-zinc-500 ${
+                    isEmptyState ? 'opacity-40' : ''
+                  }`}
+                >
                   <span className="flex items-center gap-2">
-                    <span className="h-2 w-2 rounded-full bg-zinc-400" /> Monthly cash flow
+                    <span className="h-2 w-2 rounded-full bg-zinc-500" /> Monthly cash flow
                   </span>
                   <span className="flex items-center gap-2">
                     <span className="h-2 w-2 rounded-full bg-blue-600" /> Cumulative cash flow
                   </span>
                 </div>
               </div>
-              <CashflowChart data={chartData} paybackMonth={results.paybackMonth} />
-              <div className="flex items-center justify-between text-xs text-zinc-500">
-                <span>CAC anchor at month 0 · Payback marker is dashed.</span>
-                <span>Hover to inspect monthly values.</span>
-              </div>
+              <CashflowChart
+                data={chartData}
+                paybackMonth={isEmptyState ? null : results.paybackMonth}
+                isEmpty={isEmptyState}
+              />
+              {!isEmptyState && (
+                <div className="flex items-center justify-end text-xs text-zinc-500">
+                  <span>Hover to inspect monthly values.</span>
+                </div>
+              )}
             </div>
 
             <div className="space-y-3">
               <button
                 type="button"
                 onClick={() => setShowDetails((value) => !value)}
-                className="flex w-full items-center justify-between text-sm font-semibold text-zinc-900"
+                className="flex w-full items-center justify-between text-sm font-semibold text-zinc-800 hover:text-zinc-900"
               >
-                Details
-                <span className="text-xs font-semibold uppercase tracking-wide text-blue-600">
-                  {showDetails ? 'Hide' : 'Show'}
-                </span>
+                <span>Details</span>
+                <span className="text-sm text-zinc-500">{showDetails ? '▾' : '▸'}</span>
               </button>
               {showDetails && (
-                <dl className="space-y-3 rounded-2xl border border-zinc-200 bg-zinc-50/70 p-4 text-sm">
+                <dl className="space-y-3 rounded-2xl border border-zinc-200 bg-zinc-50 p-4 text-sm">
                   <div className="flex items-center justify-between">
-                    <dt className="text-zinc-500">Month 1 earnings</dt>
+                    <dt className="text-zinc-600">Month 1 earnings</dt>
                     <dd className="font-semibold text-zinc-900">
-                      {formatCurrency(results.monthOneEarnings)}
+                      {isEmptyState ? '—' : formatCurrency(results.monthOneEarnings)}
                     </dd>
                   </div>
                   <div className="flex items-center justify-between">
-                    <dt className="text-zinc-500">Avg monthly earnings</dt>
+                    <dt className="text-zinc-600">Avg monthly earnings</dt>
                     <dd className="font-semibold text-zinc-900">
-                      {formatCurrency(results.averageMonthlyEarnings)}
+                      {isEmptyState ? '—' : formatCurrency(results.averageMonthlyEarnings)}
                     </dd>
                   </div>
                   <div className="flex items-center justify-between">
-                    <dt className="text-zinc-500">Cumulative cash created</dt>
+                    <dt className="text-zinc-600">Cumulative cash created</dt>
                     <dd className="font-semibold text-zinc-900">
-                      {formatCurrency(results.cumulativeCashCreated)}
+                      {isEmptyState ? '—' : formatCurrency(results.cumulativeCashCreated)}
                     </dd>
                   </div>
                   <div className="flex items-center justify-between">
-                    <dt className="text-zinc-500">
+                    <dt className="text-zinc-600">
                       IRR (annualized)
                       <span className="ml-2 text-[11px] text-zinc-400" title="IRR is an optional, secondary view of return over time.">
                         (optional)
                       </span>
                     </dt>
                     <dd className="font-semibold text-zinc-900">
-                      {results.irrAnnualized === null ? 'n/a' : formatPercent(results.irrAnnualized)}
+                      {isEmptyState || results.irrAnnualized === null ? '—' : formatPercent(results.irrAnnualized)}
                     </dd>
                   </div>
                 </dl>
@@ -1081,6 +1119,25 @@ export default function ContractReturnsCalculator() {
           </section>
         </div>
       </div>
+
+      <footer className="border-t border-zinc-200/80 bg-white/80">
+        <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 text-sm text-zinc-600 sm:px-6">
+          <span className="text-xs uppercase tracking-[0.2em] text-zinc-500">Get in touch</span>
+          <div className="flex items-center gap-4 font-semibold text-zinc-700">
+            <a href="mailto:ryandharma04@gmail.com" className="hover:text-zinc-900">
+              Email
+            </a>
+            <a
+              href="https://www.linkedin.com/in/ryandharma/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-zinc-900"
+            >
+              LinkedIn
+            </a>
+          </div>
+        </div>
+      </footer>
     </div>
   )
 }
