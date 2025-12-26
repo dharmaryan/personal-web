@@ -13,19 +13,23 @@ export default function HomeShell() {
   return (
   <main className="flex min-h-screen items-stretch bg-zinc-50 text-zinc-900">
     <div className="mx-auto flex w-full max-w-5xl flex-col gap-12 px-6 py-12 lg:px-10 lg:py-16">
+        {/* Tighten hero padding and vertical rhythm to match the compact layout. */}
         <section
           id="home"
-          className="flex flex-col gap-8 rounded-3xl border border-zinc-200 bg-white p-10"
+          className="flex flex-col gap-6 rounded-3xl border border-zinc-200 bg-white p-8 lg:p-9"
         >
-          <div className="space-y-4">
+          <div className="space-y-3"> {/* Reduce label/headline/subheading spacing for a tighter hero stack. */}
             <p className="text-sm font-semibold uppercase tracking-[0.28em] text-zinc-600">{headerCopy.name}</p>
-            <h1 className="text-5xl font-semibold leading-tight text-zinc-950 lg:text-6xl">{headerCopy.title}</h1>
+            {/* Reduce hero headline size/leading to match the compact reference. */}
+            <h1 className="text-4xl font-semibold leading-snug text-zinc-950 lg:text-5xl">{headerCopy.title}</h1>
             <p className="text-lg leading-relaxed text-zinc-700 lg:text-xl">{headerCopy.subtitle}</p>
           </div>
-          <div className="flex flex-wrap items-center gap-3 text-sm font-semibold text-zinc-900">
+          {/* Tighten button row spacing to reduce hero height. */}
+          <div className="flex flex-wrap items-center gap-2 text-sm font-semibold text-zinc-900">
+            {/* Slightly smaller button padding keeps CTAs balanced in the compact hero. */}
             <Link
               href={headerCopy.email}
-              className="inline-flex items-center rounded-md border border-zinc-300 bg-white px-5 py-3 hover:border-blue-500 hover:text-blue-600"
+              className="inline-flex items-center rounded-md border border-zinc-300 bg-white px-4 py-2.5 hover:border-blue-500 hover:text-blue-600"
             >
               Email me
             </Link>
@@ -33,7 +37,7 @@ export default function HomeShell() {
               href={headerCopy.linkedIn}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center rounded-md border border-zinc-900 bg-zinc-900 px-5 py-3 text-white hover:border-blue-600 hover:bg-blue-600"
+              className="inline-flex items-center rounded-md border border-zinc-900 bg-zinc-900 px-4 py-2.5 text-white hover:border-blue-600 hover:bg-blue-600"
             >
               LinkedIn
             </Link>
