@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { loadResume } from "@/lib/resume";
+import ResumeContent from "../ResumeContent";
 import styles from "./resume-pdf.module.css";
 import "./print.css";
 
@@ -12,11 +12,11 @@ export const metadata: Metadata = {
 };
 
 export default async function ResumePdfPage() {
-  const content = await loadResume();
-
   return (
     <main className={styles.pdfBody}>
-      <div className={styles.pdfSheet}>{content}</div>
+      <div className={styles.pdfSheet}>
+        <ResumeContent />
+      </div>
     </main>
   );
 }

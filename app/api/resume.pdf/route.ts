@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import chromium from "@sparticuz/chromium-min";
-import { chromium as playwrightChromium } from "playwright";
+import { chromium } from "playwright";
 
 export const runtime = "nodejs";
 
@@ -19,18 +18,9 @@ export async function GET(request: NextRequest) {
   let browser;
 
   try {
-    const isServerless = Boolean(process.env.VERCEL);
-    const launchArgs = isServerless
-      ? chromium.args
-      : ["--no-sandbox", "--disable-setuid-sandbox"];
-    const executablePath = isServerless
-      ? await chromium.executablePath()
-      : undefined;
-
-    browser = await playwrightChromium.launch({
-      args: launchArgs,
-      executablePath,
-      headless: isServerless ? chromium.headless : true,
+    browser = await chromium.launch({
+      args: ["--no-sandbox", "--disable-setuid-sandbox"],
+      headless: true,
     });
     const page = await browser.newPage();
     await page.goto(targetUrl.toString(), {
