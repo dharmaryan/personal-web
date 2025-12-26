@@ -1,0 +1,73 @@
+.pdfBody {
+  min-height: 100vh;
+  background: #ffffff;
+  color: #111111;
+  display: flex;
+  justify-content: center;
+  padding: 24px;
+  font-size: 0.9rem;
+  line-height: 1.35;
+}
+
+.pdfSheet {
+  width: 100%;
+  max-width: 720px;
+}
+
+.pdfSheet :global(h1) {
+  font-size: 1.7rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  margin-bottom: 0.25rem;
+}
+
+.pdfSheet :global(h2) {
+  margin-top: 1.1rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  border-bottom: 1px solid #111111;
+  padding-bottom: 0.2rem;
+}
+
+.pdfSheet :global(h3) {
+  margin-top: 0.7rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.pdfSheet :global(p) {
+  margin-top: 0.4rem;
+}
+
+.pdfSheet :global(ul) {
+  margin-top: 0.35rem;
+  padding-left: 1rem;
+  list-style: disc;
+}
+
+.pdfSheet :global(li) {
+  margin-top: 0.25rem;
+}
+
+.pdfSheet :global(.resume-grid) {
+  display: grid;
+  gap: 1.2rem;
+}
+
+@media (min-width: 900px) {
+  .pdfSheet :global(.resume-grid) {
+    grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
+    gap: 1.6rem;
+  }
+}
+
+.pdfSheet :global(.section),
+.pdfSheet :global(.role),
+.pdfSheet :global(h2),
+.pdfSheet :global(h3),
+.pdfSheet :global(ul),
+.pdfSheet :global(p) {
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
