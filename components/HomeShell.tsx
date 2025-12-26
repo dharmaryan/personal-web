@@ -97,13 +97,18 @@ export default function HomeShell() {
               description="Intuitively and quantitatively explaining why things work so much more quickly in tech."
               href="/case-studies/output-comparison"
             />
+            <ProjectCard
+              title="Contract-level returns calculator"
+              description="A lightweight CAC payback, cash return and unit economics viability calculator I coded."
+              href="/case-studies/contract-returns-calculator"
+            />
             <DownloadCard
-              title="Simplified Fundraising & Runway Model"  
+              title="Simplified fundraising & runway model"  
               description="Simplified illustrative model for projecting burn, runway, and dilution across fundraising scenarios."
               href="/Fundraising%20%26%20Runway%20Model.xlsx"
             />
             <DownloadCard
-              title="Detailed Annual Planning & Fundraising Model"  
+              title="Detailed annual planning & fundraising model"  
               description="A detailed strategic finance case study I developed including NTM monthly projections, multi-stage fundraising & valuation and build-out of SaaS metrics."
               href="/Project%20Oracle%20-%20Illustrative%20Annual%20Planning%20and%20Fundraising%20Model.xlsx"
             />
