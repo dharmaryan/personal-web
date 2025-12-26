@@ -1,9 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  serverExternalPackages: ["playwright-core"],
-  outputFileTracingIncludes: {
-    "/api/resume.pdf": ["node_modules/@sparticuz/chromium/**"],
+  experimental: {
+    serverComponentsExternalPackages: [
+      "playwright-core",
+      "@sparticuz/chromium",
+    ],
   },
   images: {
     remotePatterns: [
