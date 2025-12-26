@@ -1,17 +1,36 @@
 import { NextRequest, NextResponse } from "next/server";
-import { chromium } from "playwright";
+import chromium from "@sparticuz/chromium-min";
+import { chromium as playwrightChromium } from "playwright";
 
 export const runtime = "nodejs";
 
 const pdfFilename = "Ryan_Dharma_Resume.pdf";
 
 export async function GET(request: NextRequest) {
-  const targetUrl = new URL("/private/resume/pdf", request.nextUrl.origin);
+  const host =
+    request.headers.get("x-forwarded-host") ?? request.headers.get("host");
+  if (!host) {
+    console.error("PDF generation failed: missing host header");
+    return NextResponse.json({ error: "Missing host header" }, { status: 400 });
+  }
+
+  const protocol = request.headers.get("x-forwarded-proto") ?? "https";
+  const targetUrl = new URL("/private/resume/pdf", `${protocol}://${host}`);
   let browser;
 
   try {
-    browser = await chromium.launch({
-      args: ["--no-sandbox", "--disable-setuid-sandbox"],
+    const isServerless = Boolean(process.env.VERCEL);
+    const launchArgs = isServerless
+      ? chromium.args
+      : ["--no-sandbox", "--disable-setuid-sandbox"];
+    const executablePath = isServerless
+      ? await chromium.executablePath()
+      : undefined;
+
+    browser = await playwrightChromium.launch({
+      args: launchArgs,
+      executablePath,
+      headless: isServerless ? chromium.headless : true,
     });
     const page = await browser.newPage();
     await page.goto(targetUrl.toString(), {
@@ -45,7 +64,10 @@ export async function GET(request: NextRequest) {
       },
     });
   } catch (error) {
-    console.error("PDF generation failed", error);
+    console.error("PDF generation failed", {
+      url: targetUrl.toString(),
+      message: error instanceof Error ? error.message : "Unknown error",
+    });
     return NextResponse.json(
       { error: "Failed to generate PDF" },
       { status: 500 },
