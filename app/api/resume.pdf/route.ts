@@ -1,6 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import chromium from "@sparticuz/chromium-min";
-import { chromium as playwrightChromium } from "playwright-core";
 
 export const runtime = "nodejs";
 
@@ -19,7 +17,12 @@ export async function GET(request: NextRequest) {
   let browser;
 
   try {
-    browser = await playwrightChromium.launch({
+    const chromiumMod = await import("@sparticuz/chromium-min");
+    const chromium = chromiumMod.default;
+    const pw = await import("playwright-core");
+    const pwChromium = pw.chromium;
+
+    browser = await pwChromium.launch({
       args: chromium.args,
       executablePath: await chromium.executablePath(),
       headless: true,
