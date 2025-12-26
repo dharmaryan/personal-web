@@ -54,15 +54,20 @@ Once a system is designed and implemented, output is no longer tightly coupled t
 
 A simplified representation looks something like this:
 
-``` Output = [Hours x Skill x (1 – Fatigue) x System Leverage] / Review * (1 – Probability of Breakage) ```
+$$
+\text{Output}
+=
+\frac{\text{Hours} \times \text{Skill} \times (1 - \text{Fatigue})}{\text{Review}}
+\times (1 - \text{Probability of Deal Dying})
+$$
 
 Where:
--	Hours: now primarily spent on system design and iteration instead of repeated execution
--	Skill: baseline workforce quality, which is typically high but can be more variable across teams and stages
--	Fatigue: as defined above
--	System Leverage: the degree to which a system automates or eliminates manual steps
--	Review: as defined above
--	Probability of Breakage: the probability of a system malfunctioning due to bugs, edge cases or unintended changes in logic
+-	**Hours**: now primarily spent on system design and iteration instead of repeated execution
+-	**Skill**: baseline workforce quality, which is typically high but can be more variable across teams and stages
+-	**Fatigue**: as defined above
+-	**System Leverage**: the degree to which a system automates or eliminates manual steps
+-	**Review**: as defined above
+-	**Probability of Breakage**: the probability of a system malfunctioning due to bugs, edge cases or unintended changes in logic
 
 Under this construct, skill and hours are reinvested into systems leverage, reducing the hours required to produce future output. The primary failure mode is breakage, which is endogenous. It arises from design choices, complexity and change velocity, and can be permanently reduced by engineering, testing and operational discipline. 
 
@@ -70,7 +75,7 @@ As a result, you can simultaneously have extremely hard-working start-up enginee
 
 Let’s walk through a worked example.
 
-## Worked Example: Systematised GTM vs. Manual Deal Origination
+## Comparing the Sectors: Systematised GTM vs. Manual Deal Origination
 
 ### Systematised GTM
 
@@ -114,9 +119,7 @@ To be fair, this isn’t accidental either. The stakes are high, costs are asymm
 
 But – the economic consequence is clear. Unlike a systematised GTM pipeline, deal origination does not convert effort into durable infrastructure. Each cycle largely resets and has to be activated manually.
 
-Without going into nuance, I ran some expected value calculations comparing the # of qualified conversations that both processes would generate in a year assuming a 10,000 prospect set to illustratively demonstrate the difference:
-
-![Screenshot of qualified conversations](/figure2-sequences.png "Figure 1: # of qualified conversations comparison.")
+## Conclusion
 
 Having worked in both environments, this difference was really hard to articulate and really easy to feel. Finance is exceptional at teaching execution under pressure, learning how to push work through ambiguity and deliver when making mistakes is not an option. Tech, on the other hand, is exceptional at teaching automation – how to keep things working after you step away.
 
