@@ -13,7 +13,7 @@ export default function ResumeActions() {
             See my main website
           </a>
           <a
-            href="/Ryan_Dharma_Resume.pdf"
+            href="/25.12.26%20Ryan%20Dharma%20Resume.pdf"
             download
             className={`${baseButtonClass} border-zinc-200 bg-white text-zinc-900 hover:text-blue-600`}
           >
