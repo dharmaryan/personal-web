@@ -1,7 +1,20 @@
 import type { Metadata } from "next";
+import { Fraunces, Inter } from "next/font/google"; // Use Next.js font loading for deterministic typography.
 import type { ReactNode } from "react";
 import "./globals.css";
 import "katex/dist/katex.min.css"; // Load KaTeX styles so rendered math is displayed correctly.
+
+const sansFont = Inter({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-sans", // Expose sans font as a CSS variable for global body text.
+});
+
+const serifFont = Fraunces({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-serif", // Expose serif font as a CSS variable for editorial headings.
+});
 
 export const metadata: Metadata = {
   title: "Ryan Dharma – RevOps and Finance",
@@ -35,7 +48,10 @@ export default function RootLayout({
   children: ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html
+      lang="en"
+      className={`${sansFont.variable} ${serifFont.variable}`} // Attach font variables at the root for global CSS usage.
+    >
       <head>
         <meta name="robots" content="noindex, nofollow" />
       </head>
