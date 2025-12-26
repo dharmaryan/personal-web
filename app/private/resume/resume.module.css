@@ -1,0 +1,91 @@
+.resumeBody {
+  color: #111111;
+}
+
+.resumeBody h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  margin-bottom: 0.4rem;
+}
+
+.resumeBody h2 {
+  margin-top: 2.2rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  border-bottom: 1px solid #111111;
+  padding-bottom: 0.35rem;
+}
+
+.resumeBody h3 {
+  margin-top: 1.6rem;
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+.resumeBody p {
+  margin-top: 0.65rem;
+}
+
+.resumeBody ul {
+  margin-top: 0.6rem;
+  padding-left: 1.2rem;
+  list-style: disc;
+}
+
+.resumeBody li {
+  margin-top: 0.4rem;
+}
+
+.resumeBody table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 0.5rem;
+  font-size: 0.95rem;
+}
+
+.resumeBody td {
+  padding: 0.1rem 0;
+  vertical-align: top;
+}
+
+.resumeBody td:last-child {
+  text-align: right;
+  white-space: nowrap;
+}
+
+@media print {
+  @page {
+    size: A4;
+    margin: 19mm;
+  }
+
+  .resumeBody :global(.resume-actions) {
+    display: none !important;
+  }
+
+  .resumeBody {
+    max-width: none;
+    padding: 0;
+    color: #000000;
+  }
+
+  .resumeBody a {
+    color: #000000;
+    text-decoration: underline;
+  }
+
+  .resumeBody h2 {
+    border-color: #000000;
+  }
+
+  .resumeBody h2,
+  .resumeBody h3,
+  .resumeBody table,
+  .resumeBody ul,
+  .resumeBody p {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+}

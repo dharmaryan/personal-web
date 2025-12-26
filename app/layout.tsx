@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google"; // Use next/font for deterministic Inter rendering across environments.
 import type { ReactNode } from "react";
+import SiteActionBar from "@/components/SiteActionBar";
 import "./globals.css";
 import "katex/dist/katex.min.css"; // Load KaTeX styles so rendered math is displayed correctly.
 
@@ -44,12 +45,7 @@ export default function RootLayout({
       </head>
       <body className="bg-white text-zinc-900 antialiased">
         <div className="min-h-screen flex flex-col">{children}</div>
-        <div className="fixed bottom-4 right-4 z-50">
-          <div className="flex gap-2 rounded-md border border-zinc-200 bg-white px-3 py-2 text-sm font-semibold text-zinc-900 shadow-sm">
-            <a href="mailto:ryandharma04@gmail.com" className="px-2 py-1 hover:text-blue-600">Email</a>
-            <a href="https://www.linkedin.com/in/ryandharma/" target="_blank" rel="noopener noreferrer" className="px-2 py-1 hover:text-blue-600">LinkedIn</a>
-          </div>
-        </div>
+        <SiteActionBar />
       </body>
     </html>
   );
