@@ -94,6 +94,7 @@ export async function loadCaseStudy(slug: string): Promise<CaseStudy | null> {
     options: {
       parseFrontmatter: false,
       mdxOptions: {
+        format: 'md', // Treat MDX input as Markdown-only to avoid JSX parsing errors like "<100ms".
         remarkPlugins: [remarkMath], // Support $$...$$ syntax in the markdown source.
         rehypePlugins: [rehypeKatex], // Transform parsed math to KaTeX HTML.
       },
