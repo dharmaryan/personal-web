@@ -4,6 +4,7 @@ import type { ReactElement } from 'react'
 import { compileMDX } from 'next-mdx-remote/rsc'
 import rehypeKatex from 'rehype-katex'
 import remarkMath from 'remark-math'
+import MdxImage from '@/components/MdxImage'
 
 const CASE_STUDIES_DIR = path.join(process.cwd(), 'content', 'case-studies')
 
@@ -91,6 +92,7 @@ export async function loadCaseStudy(slug: string): Promise<CaseStudy | null> {
   // Compile the MDX body so markdown renders as React components instead of raw text, and enable math output.
   const compiled = await compileMDX({
     source: body,
+    components: { img: MdxImage }, // Map markdown images to figures with captions and styling.
     options: {
       parseFrontmatter: false,
       mdxOptions: {

@@ -50,16 +50,18 @@ export default function PostLayout({
       </section>
 
       <section className='bg-white'>
-        <div className='mx-auto max-w-3xl px-4 pt-10 pb-24'>
+        {/* Remove extra top padding so the divider-to-heading spacing matches the divider-to-back-link spacing. */}
+        <div className='mx-auto max-w-3xl px-4 pt-0 pb-24'>
           <article>
             <div className='case-body'>
               {children}
               <hr className='my-12 border-zinc-200' />
               <div className='sm:flex sm:items-center sm:justify-between'>
                 <p className='text-base font-semibold text-zinc-950'>Enjoyed this piece?</p>
+                {/* Suppress only the hover underline for the CTA while keeping other button styles intact. */}
                 <Link
                   href='/'
-                  className='mt-4 inline-flex items-center rounded-md border border-zinc-900 bg-zinc-900 px-6 py-3 text-sm font-semibold text-white hover:border-blue-600 hover:bg-blue-600 sm:mt-0'
+                  className='mt-4 inline-flex items-center rounded-md border border-zinc-900 bg-zinc-900 px-6 py-3 text-sm font-semibold text-white hover:border-blue-600 hover:bg-blue-600 hover:no-underline sm:mt-0'
                 >
                   <span className='text-white'>View my main site</span>
                 </Link>
