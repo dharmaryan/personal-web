@@ -97,11 +97,6 @@ export default function HomeShell() {
               description="Intuitively and quantitatively explaining why things work so much more quickly in tech."
               href="/case-studies/output-comparison"
             />
-            <ProjectCard
-              title="Contract Returns Calculator"
-              description="A lightweight contract-level unit economics & returns model."
-              href="/case-studies/contract-returns-calculator"
-            />
             <DownloadCard
               title="Simplified Fundraising & Runway Model"  
               description="Simplified illustrative model for projecting burn, runway, and dilution across fundraising scenarios."
