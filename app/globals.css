@@ -12,6 +12,11 @@ body {
   @apply mt-12 mb-4 text-3xl font-semibold text-slate-900;
 }
 
+/* Align first article heading spacing with divider spacing for consistent vertical rhythm. */
+.case-body > h2:first-child {
+  @apply mt-0;
+}
+
 .case-body h3 {
   @apply mt-10 mb-3 text-2xl font-semibold text-slate-900;
 }
