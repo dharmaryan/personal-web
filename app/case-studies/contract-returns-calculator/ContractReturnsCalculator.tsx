@@ -54,10 +54,22 @@ const percentFormatter = new Intl.NumberFormat('en-US', {
   maximumFractionDigits: 1,
 })
 
+const INPUT_BOUNDS = {
+  renewals: { min: 0, max: 5 },
+  renewalVolumeChangePercent: { min: -50, max: 100 },
+  renewalUpliftPercent: { min: 0, max: 20 },
+  escalationPercent: { min: 0, max: 10 },
+  termMonths: { min: 1, max: 60 },
+} as const
+
 const toNumber = (value: string) => {
   const parsed = Number(value)
   return Number.isFinite(parsed) ? parsed : 0
 }
+
+const clampNumber = (value: number, min: number, max: number) => Math.min(Math.max(value, min), max)
+const clampInteger = (value: number, min: number, max: number) =>
+  clampNumber(Math.floor(value), min, max)
 
 const escalationSteps = (monthInTerm: number, cadence: EscalationPeriod) => {
   if (cadence === 'monthly') return monthInTerm - 1
@@ -76,8 +88,8 @@ const buildRecognizedEarnings = (
   costMode: CostMode,
   costLines: CostLine[],
 ) => {
-  const normalizedTerm = Math.max(0, Math.floor(termMonths))
-  const normalizedRenewals = Math.max(0, Math.floor(renewals))
+  const normalizedTerm = clampInteger(termMonths, INPUT_BOUNDS.termMonths.min, INPUT_BOUNDS.termMonths.max)
+  const normalizedRenewals = clampInteger(renewals, INPUT_BOUNDS.renewals.min, INPUT_BOUNDS.renewals.max)
   const totalTermMonths = normalizedTerm * (1 + normalizedRenewals)
 
   if (!normalizedTerm || revenueLines.length === 0) {
@@ -86,9 +98,20 @@ const buildRecognizedEarnings = (
 
   const earnings: number[] = []
   const baseCosts = costLines.reduce((sum, item) => sum + item.monthlyCost, 0)
-  const escalationRate = escalationPercent / 100
-  const upliftRate = renewalUpliftPercent / 100
-  const volumeRate = renewalVolumeChangePercent / 100
+  const escalationRate =
+    clampNumber(escalationPercent, INPUT_BOUNDS.escalationPercent.min, INPUT_BOUNDS.escalationPercent.max) / 100
+  const upliftRate =
+    clampNumber(
+      renewalUpliftPercent,
+      INPUT_BOUNDS.renewalUpliftPercent.min,
+      INPUT_BOUNDS.renewalUpliftPercent.max,
+    ) / 100
+  const volumeRate =
+    clampNumber(
+      renewalVolumeChangePercent,
+      INPUT_BOUNDS.renewalVolumeChangePercent.min,
+      INPUT_BOUNDS.renewalVolumeChangePercent.max,
+    ) / 100
 
   for (let month = 1; month <= totalTermMonths; month += 1) {
     const termIndex = Math.floor((month - 1) / normalizedTerm)
@@ -227,13 +250,13 @@ const formatPercent = (value: number) => percentFormatter.format(value)
 const DEFAULT_STATE = {
   cac: 0,
   termMonths: 12,
-  renewals: 0,
+  renewals: 1,
   billingFrequency: 'monthly' as BillingFrequency,
   lagMonths: 0,
-  escalationPercent: 0,
+  escalationPercent: 3,
   escalationPeriod: 'annual' as EscalationPeriod,
-  renewalUpliftPercent: 0,
-  renewalVolumeChangePercent: 0,
+  renewalUpliftPercent: 5,
+  renewalVolumeChangePercent: 5,
   revenueLines: [{ name: 'Subscription', monthlyPrice: 0, volume: 1, margin: 80 }],
   costMode: 'margin' as CostMode,
   costLines: [] as { name: string; monthlyCost: number }[],
@@ -591,21 +614,54 @@ export default function ContractReturnsCalculator() {
     setExampleLoaded(true)
   }
 
+  const sanitizedInputs = useMemo(
+    () => ({
+      termMonths: clampInteger(termMonths, INPUT_BOUNDS.termMonths.min, INPUT_BOUNDS.termMonths.max),
+      renewals: clampInteger(renewals, INPUT_BOUNDS.renewals.min, INPUT_BOUNDS.renewals.max),
+      escalationPercent: clampNumber(
+        escalationPercent,
+        INPUT_BOUNDS.escalationPercent.min,
+        INPUT_BOUNDS.escalationPercent.max,
+      ),
+      renewalUpliftPercent: clampNumber(
+        renewalUpliftPercent,
+        INPUT_BOUNDS.renewalUpliftPercent.min,
+        INPUT_BOUNDS.renewalUpliftPercent.max,
+      ),
+      renewalVolumeChangePercent: clampNumber(
+        renewalVolumeChangePercent,
+        INPUT_BOUNDS.renewalVolumeChangePercent.min,
+        INPUT_BOUNDS.renewalVolumeChangePercent.max,
+      ),
+    }),
+    [termMonths, renewals, escalationPercent, renewalUpliftPercent, renewalVolumeChangePercent],
+  )
+
+  const cacEnabled = cac > 0
+  const cacForModel = cacEnabled ? cac : 0
+
+  const aggressiveAssumptions =
+    sanitizedInputs.renewals > 3 ||
+    sanitizedInputs.renewalVolumeChangePercent > 50 ||
+    sanitizedInputs.renewalUpliftPercent > 10 ||
+    sanitizedInputs.escalationPercent > 5 ||
+    sanitizedInputs.termMonths > 36
+
   const results = useMemo<CalculatedResults>(() => {
     const recognizedEarnings = buildRecognizedEarnings(
-      termMonths,
-      renewals,
-      escalationPercent,
+      sanitizedInputs.termMonths,
+      sanitizedInputs.renewals,
+      sanitizedInputs.escalationPercent,
       escalationPeriod,
-      renewalUpliftPercent,
-      renewalVolumeChangePercent,
+      sanitizedInputs.renewalUpliftPercent,
+      sanitizedInputs.renewalVolumeChangePercent,
       revenueLines,
       costMode,
       costLines,
     )
     const cashCollected = buildCashCollections(
       recognizedEarnings,
-      termMonths,
+      sanitizedInputs.termMonths,
       billingFrequency,
       lagMonths,
     )
@@ -618,21 +674,21 @@ export default function ContractReturnsCalculator() {
       : 0
 
     let paybackMonth: number | null = null
-    if (cac > 0) {
+    if (cacEnabled) {
       let cumulative = 0
       for (let index = 0; index < cashCollected.length; index += 1) {
         cumulative += cashCollected[index]
-        if (cumulative - cac >= 0) {
+        if (cumulative - cacForModel >= 0) {
           paybackMonth = index + 1
           break
         }
       }
     }
 
-    const cocMultiple = cac > 0 ? totalRecognized / cac : null
-    const cumulativeCashCreated = totalCashCollected - cac
+    const cocMultiple = cacEnabled ? totalRecognized / cacForModel : null
+    const cumulativeCashCreated = totalCashCollected - cacForModel
 
-    const irrMonthly = irr([-cac, ...cashCollected])
+    const irrMonthly = cacEnabled ? irr([-cacForModel, ...cashCollected]) : null
     const irrAnnualized = irrMonthly === null ? null : Math.pow(1 + irrMonthly, 12) - 1
 
     return {
@@ -659,15 +715,17 @@ export default function ContractReturnsCalculator() {
     costLines,
     billingFrequency,
     lagMonths,
-    cac,
+    cacEnabled,
+    cacForModel,
+    sanitizedInputs,
   ])
 
   const chartData = useMemo<ChartPoint[]>(() => {
     const data: ChartPoint[] = []
-    let cumulative = -cac
+    let cumulative = -cacForModel
     data.push({
       month: 0,
-      monthlyCash: -cac,
+      monthlyCash: -cacForModel,
       cumulativeCash: cumulative,
       paybackAchieved: cumulative >= 0,
     })
@@ -683,12 +741,17 @@ export default function ContractReturnsCalculator() {
     })
 
     return data
-  }, [cac, results.cashCollected])
+  }, [cacForModel, results.cashCollected])
 
   const isEmptyState = results.totalRecognized === 0 && results.totalCashCollected === 0
+  const showOutputsWarning =
+    !isEmptyState &&
+    ((results.cocMultiple !== null && results.cocMultiple > 100) ||
+      (results.irrAnnualized !== null && results.irrAnnualized > 10) ||
+      (results.paybackMonth !== null && results.paybackMonth < 1))
 
   const paybackLabel =
-    isEmptyState
+    isEmptyState || !cacEnabled
       ? '—'
       : results.paybackMonth === null
         ? 'No payback'
@@ -699,12 +762,14 @@ export default function ContractReturnsCalculator() {
   const verdictLine =
     isEmptyState
       ? 'Enter CAC and at least one revenue line to compute payback.'
+      : !cacEnabled
+        ? 'Payback is not defined when CAC ≤ 0.'
       : results.paybackMonth === null
         ? 'No payback within the modeled term.'
         : `Payback in month ${results.paybackMonth}.`
 
   const cocLine =
-    isEmptyState
+    isEmptyState || !cacEnabled
       ? ''
       : results.cocMultiple === null
         ? 'Returns pending.'
@@ -786,7 +851,18 @@ export default function ContractReturnsCalculator() {
                   <input
                     type="number"
                     value={termMonths}
-                    onChange={(event) => setTermMonths(toNumber(event.target.value))}
+                    min={INPUT_BOUNDS.termMonths.min}
+                    max={INPUT_BOUNDS.termMonths.max}
+                    step={1}
+                    onChange={(event) =>
+                      setTermMonths(
+                        clampInteger(
+                          toNumber(event.target.value),
+                          INPUT_BOUNDS.termMonths.min,
+                          INPUT_BOUNDS.termMonths.max,
+                        ),
+                      )
+                    }
                     className="mt-2 w-full rounded-xl border border-zinc-300 px-3 py-2 text-sm text-zinc-900"
                   />
                 </label>
@@ -956,7 +1032,18 @@ export default function ContractReturnsCalculator() {
                       <input
                         type="number"
                         value={escalationPercent}
-                        onChange={(event) => setEscalationPercent(toNumber(event.target.value))}
+                        min={INPUT_BOUNDS.escalationPercent.min}
+                        max={INPUT_BOUNDS.escalationPercent.max}
+                        step={0.1}
+                        onChange={(event) =>
+                          setEscalationPercent(
+                            clampNumber(
+                              toNumber(event.target.value),
+                              INPUT_BOUNDS.escalationPercent.min,
+                              INPUT_BOUNDS.escalationPercent.max,
+                            ),
+                          )
+                        }
                         className="mt-2 w-full rounded-xl border border-zinc-300 px-3 py-2 text-sm text-zinc-900"
                       />
                     </label>
@@ -977,7 +1064,18 @@ export default function ContractReturnsCalculator() {
                       <input
                         type="number"
                         value={renewals}
-                        onChange={(event) => setRenewals(toNumber(event.target.value))}
+                        min={INPUT_BOUNDS.renewals.min}
+                        max={INPUT_BOUNDS.renewals.max}
+                        step={1}
+                        onChange={(event) =>
+                          setRenewals(
+                            clampInteger(
+                              toNumber(event.target.value),
+                              INPUT_BOUNDS.renewals.min,
+                              INPUT_BOUNDS.renewals.max,
+                            ),
+                          )
+                        }
                         className="mt-2 w-full rounded-xl border border-zinc-300 px-3 py-2 text-sm text-zinc-900"
                       />
                     </label>
@@ -986,7 +1084,18 @@ export default function ContractReturnsCalculator() {
                       <input
                         type="number"
                         value={renewalUpliftPercent}
-                        onChange={(event) => setRenewalUpliftPercent(toNumber(event.target.value))}
+                        min={INPUT_BOUNDS.renewalUpliftPercent.min}
+                        max={INPUT_BOUNDS.renewalUpliftPercent.max}
+                        step={0.1}
+                        onChange={(event) =>
+                          setRenewalUpliftPercent(
+                            clampNumber(
+                              toNumber(event.target.value),
+                              INPUT_BOUNDS.renewalUpliftPercent.min,
+                              INPUT_BOUNDS.renewalUpliftPercent.max,
+                            ),
+                          )
+                        }
                         className="mt-2 w-full rounded-xl border border-zinc-300 px-3 py-2 text-sm text-zinc-900"
                       />
                     </label>
@@ -995,7 +1104,18 @@ export default function ContractReturnsCalculator() {
                       <input
                         type="number"
                         value={renewalVolumeChangePercent}
-                        onChange={(event) => setRenewalVolumeChangePercent(toNumber(event.target.value))}
+                        min={INPUT_BOUNDS.renewalVolumeChangePercent.min}
+                        max={INPUT_BOUNDS.renewalVolumeChangePercent.max}
+                        step={0.1}
+                        onChange={(event) =>
+                          setRenewalVolumeChangePercent(
+                            clampNumber(
+                              toNumber(event.target.value),
+                              INPUT_BOUNDS.renewalVolumeChangePercent.min,
+                              INPUT_BOUNDS.renewalVolumeChangePercent.max,
+                            ),
+                          )
+                        }
                         className="mt-2 w-full rounded-xl border border-zinc-300 px-3 py-2 text-sm text-zinc-900"
                       />
                     </label>
@@ -1093,32 +1213,50 @@ export default function ContractReturnsCalculator() {
                 </div>
               )}
             </div>
+
+            {aggressiveAssumptions && (
+              <div className="rounded-2xl border border-zinc-200 bg-zinc-50 px-4 py-3 text-xs text-zinc-500">
+                Assumptions are aggressive for a typical SaaS contract. Results may overstate returns.
+              </div>
+            )}
           </section>
 
           <section className="flex flex-col gap-6 rounded-3xl border border-zinc-300 bg-white p-6 shadow-sm">
+            {showOutputsWarning && (
+              <div className="rounded-2xl border border-amber-300 bg-amber-50 px-4 py-3 text-sm font-semibold text-amber-900">
+                Results exceed realistic SaaS contract economics. Review renewal and expansion assumptions.
+              </div>
+            )}
             <div className="space-y-2">
               <p className="text-sm font-semibold text-zinc-900">Decision summary</p>
-              <p className="text-sm text-zinc-600">{summaryLine}</p>
+              <p className="text-sm text-zinc-600 break-words">{summaryLine}</p>
             </div>
 
             <dl className="grid gap-4 sm:grid-cols-3">
               <div className="rounded-2xl border border-zinc-300 p-4 shadow-sm">
                 <dt className="text-xs font-semibold uppercase tracking-wide text-zinc-600">Payback period</dt>
-                <dd className="mt-2 text-lg font-semibold text-zinc-950">{paybackLabel}</dd>
+                <dd className="mt-2 text-lg font-semibold text-zinc-950 break-words">{paybackLabel}</dd>
               </div>
               <div className="rounded-2xl border border-zinc-300 p-4 shadow-sm">
                 <dt className="text-xs font-semibold uppercase tracking-wide text-zinc-600">CoC multiple</dt>
-                <dd className="mt-2 text-lg font-semibold text-zinc-950">
-                  {isEmptyState ? '—' : results.cocMultiple === null ? '—' : `${formatCompact(results.cocMultiple)}x`}
+                <dd className="mt-2 text-lg font-semibold text-zinc-950 break-words">
+                  {isEmptyState || !cacEnabled
+                    ? '—'
+                    : results.cocMultiple === null
+                      ? '—'
+                      : `${formatCompact(results.cocMultiple)}x`}
                 </dd>
               </div>
               <div className="rounded-2xl border border-zinc-300 p-4 shadow-sm">
                 <dt className="text-xs font-semibold uppercase tracking-wide text-zinc-600">Total earnings</dt>
-                <dd className="mt-2 text-lg font-semibold text-zinc-950">
+                <dd className="mt-2 text-lg font-semibold text-zinc-950 break-words">
                   {isEmptyState ? '—' : formatCurrency(results.totalRecognized)}
                 </dd>
               </div>
             </dl>
+            {!cacEnabled && (
+              <p className="text-xs text-zinc-500">Payback is not defined when CAC ≤ 0.</p>
+            )}
 
             <div className="space-y-3">
               <div className="flex flex-wrap items-center justify-between gap-2">
@@ -1161,19 +1299,19 @@ export default function ContractReturnsCalculator() {
                 <dl className="space-y-3 rounded-2xl border border-zinc-200 bg-zinc-50 p-4 text-sm">
                   <div className="flex items-center justify-between">
                     <dt className="text-zinc-600">Month 1 earnings</dt>
-                    <dd className="font-semibold text-zinc-900">
+                    <dd className="font-semibold text-zinc-900 break-words">
                       {isEmptyState ? '—' : formatCurrency(results.monthOneEarnings)}
                     </dd>
                   </div>
                   <div className="flex items-center justify-between">
                     <dt className="text-zinc-600">Avg monthly earnings</dt>
-                    <dd className="font-semibold text-zinc-900">
+                    <dd className="font-semibold text-zinc-900 break-words">
                       {isEmptyState ? '—' : formatCurrency(results.averageMonthlyEarnings)}
                     </dd>
                   </div>
                   <div className="flex items-center justify-between">
                     <dt className="text-zinc-600">Cumulative cash created</dt>
-                    <dd className="font-semibold text-zinc-900">
+                    <dd className="font-semibold text-zinc-900 break-words">
                       {isEmptyState ? '—' : formatCurrency(results.cumulativeCashCreated)}
                     </dd>
                   </div>
@@ -1184,8 +1322,10 @@ export default function ContractReturnsCalculator() {
                         (optional)
                       </span>
                     </dt>
-                    <dd className="font-semibold text-zinc-900">
-                      {isEmptyState || results.irrAnnualized === null ? '—' : formatPercent(results.irrAnnualized)}
+                    <dd className="font-semibold text-zinc-900 break-words">
+                      {isEmptyState || !cacEnabled || results.irrAnnualized === null
+                        ? '—'
+                        : formatPercent(results.irrAnnualized)}
                     </dd>
                   </div>
                 </dl>
