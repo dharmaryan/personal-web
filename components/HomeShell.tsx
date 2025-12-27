@@ -12,14 +12,14 @@ const headerCopy = {
 
 const projects: ProjectItem[] = [
   {
-    title: "Shipping under a non-negotiable deadline with broken inputs",
-    description: "Shipping under a non-negotiable deadline with broken inputs.",
-    href: "/case-studies/shipping-fast",
+    title: "Brute-force sales funnel methodology for getting employed",
+    description: "How I manufactured momentum out of nothing and sent out ~6,400 emails over the course of 3 months to brute force my way into the US.",
+    href: "/case-studies/brute-forcing-move",
   },
   {
-    title: "Brute-force sales funnel methodology for getting employed",
-    description: "How I sent out ~6,400 emails over the course of 3 months to brute force my way into the US.",
-    href: "/case-studies/brute-forcing-move",
+    title: "Shipping under a non-negotiable deadline with broken inputs",
+    description: "Stabilizing a critical model so a live transaction process could continue.",
+    href: "/case-studies/shipping-fast",
   },
   {
     title: "An ex-financier’s view on why tech ships faster than finance",
@@ -28,7 +28,7 @@ const projects: ProjectItem[] = [
   },
   {
     title: "Contract-level returns calculator",
-    description: "A lightweight CAC payback, cash return and unit economics viability calculator I coded.",
+    description: "A decision tool to replace brittle spreadsheet-based contract modelling.",
     href: "/case-studies/contract-returns-calculator",
   },
   {
