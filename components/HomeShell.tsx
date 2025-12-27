@@ -51,27 +51,27 @@ export default function HomeShell() {
             </div>
             <div className="space-y-4">
               <ExperienceCard
-                time="2025 – Present"
+                time="2025 – Present | San Francisco"
                 role="Revenue Operations @ Omni"
                 description="Building and managing GTM systems and revenue strategy for a Series B analytics start-up."
               />
               <ExperienceCard
-                time="2025 – 2026"
+                time="2025 – 2026 | Remote (Project-Based)"
                 role="Finance Domain Expert @ Mercor"
                 description="Part of the global effort to provide robust financial models to leading AI labs to automate out junior investment banking work."
               />
               <ExperienceCard
-                time="2024 – 2025"
+                time="2024 – 2025 | Sydney"
                 role="Private Equity @ I Squared Capital"
                 description="First junior hire in the Sydney office of a $50B private equity fund, making and managing investments in core-plus & value-add infrastructure."
               />
               <ExperienceCard
-                time="2023 – 2024"
+                time="2023 – 2024 | Sydney"
                 role="Investment Banking @ Bank of America"
                 description="Made fancy slide decks and pretty Excels for publicly listed TMT clients :)"
               />
               <ExperienceCard
-                time="2019 – 2022"
+                time="2019 – 2022 | Sydney"
                 role="Statistics & Finance @ University of Sydney"
                 description="Did an exchange at Wharton, met some cool people."
               />
