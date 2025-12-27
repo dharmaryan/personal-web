@@ -1,0 +1,60 @@
+---
+slug: "shipping-fast"
+title: "Shipping Under a Non-Negotiable Deadline with Broken Inputs"
+summary: "A case study on stabilizing a critical projections model after the original owner exited and an error surfaced during client review."
+description: "A case study on stabilizing a critical projections model after the original owner exited and an error surfaced during client review."
+author: "Ryan Dharma"
+date: "2026-01-14"
+backHref: "/"
+backLabel: "← Back to main site"
+label: "CASE STUDY"
+---
+
+## Context
+
+I was part of a small team working on a multi-billion-dollar transaction involving the carve-out of a national fibre network. The output that mattered most was a detailed projections model that fed directly into client and investor materials. It was not an ancillary deliverable; it was the core numeric narrative that every downstream deck, memo, and data room export depended on.
+
+Midway through the process, the person who owned the core model left unexpectedly. What remained was a partially built system with limited documentation and an immovable delivery deadline. The model had working sections, but dependencies were poorly mapped, and the logic chain from assumptions to outputs was brittle. The timeline did not allow a full rebuild, but the work still had to be finished and shipped.
+
+The deliverable was also multi-layered: base-case projections, downside cases, and the linkage to the narrative used in management presentations. That meant any single error could cascade across multiple outputs and create inconsistent numbers in front of the same reviewers.
+
+## Constraints
+
+- The projections had to ship on time — the broader process depended on it.
+- The model was incomplete and fragile, with unclear handoffs between tabs.
+- I had no formal ownership, but the work still had to get done.
+- Review cycles were compressed and stakes were high.
+
+## What Happened
+
+While extending and validating the model under time pressure, I made an error that wasn’t caught internally and surfaced during a client review. At that point, the priority shifted from “perfecting the model” to containing damage and fixing the issue immediately. The error was isolated to a specific set of assumptions and their downstream rollups, but it undermined confidence in the rest of the outputs.
+
+The immediate risk was not just the mistake itself; it was the perception that the entire model might be unreliable. That meant the response needed to be fast, precise, and transparent. There was no time for a full redesign, and the deadline did not move. The objective became: recover accuracy, prove stability, and preserve the delivery window.
+
+## What I Did
+
+- Isolated the source of the error and rebuilt the affected sections from first principles, tracing assumptions to outputs step by step.
+- Implemented additional internal checks to prevent recurrence, including cross-tab reconciliations and sanity checks on key drivers.
+- Re-validated downstream outputs to ensure no secondary effects, with spot checks across scenarios and sensitivity tables.
+- Prioritized correctness and speed over elegance to get the system back to a stable state, leaving optimization for later.
+
+The response emphasized triage. I focused on the subset of logic that could compromise the integrity of the full output set and rebuilt only what had to be rebuilt. Every change was paired with a diagnostic check so the model could flag breakage quickly. The intent was to reduce surface area, not to broaden scope.
+
+## Outcome
+
+- A corrected projections pack was delivered within the required window.
+- The process continued without delay.
+- The revised checks became part of my default approach to any critical model or system.
+
+The model shipped on time and held up through subsequent review cycles. The client-facing materials were not delayed, and the projections were accepted after the corrections and validations were demonstrated. The additional checks, while basic, meaningfully reduced the probability of similar issues and became a standard part of my workflow for high-stakes deliverables.
+
+## Why This Matters
+
+This experience taught me how to operate when:
+
+- Inputs are incomplete.
+- Ownership is ambiguous.
+- Deadlines are fixed.
+- Failure is visible.
+
+The key lesson wasn’t technical — it was learning how to triage, recover, and ship when conditions are far from ideal. That mindset has carried forward into every operational role I’ve held since. It reinforced that under hard deadlines, the critical skill is not perfection; it is the ability to isolate risk, stabilize core outputs, and move forward without compromising credibility.

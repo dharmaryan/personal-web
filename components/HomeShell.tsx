@@ -1,4 +1,5 @@
 import Link from "next/link";
+import ProjectsSection, { type ProjectItem } from "./ProjectsSection";
 
 const headerCopy = {
   name: "RYAN DHARMA",
@@ -9,10 +10,46 @@ const headerCopy = {
   email: "mailto:ryandharma04@gmail.com",
 };
 
+const projects: ProjectItem[] = [
+  {
+    title: "Shipping under a non-negotiable deadline with broken inputs",
+    description: "Shipping under a non-negotiable deadline with broken inputs.",
+    href: "/case-studies/shipping-fast",
+  },
+  {
+    title: "Brute-force sales funnel methodology for getting employed",
+    description: "How I sent out ~6,400 emails over the course of 3 months to brute force my way into the US.",
+    href: "/case-studies/brute-forcing-move",
+  },
+  {
+    title: "An ex-financier’s view on why tech ships faster than finance",
+    description: "Intuitively and quantitatively explaining why things work so much more quickly in tech.",
+    href: "/case-studies/output-comparison",
+  },
+  {
+    title: "Contract-level returns calculator",
+    description: "A lightweight CAC payback, cash return and unit economics viability calculator I coded.",
+    href: "/case-studies/contract-returns-calculator",
+  },
+  {
+    title: "Simplified fundraising & runway model",
+    description: "Simplified illustrative model for projecting burn, runway, and dilution across fundraising scenarios.",
+    href: "/Fundraising%20%26%20Runway%20Model.xlsx",
+    variant: "download",
+  },
+  {
+    title: "Detailed annual planning & fundraising model",
+    description:
+      "A detailed strategic finance case study I developed including NTM monthly projections, multi-stage fundraising & valuation and build-out of SaaS metrics.",
+    href: "/Project%20Oracle%20-%20Illustrative%20Annual%20Planning%20and%20Fundraising%20Model.xlsx",
+    variant: "download",
+  },
+];
+
 export default function HomeShell() {
   return (
-  <main className="flex min-h-screen items-stretch bg-zinc-50 text-zinc-900">
-    <div className="mx-auto flex w-full max-w-5xl flex-col gap-12 px-6 py-12 lg:px-10 lg:py-16">
+    <main className="flex min-h-screen items-stretch bg-zinc-50 text-zinc-900">
+      <div className="mx-auto flex w-full max-w-5xl flex-col gap-12 px-6 py-12 lg:px-10 lg:py-16">
         {/* Tighten hero padding and vertical rhythm to match the compact layout. */}
         <section
           id="home"
@@ -79,41 +116,7 @@ export default function HomeShell() {
           </div>
         </section>
 
-        <section id="projects" className="rounded-3xl border border-zinc-200 bg-white p-8">
-          <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
-            <div>
-              <h2 className="text-2xl font-semibold text-zinc-950">Projects</h2>
-              <p className="text-base text-zinc-600">Documenting passion projects and what I've been up to lately.</p>
-            </div>
-          </div>
-          <div className="mt-6 grid gap-4 md:grid-cols-2">
-            <ProjectCard
-              title="Brute-force sales funnel methodology for getting employed"
-              description="How I sent out ~6,400 emails over the course of 3 months to brute force my way into the US."
-              href="/case-studies/brute-forcing-move"
-            />
-            <ProjectCard
-              title="An ex-financier’s view on why tech ships faster than finance"
-              description="Intuitively and quantitatively explaining why things work so much more quickly in tech."
-              href="/case-studies/output-comparison"
-            />
-            <ProjectCard
-              title="Contract-level returns calculator"
-              description="A lightweight CAC payback, cash return and unit economics viability calculator I coded."
-              href="/case-studies/contract-returns-calculator"
-            />
-            <DownloadCard
-              title="Simplified fundraising & runway model"  
-              description="Simplified illustrative model for projecting burn, runway, and dilution across fundraising scenarios."
-              href="/Fundraising%20%26%20Runway%20Model.xlsx"
-            />
-            <DownloadCard
-              title="Detailed annual planning & fundraising model"  
-              description="A detailed strategic finance case study I developed including NTM monthly projections, multi-stage fundraising & valuation and build-out of SaaS metrics."
-              href="/Project%20Oracle%20-%20Illustrative%20Annual%20Planning%20and%20Fundraising%20Model.xlsx"
-            />
-          </div>
-        </section>
+        <ProjectsSection items={projects} />
 
         <div id="contact" className="h-4" aria-hidden />
       </div>
@@ -136,63 +139,5 @@ function ExperienceCard({
       <h4 className="mt-2 text-lg font-semibold text-zinc-950">{role}</h4>
       <p className="mt-2 text-sm text-zinc-700">{description}</p>
     </div>
-  );
-}
-
-function ProjectCard({
-  title,
-  description,
-  href,
-}: {
-  title: string;
-  description: string;
-  href: string;
-}) {
-  return (
-    <Link
-      href={href}
-      className="block h-full rounded-3xl border border-zinc-200 bg-white p-6 hover:border-blue-500"
-    >
-      <div className="flex items-start justify-between gap-3">
-        <h3 className="text-lg font-semibold text-zinc-950">{title}</h3>
-        <span className="text-sm text-zinc-500" aria-hidden>
-          →
-        </span>
-      </div>
-      <p className="mt-3 text-sm text-zinc-700">{description}</p>
-      <div className="mt-4 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-zinc-600">
-        <span className="h-2 w-2 rounded-full bg-zinc-900" aria-hidden />
-        <span>View</span>
-      </div>
-    </Link>
-  );
-}
-
-function DownloadCard({
-  title,
-  description,
-  href,
-}: {
-  title: string;
-  description: string;
-  href: string;
-}) {
-  return (
-    <Link
-      href={href}
-      className="block h-full rounded-3xl border border-zinc-200 bg-white p-6 hover:border-blue-500"
-    >
-      <div className="flex items-start justify-between gap-3">
-        <h3 className="text-lg font-semibold text-zinc-950">{title}</h3>
-        <span className="text-sm text-zinc-500" aria-hidden>
-          →
-        </span>
-      </div>
-      <p className="mt-3 text-sm text-zinc-700">{description}</p>
-      <div className="mt-4 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-zinc-600">
-        <span className="h-2 w-2 rounded-full bg-zinc-900" aria-hidden />
-        <span>Download</span>
-      </div>
-    </Link>
   );
 }
