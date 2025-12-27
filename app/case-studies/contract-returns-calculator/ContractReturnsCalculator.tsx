@@ -1335,7 +1335,7 @@ export default function ContractReturnsCalculator() {
         </div>
       </div>
 
-      <footer className="border-t border-zinc-200/80 bg-white/80">
+      {/* <footer className="border-t border-zinc-200/80 bg-white/80">
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-end gap-4 px-4 text-sm font-semibold text-zinc-700 sm:px-6">
           <a href="mailto:ryandharma04@gmail.com" className="hover:text-zinc-900">
             Email
@@ -1349,7 +1349,7 @@ export default function ContractReturnsCalculator() {
             LinkedIn
           </a>
         </div>
-      </footer>
+      </footer> */}
     </div>
   )
 }
