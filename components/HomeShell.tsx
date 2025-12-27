@@ -17,11 +17,6 @@ const projects: ProjectItem[] = [
     href: "/case-studies/brute-forcing-move",
   },
   {
-    title: "Shipping under a non-negotiable deadline with broken inputs",
-    description: "Stabilizing a critical model so a live transaction process could continue.",
-    href: "/case-studies/shipping-fast",
-  },
-  {
     title: "An ex-financier’s view on why tech ships faster than finance",
     description: "Intuitively and quantitatively explaining why things work so much more quickly in tech.",
     href: "/case-studies/output-comparison",
