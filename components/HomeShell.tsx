@@ -4,7 +4,7 @@ const headerCopy = {
   name: "RYAN DHARMA",
   title: "Revenue Operations at Omni",
   subtitle:
-    "Making people confident in their decision making by interpreting and wrangling big datasets. Previous investing and investment banking experience across infrastructure and TMT.",
+    "Building revenue systems and infrastructure for high-growth companies. Former private equity investor and investment banker.",
   linkedIn: "https://www.linkedin.com/in/ryandharma/",
   email: "mailto:ryandharma04@gmail.com",
 };
@@ -56,7 +56,7 @@ export default function HomeShell() {
                 description="Building and managing GTM systems and revenue strategy for a Series B analytics start-up."
               />
               <ExperienceCard
-                time="2025 – 2026 | Remote (Project-Based)"
+                time="2025 – 2026 | Remote (Concurrent, Project-Based)"
                 role="Finance Domain Expert @ Mercor"
                 description="Part of the global effort to provide robust financial models to leading AI labs to automate out junior investment banking work."
               />
@@ -68,7 +68,7 @@ export default function HomeShell() {
               <ExperienceCard
                 time="2023 – 2024 | Sydney"
                 role="Investment Banking @ Bank of America"
-                description="Made fancy slide decks and pretty Excels for publicly listed TMT clients :)"
+                description="Made fancy slide decks and pretty Excels for publicly listed tech, media and telecom clients :)"
               />
               <ExperienceCard
                 time="2019 – 2022 | Sydney"
