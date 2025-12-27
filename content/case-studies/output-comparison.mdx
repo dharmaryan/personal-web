@@ -12,14 +12,14 @@ label: "CASE STUDY"
 
 ## Introduction
 
-This is something I’ve always wanted to tease out. Since moving into an operations role, the concept that has come up most consistently is the idea of a system – not as this vague concept, but as something that fundamentally shapes output.
+This is something I’ve always wanted to tease out. Since moving into an operations role, the concept that has come up most consistently is the idea of a system – not as a vague concept, but as something that fundamentally shapes output.
 
 Well set-up systems are the reason small teams can outship entire organizations with a fraction of the headcount – and often a fraction of the hours.
 
 ## Definitions
 
 - **System:** a collection of processes that automates a sequence of steps to reliably achieve a specific outcome, repeatedly and at scale.
-- **Finance:** front-office investment banking, investing and deal-related roles 
+- **Finance:** front-office investment banking, investing and deal-related roles (NOT fintech / quant trading / systematized finance)
 - **Tech:** early, mid-stage and pre-IPO stage software (not legacy technology enterprises)
 
 ## The Unit Economics of Work
@@ -40,7 +40,7 @@ Where:
 - **Review:** the average # of review cycles before a deliverable is approved  
 - **Prob. of Deal Dying:** the probability that a deal dies for external reasons, even after substantial work has been completed (anyone who’s worked on live deals knows this)
 
-Most of these factors are fixed in the short-run. Skill is fixed, review is structurally fixed due to the high opportunity cost of errors, and deal survival probability is exogenous. 
+Most of these factors are fixed in the short-run. Skill is fixed, review is structurally fixed due to the high opportunity cost of errors, and deal survival probability is exogenous.
 
 In practice, this means that finance scales output primarily by increasing hours, even when the marginal return on those hours decreases significantly with fatigue. Other components of the equation are either already optimised, slow to change or out of the team’s control.
 
@@ -55,7 +55,7 @@ Once a system is designed and implemented, output is no longer tightly coupled t
 A simplified representation looks something like this:
 
 $$
-\text{Output} = \frac{\text{Hours} \times \text{Skill} \times (1 - \text{Fatigue}) \times \text{System Leverage}}{\text{Review}} \times (1 - \text{Prob. of Deal Breakage})
+\text{Output} = \frac{\text{Hours} \times \text{Skill} \times (1 - \text{Fatigue}) \times \text{System Leverage}}{\text{Review}} \times (1 - \text{Prob. of  Breakage})
 $$
 
 Where:
@@ -78,7 +78,7 @@ Let’s walk through a worked example.
 
 In a well-designed GTM system, outbound execution is driven by a data activation pipeline rather than individual judgement calls, which follow the below steps:
 
-Process Flow:
+**Process Flow:**
 1.	Accounts and leads are sourced programmatically based on defined ICP / criteria
 2.	Records are enriched, deduped and validated automatically
 3.	RevOps teams will enforce routing and rules of engagement across the system
@@ -99,7 +99,7 @@ The closest parallel in finance to a systematised GTM pipeline is deal originati
 
 In practice, this process is far more human mediated and follows roughly the below steps:
 
-Process Flow:
+**Process Flow:**
 1.	A senior banker or investor defines a loose mandate (sector, revenue, EBITDA, geography)
 2.	Analysts systematically screen large datasets using tools like S&P CapIQ and FactSet
 3.	Screens output a long list of companies, usually hardcoded into Excel
@@ -112,9 +112,36 @@ There is structure here, but it’s cognitive structure, not automation. Each st
 
 As a result, output scales linearly with attention. Adding 10,000 additional companies requires close to 10x the analyst effort.
 
-To be fair, this isn’t accidental either. The stakes are high, costs are asymmetric, and the companies involved are often orders of magnitude larger and more complex. Precision and discretion matter much more than throughput.
+To be fair, this isn’t accidental either. The stakes are high, costs are asymmetric, and the companies involved are often orders of magnitude larger and more complex. Precision and discretion matter much more than throughput, which magnifies the cost of failure.
 
 But – the economic consequence is clear. Unlike a systematised GTM pipeline, deal origination does not convert effort into durable infrastructure. Each cycle largely resets and has to be activated manually.
+
+## The Structural Constraint: Risk Asymmetry
+
+At this point, it's tempting to conclude that finance is simply "behind" tech in adopting systems. That's **probably** the wrong takeaway.
+
+The more accurate explanation is that finance and tech optimise for fundamentally different risk profiles, and those profiles mathematically force different organisational designs.
+
+### Risk Asymmetry is the Binding Constraint
+#### Why review, hierarchy and caution persist in finance
+
+In tech, downside tends to be capped, because:
+- Errors are usually observable
+- Most failures are reversible (even company failures to some extent)
+- Rollbacks are cheap
+- Iteration is expected
+
+In finance, downside can potentially be unlimited, because:
+- Errors can permanently impact credibility with counterparties and decision makers
+- Many failures are only discovered after irreversible commitments
+- A single mistake can kill a deal, damage reputation or impair a franchise
+- The upside for making a bold move often doesn't compensate for deviating from a known playbook
+
+This gives review insurance value in finance. Multiple review cycles exist because the expected value of error reduction outweighs the cost of slower throughput. 
+
+This also explains why output means different things in each sector, with tech incentivised to automate workflows and remove execution from the critical path. In contrast, finance optimises for analytical rigour and the elimination of risk before capital deployment.
+
+These are not the same optimisation problems. You'll see these in incentive dynamics. Finance compensation is largely driven by annual cash bonuses tied to error avoidance, responsiveness to senior stakeholders and visible effort within a defined review cycle. That structure naturally favours caution. It also weakly rewards risk taken building systems whose benefits accrue later. In contrast, tech compensation is typically anchored in equity and long-dated incentives, which reward durable leverage, system ownership and work that compounds over time, even if it reduces near-term visibility in a given quarter. 
 
 ## Conclusion
 
