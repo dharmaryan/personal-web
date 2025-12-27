@@ -57,7 +57,7 @@ export default function ProjectsSection({ items }: { items: ProjectItem[] }) {
       <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
         <div>
           <h2 className="text-2xl font-semibold text-zinc-950">Projects</h2>
-          <p className="text-base text-zinc-600">Documenting passion projects and what I've been up to lately.</p>
+          <p className="text-base text-zinc-600">What I've been up to.</p>
         </div>
       </div>
       <div
