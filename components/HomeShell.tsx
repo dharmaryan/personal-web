@@ -5,7 +5,7 @@ const headerCopy = {
   name: "RYAN DHARMA",
   title: "Revenue Operations at Omni",
   subtitle:
-    "3 years in IB / PE turned RevOps professional. Now shipping all things analytics infrastructure, GTM strategy and integrating LLMs into operating workflows without nuking prod",
+    "3 years in IB / PE turned RevOps professional. Now shipping all things analytics infrastructure, GTM strategy and integrating LLMs into operating workflows.",
   linkedIn: "https://www.linkedin.com/in/ryandharma/",
   email: "mailto:ryandharma04@gmail.com",
 };
