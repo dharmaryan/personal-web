@@ -5,7 +5,7 @@ const headerCopy = {
   name: "RYAN DHARMA",
   title: "Revenue Operations at Omni",
   subtitle:
-    "3 years in APAC IB / PE turned SF-based revenue operations professional with a background in stats and finance.",
+    "3 years in IB / PE turned RevOps professional. Now shipping all things analytics infrastructure, GTM strategy and integrating LLMs into operating workflows without nuking prod",
   linkedIn: "https://www.linkedin.com/in/ryandharma/",
   email: "mailto:ryandharma04@gmail.com",
 };
@@ -85,7 +85,7 @@ export default function HomeShell() {
               <ExperienceCard
                 time="2025 – Present | San Francisco"
                 role="Revenue Operations @ Omni"
-                description="Second hire in Omni's RevOps function managing a team of ~110 sellers across territory allocations, commissions / incentive design and ongoing GTM infrastructure maintenance."
+                description="Second hire in Omni's RevOps function managing a GTM org of ~100 across territory allocations, commissions / incentive design and ongoing GTM infrastructure builds and maintenance."
               />
               <ExperienceCard
                 time="2024 – 2025 | Sydney"
